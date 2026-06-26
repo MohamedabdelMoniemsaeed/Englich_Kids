@@ -6,12 +6,13 @@ class TapRow extends StatelessWidget {
   Color color = Colors.white54;
   String image;
   Function() onTap;
-  TapRow(
-      {super.key,
-      required this.name,
-      // required this.color,
-      required this.image,
-      required this.onTap});
+  TapRow({
+    super.key,
+    required this.name,
+    // required this.color,
+    required this.image,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -20,11 +21,12 @@ class TapRow extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
-              end: Alignment.topCenter,
-              begin: Alignment.bottomCenter,
-              stops: const [0, 1],
-              tileMode: TileMode.clamp,
-              colors: [Theme.of(context).dividerColor, color]),
+            end: Alignment.topCenter,
+            begin: Alignment.bottomCenter,
+            stops: const [0, 1],
+            tileMode: TileMode.clamp,
+            colors: [Theme.of(context).dividerColor, color],
+          ),
           borderRadius: BorderRadius.circular(50),
           color: color,
         ),
@@ -33,25 +35,39 @@ class TapRow extends StatelessWidget {
         width: MediaQuery.of(context).size.width * .5,
         // height: MediaQuery.of(context).size.height * .3,
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SizedBox(
-              width: MediaQuery.of(context).size.width * .30,
-              // height: MediaQuery.of(context).size.height * .2,
-              child: SizedBox(
-                height: MediaQuery.of(context).size.height * .15,
-                child: Image.asset(
-                  image,
-                  fit: BoxFit.cover,
+              width: MediaQuery.of(context).size.width * .42,
+              child: AspectRatio(
+                aspectRatio: 1,
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.15),
+                        blurRadius: 12,
+                        offset: const Offset(0, 6),
+                      ),
+                    ],
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: Image.asset(image, fit: BoxFit.cover),
+                  ),
                 ),
               ),
             ),
+            const SizedBox(height: 1),
             Text(
               name,
               style: const TextStyle(
-                  fontSize: 30,
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold),
+                fontSize: 26,
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ],
         ),

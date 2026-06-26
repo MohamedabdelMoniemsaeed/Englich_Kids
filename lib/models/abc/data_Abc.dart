@@ -25,6 +25,7 @@ abstract class DataAbc {
   static String x = 'Xx';
   static String y = 'Yy';
   static String z = 'Zz';
+  static String backgroundimage = 'assets/images/abc/backgroundimage.jpg';
 
   static String apple = 'Apple';
   static String book = 'Book';

@@ -1,4 +1,4 @@
-abstract class DataZoo {
+abstract class DataAnimals {
   static String camel = 'Camel';
   static String canary = 'Canary';
   static String cat = 'Cat';

@@ -29,12 +29,12 @@ class _SettingsState extends State<Settings> {
             width: 300,
             onSelected: (value) {
               if (value != null) {
-                providerMode.setmode(value);
+                providerMode.setMode(value);
               }
             },
-            dropdownMenuEntries: [
-              DropdownMenuEntry(value: ThemeApp.boyTheme, label: "Blue"),
-              DropdownMenuEntry(value: ThemeApp.girlTheme, label: "Pink"),
+            dropdownMenuEntries: const [
+              DropdownMenuEntry(value: AppTheme.boy, label: "Blue"),
+              DropdownMenuEntry(value: AppTheme.girl, label: "Pink"),
             ],
           ),
         ],

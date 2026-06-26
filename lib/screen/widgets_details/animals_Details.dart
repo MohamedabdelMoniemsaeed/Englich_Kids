@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 
 // ignore: must_be_immutable
-class ZooDetails extends StatelessWidget {
+class AnimalsDetails extends StatelessWidget {
   String passimage;
   String nameEnglish;
   String nameArbic;
   String sounds;
-  ZooDetails({
+  AnimalsDetails({
     super.key,
     required this.passimage,
     required this.nameEnglish,

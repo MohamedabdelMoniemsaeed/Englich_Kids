@@ -74,13 +74,13 @@ flutter:
     - assets/images/numbers/
     - assets/images/family_members/
     - assets/images/colors/
+    - assets/images/animals/
     - assets/images/
-    - assets/images/zoo/
+    - assets/sounds/animals/
     - assets/sounds/colors/
     - assets/sounds/family_members/
     - assets/sounds/numbers/
     - assets/sounds/abc/
-    - assets/sounds/zoo/
     - assets/video/
 
   # An image asset can refer to one or more resolution-specific "variants", see

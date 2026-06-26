@@ -5,9 +5,11 @@ import 'package:englich_kids/screen/family/family_screen.dart';
 import 'package:englich_kids/screen/numbers/numbers_Screen.dart';
 import 'package:englich_kids/screen/settings/settings.dart';
 import 'package:englich_kids/screen/widget/home_icon.dart';
-import 'package:englich_kids/screen/zoo/zoo_screen.dart';
+import 'package:englich_kids/screen/animals/animals_screen.dart';
 import 'package:englich_kids/services/internet_service.dart';
+import 'package:englich_kids/theme/porvider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -65,12 +67,12 @@ class _HomeScreenState extends State<HomeScreen> {
         },
       ),
       TapRow(
-        name: 'Zoo',
-        image: 'assets/images/zoohome.jpg',
+        name: 'Animals',
+        image: 'assets/images/animals/animalshome.jpg',
         onTap: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const ZooScreen()),
+            MaterialPageRoute(builder: (context) => const AnimalsScreen()),
           );
         },
       ),
@@ -86,7 +88,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       TapRow(
         name: 'A B C',
-        image: 'assets/images/backgroundimage.jpg',
+        image: 'assets/images/abc/backgroundimage.jpg',
         onTap: () {
           Navigator.push(
             context,
@@ -96,15 +98,32 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     ];
 
+    final mode = Provider.of<Mode>(context);
+
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
       appBar: AppBar(title: const Text("English Kids")),
-      body: GridView.builder(
-        itemCount: item.length,
-        itemBuilder: (context, index) => item[index],
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-        ),
+      body: Stack(
+        children: [
+          Positioned.fill(
+            child: Image.asset(mode.backgroundImage, fit: BoxFit.cover),
+          ),
+          Positioned.fill(
+            child: Container(
+              color: Theme.of(context).primaryColor.withAlpha(166),
+            ),
+          ),
+          GridView.builder(
+            padding: const EdgeInsets.all(16),
+            itemCount: item.length,
+            itemBuilder: (context, index) => item[index],
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              crossAxisSpacing: 16,
+              mainAxisSpacing: 16,
+            ),
+          ),
+        ],
       ),
       drawer: Drawer(
         backgroundColor: Theme.of(context).primaryColor,
