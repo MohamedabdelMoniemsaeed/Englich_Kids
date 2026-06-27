@@ -1,18 +1,16 @@
+import 'package:englich_kids/services/tts_service.dart';
 import 'package:flutter/material.dart';
-import 'package:audioplayers/audioplayers.dart';
 
 // ignore: must_be_immutable
 class AnimalsDetails extends StatelessWidget {
   String passimage;
   String nameEnglish;
   String nameArbic;
-  String sounds;
   AnimalsDetails({
     super.key,
     required this.passimage,
     required this.nameEnglish,
     required this.nameArbic,
-    required this.sounds,
   });
 
   @override
@@ -69,12 +67,27 @@ class AnimalsDetails extends StatelessWidget {
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
       body: SafeArea(
-        child: GestureDetector(
-          onTap: () {
-            final player = AudioPlayer();
-            player.play(AssetSource(sounds));
-          },
-          child: container,
+        child: Stack(
+          children: [
+            GestureDetector(
+              onTap: () async {
+                await TtsService.speak(nameEnglish);
+              },
+              child: container,
+            ),
+            Positioned(
+              top: 8,
+              right: 8,
+              child: IconButton(
+                onPressed: () async => TtsService.speak(nameEnglish),
+                style: IconButton.styleFrom(
+                  backgroundColor: Colors.black54,
+                  padding: const EdgeInsets.all(10),
+                ),
+                icon: const Icon(Icons.volume_up, color: Colors.white),
+              ),
+            ),
+          ],
         ),
       ),
     );

@@ -2,8 +2,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:englich_kids/models/animals/data_Animals.dart';
 import 'package:englich_kids/models/animals/image_Animals.dart';
-import 'package:englich_kids/models/animals/sound_Animals.dart';
-import 'package:englich_kids/screen/widgets_details/Animals_Details.dart';
+import 'package:englich_kids/screen/widgets_details/animals_Details.dart';
 
 import 'package:flutter/material.dart';
 
@@ -27,67 +26,65 @@ class _AnimalsScreenState extends State<AnimalsScreen> {
         nameEnglish: DataAnimals.rooster,
         passimage: ImageAnimals.rooster,
         nameArbic: DataAnimals.roosterArabic,
-        sounds: SoundAnimals.rooster,
       ),
       AnimalsDetails(
         nameEnglish: DataAnimals.penguin,
         passimage: ImageAnimals.penguin,
         nameArbic: DataAnimals.penguinArabic,
-        sounds: SoundAnimals.penguin,
       ),
       AnimalsDetails(
         nameEnglish: DataAnimals.peacock,
         passimage: ImageAnimals.peacock,
         nameArbic: DataAnimals.peacockArabic,
-        sounds: SoundAnimals.peacock,
+        //  sounds: SoundAnimals.peacock,
       ),
       AnimalsDetails(
         nameEnglish: DataAnimals.horse,
         passimage: ImageAnimals.horse,
         nameArbic: DataAnimals.horseArabic,
-        sounds: SoundAnimals.horse,
+        //sounds: SoundAnimals.horse,
       ),
       AnimalsDetails(
         nameEnglish: DataAnimals.cow,
         passimage: ImageAnimals.cow,
         nameArbic: DataAnimals.cowArabic,
-        sounds: SoundAnimals.cow,
+        // sounds: SoundAnimals.cow,
       ),
       AnimalsDetails(
         nameEnglish: DataAnimals.chick,
         passimage: ImageAnimals.chick,
         nameArbic: DataAnimals.chickArabic,
-        sounds: SoundAnimals.chick,
+        // sounds: SoundAnimals.chick,
       ),
       AnimalsDetails(
         nameEnglish: DataAnimals.cat,
         passimage: ImageAnimals.cat,
         nameArbic: DataAnimals.catArabic,
-        sounds: SoundAnimals.cat,
+        // sounds: SoundAnimals.cat,
       ),
       AnimalsDetails(
         nameEnglish: DataAnimals.canary,
         passimage: ImageAnimals.canary,
         nameArbic: DataAnimals.canaryArabic,
-        sounds: SoundAnimals.canary,
+        //  sounds: SoundAnimals.canary,
       ),
       AnimalsDetails(
         nameEnglish: DataAnimals.camel,
         passimage: ImageAnimals.camel,
         nameArbic: DataAnimals.camelArabic,
-        sounds: SoundAnimals.camel,
+        //  sounds: SoundAnimals.camel,
       ),
       AnimalsDetails(
         nameEnglish: DataAnimals.tiger,
         passimage: ImageAnimals.tiger,
         nameArbic: DataAnimals.tigerArabic,
-        sounds: SoundAnimals.tiger,
+        // sounds: SoundAnimals.tiger,
       ),
       AnimalsDetails(
         nameEnglish: DataAnimals.elephant,
         passimage: ImageAnimals.elephant,
         nameArbic: DataAnimals.elephantArabic,
-        sounds: SoundAnimals.elephant,
+        // sounds: SoundAnimals.elephant,
       ),
     ];
     return Scaffold(
@@ -120,7 +117,6 @@ class _AnimalsScreenState extends State<AnimalsScreen> {
                 nameArbic: e.nameArbic,
                 nameEnglish: e.nameEnglish,
                 passimage: e.passimage,
-                sounds: e.sounds,
               ),
             )
             .toList(),
