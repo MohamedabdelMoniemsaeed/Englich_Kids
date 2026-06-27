@@ -8,9 +8,23 @@ abstract class DataAnimals {
   static String tiger = 'Tiger';
   static String peacock = 'Peacock';
   static String elephant = 'Elephant';
-    static String penguin = 'Penguin';
+  static String penguin = 'Penguin';
   static String rooster = 'Rooster';
-
+  static String zebra = 'Zebra';
+  static String sheep = 'Sheep';
+  static String rhinoceros = 'Rhinoceros';
+  static String rabbit = 'Rabbit';
+  static String monkey = 'Monkey';
+  static String lion = 'Lion';
+  static String hyena = 'Hyena';
+  static String gorilla = 'Gorilla';
+  static String giraffe = 'Giraffe';
+  static String gazelle = 'Gazelle';
+  static String fox = 'Fox';
+  static String donkey = 'Donkey';
+  static String dog = 'Dog';
+  static String chicken = 'Chicken';
+  static String bear = 'Bear';
 
   static String camelArabic = 'جمل';
   static String canaryArabic = 'كناري';
@@ -21,6 +35,21 @@ abstract class DataAnimals {
   static String tigerArabic = 'النمر';
   static String peacockArabic = 'الطاووس';
   static String elephantArabic = 'الفيل';
-   static String penguinArabic = 'البطريق';
+  static String penguinArabic = 'البطريق';
   static String roosterArabic = 'ديك';
+  static String zebraArabic = 'حمار وحشي';
+  static String sheepArabic = 'خروف';
+  static String rhinocerosArabic = 'وحيد القرن';
+  static String rabbitArabic = 'أرنب';
+  static String monkeyArabic = 'قرد';
+  static String lionArabic = 'أسد';
+  static String hyenaArabic = 'ضبع';
+  static String gorillaArabic = 'غوريلا';
+  static String giraffeArabic = 'زرافة';
+  static String gazelleArabic = 'غزال';
+  static String foxArabic = 'ثعلب';
+  static String donkeyArabic = 'حمار';
+  static String dogArabic = 'كلب';
+  static String chickenArabic = 'دجاج';
+  static String bearArabic = 'دب';
 }

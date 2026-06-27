@@ -11,4 +11,19 @@ abstract class ImageAnimals {
   static String elephant = 'assets/images/animals/Elephant.jpg';
   static String penguin = 'assets/images/animals/Penguin.jpg';
   static String rooster = 'assets/images/animals/Rooster.jpg';
+  static String bear = 'assets/images/animals/Bear.jpg';
+  static String zebra = 'assets/images/animals/Zebra.jpg';
+  static String sheep = 'assets/images/animals/Sheep.jpg';
+  static String fox = 'assets/images/animals/Fox.jpg';
+  static String donkey = 'assets/images/animals/Donkey.jpg';
+  static String dog = 'assets/images/animals/dog.jpg';
+  static String chicken = 'assets/images/animals/Chicken.jpg';
+  static String rhinoceros = 'assets/images/animals/Rhinoceros.jpg';
+  static String rabbit = 'assets/images/animals/Rabbit.jpg';
+  static String monkey = 'assets/images/animals/Monkey.jpg';
+  static String lion = 'assets/images/animals/Lion.jpg';
+  static String hyena = 'assets/images/animals/Hyena.jpg';
+  static String gorilla = 'assets/images/animals/Gorilla.jpg';
+  static String giraffe = 'assets/images/animals/Giraffe.jpg';
+  static String gazelle = 'assets/images/animals/Gazelle.jpg';
 }

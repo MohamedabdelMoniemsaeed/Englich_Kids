@@ -6,13 +6,11 @@ class NumberDetails extends StatelessWidget {
   String passimage;
   String nameEnglish;
   String nameArbic;
-  String sounds;
   NumberDetails({
     super.key,
     required this.passimage,
     required this.nameEnglish,
     required this.nameArbic,
-    required this.sounds,
   });
 
   @override

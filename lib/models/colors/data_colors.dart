@@ -1,4 +1,3 @@
-
 abstract class DataColors {
   static String black = 'Black';
   static String brown = 'Brown';
@@ -7,7 +6,7 @@ abstract class DataColors {
   static String green = 'Green';
   static String red = 'Red';
   static String white = 'White';
+  static String blue = 'Blue';
   static String yellow = 'Yellow';
   static String orange = 'Orange';
-
 }

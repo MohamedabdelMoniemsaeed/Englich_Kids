@@ -3,13 +3,11 @@ import 'package:flutter/material.dart';
 
 class ColorsDetails extends StatelessWidget {
   final Color color;
-  final String sound;
   final String nameArbic;
   final String nameEnglish;
   const ColorsDetails({
     super.key,
     required this.color,
-    required this.sound,
     required this.nameArbic,
     required this.nameEnglish,
   });
@@ -40,8 +38,10 @@ class ColorsDetails extends StatelessWidget {
                       padding: const EdgeInsets.only(left: 10),
                       child: Text(
                         nameEnglish,
-                        style: const TextStyle(
-                          color: Colors.white,
+                        style: TextStyle(
+                          color: color == Colors.white
+                              ? Colors.black
+                              : Colors.white,
                           fontSize: 30,
                           fontWeight: FontWeight.bold,
                         ),
@@ -52,8 +52,10 @@ class ColorsDetails extends StatelessWidget {
                       padding: const EdgeInsets.only(right: 10),
                       child: Text(
                         nameArbic,
-                        style: const TextStyle(
-                          color: Colors.white,
+                        style: TextStyle(
+                          color: color == Colors.white
+                              ? Colors.black
+                              : Colors.white,
                           fontSize: 30,
                           fontWeight: FontWeight.bold,
                         ),

@@ -2,11 +2,12 @@ import 'package:englich_kids/services/tts_service.dart';
 import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
-class AnimalsDetails extends StatelessWidget {
-  String passimage;
-  String nameEnglish;
-  String nameArbic;
-  AnimalsDetails({
+class AnimalsDetails extends StatefulWidget {
+  final String passimage;
+  final String nameEnglish;
+  final String nameArbic;
+
+  const AnimalsDetails({
     super.key,
     required this.passimage,
     required this.nameEnglish,
@@ -14,31 +15,67 @@ class AnimalsDetails extends StatelessWidget {
   });
 
   @override
+  State<AnimalsDetails> createState() => _AnimalsDetailsState();
+}
+
+class _AnimalsDetailsState extends State<AnimalsDetails> {
+  late final AssetImage _image;
+
+  @override
+  void initState() {
+    super.initState();
+    _image = AssetImage(widget.passimage);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      precacheImage(_image, context);
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    var container = Column(
-      // crossAxisAlignment: CrossAxisAlignment.stretch,
+    final imageContainer = Container(
+      margin: const EdgeInsets.all(8),
+      width: size.width,
+      height: size.height * .5,
+      decoration: BoxDecoration(
+        border: Border.all(color: Theme.of(context).hoverColor, width: 5),
+        borderRadius: BorderRadiusDirectional.circular(50),
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadiusDirectional.circular(44),
+        child: Image.asset(
+          widget.passimage,
+          fit: BoxFit.cover,
+          gaplessPlayback: true,
+          filterQuality: FilterQuality.high,
+          errorBuilder: (context, error, stackTrace) => Container(
+            color: Colors.grey.shade300,
+            child: const Center(child: Icon(Icons.broken_image)),
+          ),
+        ),
+      ),
+    );
+
+    final container = Column(
       children: [
+        imageContainer,
         Container(
-          margin: const EdgeInsets.all(8),
-          width: size.width,
-          height: size.height * .5,
-          decoration: BoxDecoration(
-            border: Border.all(color: Theme.of(context).hoverColor, width: 5),
-            borderRadius: BorderRadiusDirectional.circular(50),
-            image: DecorationImage(
-              image: AssetImage(passimage),
-              fit: BoxFit.cover,
+          margin: const EdgeInsets.symmetric(horizontal: 20),
+          child: Text(
+            textAlign: TextAlign.center,
+            widget.nameArbic,
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 35,
+              fontWeight: FontWeight.bold,
             ),
           ),
         ),
         Container(
-          // color: Colors.amber,
-          // width: size.width * .5,
-          margin: const EdgeInsets.symmetric(horizontal: 20),
+          margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
           child: Text(
             textAlign: TextAlign.center,
-            nameArbic,
+            widget.nameEnglish,
             style: const TextStyle(
               color: Colors.white,
               fontSize: 45,
@@ -46,48 +83,34 @@ class AnimalsDetails extends StatelessWidget {
             ),
           ),
         ),
-        Container(
-          // color: Colors.black,
-          // width: size.width * .5,
-          margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-          child: Text(
-            textAlign: TextAlign.center,
-            // minFontSize: 16,
-            // maxLines: 2,
-            nameEnglish,
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 80,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
       ],
     );
+
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
       body: SafeArea(
-        child: Stack(
-          children: [
-            GestureDetector(
-              onTap: () async {
-                await TtsService.speak(nameEnglish);
-              },
-              child: container,
-            ),
-            Positioned(
-              top: 8,
-              right: 8,
-              child: IconButton(
-                onPressed: () async => TtsService.speak(nameEnglish),
-                style: IconButton.styleFrom(
-                  backgroundColor: Colors.black54,
-                  padding: const EdgeInsets.all(10),
+        child: GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: () async {
+            await TtsService.speak(widget.nameEnglish);
+          },
+          child: Stack(
+            children: [
+              container,
+              Positioned(
+                top: 8,
+                right: 8,
+                child: IconButton(
+                  onPressed: () async => TtsService.speak(widget.nameEnglish),
+                  style: IconButton.styleFrom(
+                    backgroundColor: Colors.black54,
+                    padding: const EdgeInsets.all(10),
+                  ),
+                  icon: const Icon(Icons.volume_up, color: Colors.white),
                 ),
-                icon: const Icon(Icons.volume_up, color: Colors.white),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

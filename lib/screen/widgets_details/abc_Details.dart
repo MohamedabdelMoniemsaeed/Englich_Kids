@@ -7,13 +7,11 @@ class AbcDetails extends StatelessWidget {
   String imageAbc;
   String nameEnglish;
   String abc;
-  String sound;
   AbcDetails({
     super.key,
     required this.imageAbc,
     required this.abc,
     required this.nameEnglish,
-    required this.sound,
   });
   @override
   Widget build(BuildContext context) {

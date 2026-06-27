@@ -14,6 +14,49 @@ class AnimalsScreen extends StatefulWidget {
 }
 
 class _AnimalsScreenState extends State<AnimalsScreen> {
+  final List<String> _imagePaths = [
+    ImageAnimals.rooster,
+    ImageAnimals.penguin,
+    ImageAnimals.peacock,
+    ImageAnimals.horse,
+    ImageAnimals.cow,
+    ImageAnimals.chick,
+    ImageAnimals.cat,
+    ImageAnimals.canary,
+    ImageAnimals.camel,
+    ImageAnimals.tiger,
+    ImageAnimals.elephant,
+    ImageAnimals.bear,
+    ImageAnimals.zebra,
+    ImageAnimals.sheep,
+    ImageAnimals.fox,
+    ImageAnimals.donkey,
+    ImageAnimals.dog,
+    ImageAnimals.chicken,
+    ImageAnimals.rhinoceros,
+    ImageAnimals.rabbit,
+    ImageAnimals.monkey,
+    ImageAnimals.lion,
+    ImageAnimals.hyena,
+    ImageAnimals.gorilla,
+    ImageAnimals.giraffe,
+    ImageAnimals.gazelle,
+  ];
+
+  bool _imagesPrecached = false;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_imagesPrecached) return;
+      for (final imagePath in _imagePaths) {
+        precacheImage(AssetImage(imagePath), context);
+      }
+      _imagesPrecached = true;
+    });
+  }
+
   // ignore: recursive_getters
   @override
   Widget build(BuildContext context) {
@@ -86,6 +129,81 @@ class _AnimalsScreenState extends State<AnimalsScreen> {
         nameArbic: DataAnimals.elephantArabic,
         // sounds: SoundAnimals.elephant,
       ),
+      AnimalsDetails(
+        nameEnglish: DataAnimals.bear,
+        passimage: ImageAnimals.bear,
+        nameArbic: DataAnimals.bearArabic,
+      ),
+      AnimalsDetails(
+        nameEnglish: DataAnimals.zebra,
+        passimage: ImageAnimals.zebra,
+        nameArbic: DataAnimals.zebraArabic,
+      ),
+      AnimalsDetails(
+        nameEnglish: DataAnimals.sheep,
+        passimage: ImageAnimals.sheep,
+        nameArbic: DataAnimals.sheepArabic,
+      ),
+      AnimalsDetails(
+        nameEnglish: DataAnimals.fox,
+        passimage: ImageAnimals.fox,
+        nameArbic: DataAnimals.foxArabic,
+      ),
+      AnimalsDetails(
+        nameEnglish: DataAnimals.donkey,
+        passimage: ImageAnimals.donkey,
+        nameArbic: DataAnimals.donkeyArabic,
+      ),
+      AnimalsDetails(
+        nameEnglish: DataAnimals.dog,
+        passimage: ImageAnimals.dog,
+        nameArbic: DataAnimals.dogArabic,
+      ),
+      AnimalsDetails(
+        nameEnglish: DataAnimals.chicken,
+        passimage: ImageAnimals.chicken,
+        nameArbic: DataAnimals.chickenArabic,
+      ),
+      AnimalsDetails(
+        nameEnglish: DataAnimals.rhinoceros,
+        passimage: ImageAnimals.rhinoceros,
+        nameArbic: DataAnimals.rhinocerosArabic,
+      ),
+      AnimalsDetails(
+        nameEnglish: DataAnimals.rabbit,
+        passimage: ImageAnimals.rabbit,
+        nameArbic: DataAnimals.rabbitArabic,
+      ),
+      AnimalsDetails(
+        nameEnglish: DataAnimals.monkey,
+        passimage: ImageAnimals.monkey,
+        nameArbic: DataAnimals.monkeyArabic,
+      ),
+      AnimalsDetails(
+        nameEnglish: DataAnimals.lion,
+        passimage: ImageAnimals.lion,
+        nameArbic: DataAnimals.lionArabic,
+      ),
+      AnimalsDetails(
+        nameEnglish: DataAnimals.hyena,
+        passimage: ImageAnimals.hyena,
+        nameArbic: DataAnimals.hyenaArabic,
+      ),
+      AnimalsDetails(
+        nameEnglish: DataAnimals.gorilla,
+        passimage: ImageAnimals.gorilla,
+        nameArbic: DataAnimals.gorillaArabic,
+      ),
+      AnimalsDetails(
+        nameEnglish: DataAnimals.giraffe,
+        passimage: ImageAnimals.giraffe,
+        nameArbic: DataAnimals.giraffeArabic,
+      ),
+      AnimalsDetails(
+        nameEnglish: DataAnimals.gazelle,
+        passimage: ImageAnimals.gazelle,
+        nameArbic: DataAnimals.gazelleArabic,
+      ),
     ];
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
@@ -106,17 +224,24 @@ class _AnimalsScreenState extends State<AnimalsScreen> {
         options: CarouselOptions(
           viewportFraction: 1,
           enlargeCenterPage: true,
-          // enlargeFactor: 0.3,
+          enableInfiniteScroll: true,
+          autoPlay: false,
+          enlargeFactor: 0.15,
+          pageSnapping: true,
+          animateToClosest: true,
           onPageChanged: (index, reason) => setState(() => indexs = index),
           scrollDirection: Axis.horizontal,
           height: size.height,
         ),
         items: item
             .map(
-              (e) => AnimalsDetails(
-                nameArbic: e.nameArbic,
-                nameEnglish: e.nameEnglish,
-                passimage: e.passimage,
+              (e) => SizedBox(
+                width: size.width,
+                child: AnimalsDetails(
+                  nameArbic: e.nameArbic,
+                  nameEnglish: e.nameEnglish,
+                  passimage: e.passimage,
+                ),
               ),
             )
             .toList(),

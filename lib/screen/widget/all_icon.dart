@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 class FamilyIcon extends StatefulWidget {
   final String images;
   final String nameEnglish;
-  final String sound;
   final String nameArbic;
   // Function() onTap;
   const FamilyIcon({
@@ -14,7 +13,6 @@ class FamilyIcon extends StatefulWidget {
     required this.images,
     required this.nameEnglish,
     required this.nameArbic,
-    required this.sound,
     // required this.onTap
   });
 
@@ -31,7 +29,6 @@ class _FamilyIconState extends State<FamilyIcon> {
           context,
           MaterialPageRoute(
             builder: (context) => FamilyDetails(
-              sounds: widget.sound,
               passimage: widget.images,
               nameEnglish: widget.nameEnglish,
               nameArbic: widget.nameArbic,
