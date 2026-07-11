@@ -8,6 +8,7 @@ import 'package:englich_kids/screen/widget/home_icon.dart';
 import 'package:englich_kids/screen/animals/animals_screen.dart';
 import 'package:englich_kids/services/internet_service.dart';
 import 'package:englich_kids/theme/porvider.dart';
+import 'package:englich_kids/widgets/home_banner_ad.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -113,15 +114,22 @@ class _HomeScreenState extends State<HomeScreen> {
               color: Theme.of(context).primaryColor.withAlpha(166),
             ),
           ),
-          GridView.builder(
-            padding: const EdgeInsets.all(16),
-            itemCount: item.length,
-            itemBuilder: (context, index) => item[index],
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              crossAxisSpacing: 16,
-              mainAxisSpacing: 16,
-            ),
+          Column(
+            children: [
+              Expanded(
+                child: GridView.builder(
+                  padding: const EdgeInsets.all(16),
+                  itemCount: item.length,
+                  itemBuilder: (context, index) => item[index],
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 16,
+                    mainAxisSpacing: 16,
+                  ),
+                ),
+              ),
+              const HomeBannerAd(),
+            ],
           ),
         ],
       ),
