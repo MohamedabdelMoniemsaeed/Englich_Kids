@@ -44,6 +44,8 @@ dependencies:
   http: ^1.6.0
   flutter_tts: ^4.2.5
   google_mobile_ads: ^9.0.0
+  google_generative_ai: ^0.4.7
+  speech_to_text: ^7.4.0
 
 dev_dependencies:
   flutter_test:

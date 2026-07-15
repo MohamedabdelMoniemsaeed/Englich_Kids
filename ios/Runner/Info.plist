@@ -47,5 +47,9 @@
 	<true/>
 	<key>GADApplicationIdentifier</key>
 	<string>ca-app-pub-3841714693406145~4870237191</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>We need access to your microphone so the AI can listen to the child.</string>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>We need speech recognition to understand what the child is saying.</string>
 </dict>
 </plist>

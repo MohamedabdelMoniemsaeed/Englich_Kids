@@ -97,7 +97,7 @@ class _HomeBannerAdState extends State<HomeBannerAd> {
     return Container(
       height: 60,
       width: double.infinity,
-      color: Colors.black.withOpacity(0.75),
+      color: Colors.black.withValues(alpha: 0.75),
       alignment: Alignment.center,
       child: _hasFailed
           ? const Center(

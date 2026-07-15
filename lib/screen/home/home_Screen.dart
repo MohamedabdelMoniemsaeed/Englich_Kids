@@ -1,3 +1,4 @@
+import 'package:englich_kids/screen/ai_chat/ai_chat_screen.dart';
 import 'package:englich_kids/models/numbers/image_number.dart';
 import 'package:englich_kids/screen/abc/abc.dart';
 import 'package:englich_kids/screen/colors/colors_Screen.dart';
@@ -94,6 +95,17 @@ class _HomeScreenState extends State<HomeScreen> {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => const AbcScreen()),
+          );
+        },
+      ),
+      TapRow(
+        name: 'AI Friend',
+        image: 'assets/images/AI Friend.png',
+        isLocked: true,
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const AiChatScreen()),
           );
         },
       ),
