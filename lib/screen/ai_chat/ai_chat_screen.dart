@@ -19,8 +19,15 @@ class _AiChatScreenState extends State<AiChatScreen> {
   String _aiResponse = '';
   String _imageUrl = '';
   
-  // ⚠️ IMPORTANT: Get a key starting with "AIza" from https://aistudio.google.com/
-  final String _apiKey = 'YOUR_GEMINI_API_KEY';
+  // 🔑 قائمة المفاتيح لضمان عدم توقف الشات (API Key Rotation)
+  // يمكنك إضافة المزيد من المفاتيح هنا من حسابات مختلفة
+  final List<String> _apiKeys = [
+    'YOUR_API_KEY_1', // المفتاح الأول
+    'YOUR_API_KEY_2',
+     'YOUR_API_KEY_3',
+  ];
+  int _currentKeyIndex = 0;
+
   late GenerativeModel _model;
   late ChatSession _chat;
 
@@ -32,46 +39,40 @@ class _AiChatScreenState extends State<AiChatScreen> {
 
   void _initAi() {
     _model = GenerativeModel(
-      model: 'gemini-3.5-flash',
-      apiKey: _apiKey,
+      model: 'gemini-3.5-flash', // الموديل المتاح والمجاني في 2026
+      apiKey: _apiKeys[_currentKeyIndex],
       generationConfig: GenerationConfig(
-        temperature: 0.8,
+        temperature: 0.7,
         maxOutputTokens: 1000,
       ),
       systemInstruction: Content.system(
-        'You are a joyful and expert AI teacher for children (ages 3-7). '
-        'Rules: '
-        '1. Detect the child\'s language (Arabic or English) and respond in the EXACT same language. '
-        '2. Your response MUST be a short paragraph of 3 to 5 sentences. '
-        '3. Use very simple, clear language. Tell a mini-story or give a fun explanation. '
-        '4. At the VERY END of your response, you MUST add a single English noun in this format: [IMAGE: keyword]. '
-        '5. Choose a concrete noun (e.g., dog, tree, astronaut, cake). '
+        'You are a joyful AI teacher for children (ages 3-7). '
+        'STRICT RULE: Always respond in ENGLISH, even if the child speaks in Arabic. '
+        'Tell a short story or explanation in 3 to 5 clear sentences. '
+        'End with [IMAGE: keyword] with a simple English noun.'
       ),
     );
     _chat = _model.startChat();
   }
 
-  void _startListening() async {
-    if (_aiResponse == '...') return; // Prevent listening while AI is thinking
+  // دالة للتبديل للمفتاح التالي عند انتهاء الليمت
+  void _switchToNextKey() {
+    if (_apiKeys.length > 1) {
+      _currentKeyIndex = (_currentKeyIndex + 1) % _apiKeys.length;
+      _initAi(); // إعادة تهيئة الموديل بالمفتاح الجديد
+      print('Switched to API Key index: $_currentKeyIndex');
+    }
+  }
 
-    bool available = await _speech.initialize(
-      onStatus: (status) {
-        if ((status == 'done' || status == 'notListening') && _isListening) {
-          _stopListening();
-        }
-      },
-      onError: (e) => setState(() => _isListening = false),
-    );
+  void _startListening() async {
+    if (_aiResponse == '...') return;
+    bool available = await _speech.initialize();
     if (available) {
       setState(() {
         _isListening = true;
         _text = 'Listening...';
       });
-      _speech.listen(
-        onResult: (val) => setState(() {
-          _text = val.recognizedWords;
-        }),
-      );
+      _speech.listen(onResult: (val) => setState(() => _text = val.recognizedWords));
     }
   }
 
@@ -84,14 +85,6 @@ class _AiChatScreenState extends State<AiChatScreen> {
         _getResponseFromAi(_text);
       }
     });
-  }
-
-  void _toggleListening() {
-    if (_isListening) {
-      _stopListening();
-    } else {
-      _startListening();
-    }
   }
 
   Future<void> _getResponseFromAi(String userMessage) async {
@@ -108,40 +101,41 @@ class _AiChatScreenState extends State<AiChatScreen> {
       
       if (fullText.isEmpty) throw 'Empty response';
 
-      String cleanedText = fullText;
-      String keyword = 'kids';
-      
-      final regExp = RegExp(r'\[IMAGE:\s*(.*?)\]');
-      final match = regExp.firstMatch(fullText);
-      
-      if (match != null) {
-        keyword = match.group(1)?.trim().replaceAll(' ', ',') ?? 'kids';
-        cleanedText = fullText.replaceAll(regExp, '').trim();
-      }
-
-      setState(() {
-        _aiResponse = cleanedText;
-        _imageUrl = 'https://loremflickr.com/600/400/$keyword,cartoon/all';
-      });
-      
-      bool isArabic = RegExp(r'[\u0600-\u06FF]').hasMatch(cleanedText);
-      await TtsService.speak(cleanedText, language: isArabic ? 'ar-SA' : 'en-US');
+      _processAiResponse(fullText);
 
     } catch (e) {
-      print('GEMINI DETAILED ERROR: $e');
-      String errorMessage = 'Error: $e';
-      
-      // التحقق من انتهاء الليمت (Quota Exceeded)
-      if (e.toString().toLowerCase().contains('quota') || 
-          e.toString().toLowerCase().contains('rate limit')) {
-        errorMessage = 'لقد انتهى الحد المسموح به لليوم. حاول مرة أخرى غداً.\n'
-                       'Daily limit reached. Please try again tomorrow.';
+      String err = e.toString().toLowerCase();
+      // إذا كان الخطأ بسبب الليمت، نحاول التبديل للمفتاح التالي
+      if (err.contains('quota') || err.contains('rate limit')) {
+        if (_apiKeys.length > 1 && _currentKeyIndex < _apiKeys.length - 1) {
+          _switchToNextKey();
+          _getResponseFromAi(userMessage); // إعادة المحاولة بالمفتاح الجديد
+        } else {
+          setState(() => _aiResponse = 'لقد انتهى الحد المسموح به لليوم. حاول مرة أخرى غداً.\nDaily limit reached.');
+        }
+      } else {
+        setState(() => _aiResponse = 'Error: $e');
       }
-
-      setState(() {
-        _aiResponse = errorMessage;
-      });
     }
+  }
+
+  void _processAiResponse(String fullText) {
+    String cleanedText = fullText;
+    String keyword = 'kids';
+    final regExp = RegExp(r'\[IMAGE:\s*(.*?)\]');
+    final match = regExp.firstMatch(fullText);
+    
+    if (match != null) {
+      keyword = match.group(1)?.trim().replaceAll(' ', ',') ?? 'kids';
+      cleanedText = fullText.replaceAll(regExp, '').trim();
+    }
+
+    setState(() {
+      _aiResponse = cleanedText;
+      _imageUrl = 'https://loremflickr.com/600/400/$keyword,cartoon/all';
+    });
+    
+    TtsService.speak(cleanedText, language: 'en-US');
   }
 
   @override
@@ -194,21 +188,7 @@ class _AiChatScreenState extends State<AiChatScreen> {
                                 if (_imageUrl.isNotEmpty && _aiResponse != '...')
                                   ClipRRect(
                                     borderRadius: BorderRadius.circular(15),
-                                    child: Image.network(
-                                      _imageUrl,
-                                      height: 200,
-                                      width: double.infinity,
-                                      fit: BoxFit.cover,
-                                      loadingBuilder: (context, child, loadingProgress) {
-                                        if (loadingProgress == null) return child;
-                                        return Container(
-                                          height: 200,
-                                          color: Colors.grey[200],
-                                          child: const Center(child: CircularProgressIndicator()),
-                                        );
-                                      },
-                                      errorBuilder: (context, e, s) => const SizedBox.shrink(),
-                                    ),
+                                    child: Image.network(_imageUrl, height: 200, width: double.infinity, fit: BoxFit.cover),
                                   ),
                                 const SizedBox(height: 10),
                                 if (_aiResponse == '...')
@@ -216,11 +196,7 @@ class _AiChatScreenState extends State<AiChatScreen> {
                                 else
                                   Text(
                                     _aiResponse,
-                                    style: const TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.w600,
-                                      height: 1.5,
-                                    ),
+                                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600, height: 1.5),
                                     softWrap: true,
                                     textDirection: RegExp(r'[\u0600-\u06FF]').hasMatch(_aiResponse) 
                                         ? TextDirection.rtl : TextDirection.ltr,
@@ -238,17 +214,15 @@ class _AiChatScreenState extends State<AiChatScreen> {
                 decoration: const BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
-                  boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 10)],
                 ),
                 child: GestureDetector(
-                  onTap: _aiResponse == '...' ? null : _toggleListening,
-                  child: Opacity(
-                    opacity: _aiResponse == '...' ? 0.5 : 1.0,
-                    child: CircleAvatar(
-                      radius: 40,
-                      backgroundColor: _isListening ? Colors.red : accentColor,
-                      child: Icon(_isListening ? Icons.mic : Icons.mic_none, color: Colors.white, size: 40),
-                    ),
+                  onTap: _aiResponse == '...' ? null : () {
+                    if (_isListening) _stopListening(); else _startListening();
+                  },
+                  child: CircleAvatar(
+                    radius: 40,
+                    backgroundColor: _isListening ? Colors.red : accentColor,
+                    child: Icon(_isListening ? Icons.mic : Icons.mic_none, color: Colors.white, size: 40),
                   ),
                 ),
               ),
