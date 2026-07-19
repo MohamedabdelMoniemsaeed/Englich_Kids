@@ -1,4 +1,4 @@
-import 'package:englich_kids/screen/home/home_Screen.dart';
+import 'package:englich_kids/screen/home/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 

@@ -1,4 +1,4 @@
-import 'package:englich_kids/theme/porvider.dart';
+import 'package:englich_kids/theme/provider.dart';
 import 'package:englich_kids/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -15,8 +15,8 @@ class _SettingsState extends State<Settings> {
   late Mode providerMode;
   String name = 'Theme Colors';
 
-  // رابط مستودع المشروع على جيت هاب لتحميل أحدث APK
-  final String githubUrl = "https://github.com/MohamedabdelMoniemsaeed/Englich_Kids/releases/latest";
+  // رابط مستودع المشروع على جيت هاب لرؤية الإصدارات
+  final String githubUrl = "https://github.com/MohamedabdelMoniemsaeed/APP/tree/main/English%20Kids";
 
   Future<void> _launchUpdateUrl() async {
     final Uri url = Uri.parse(githubUrl);
@@ -39,12 +39,14 @@ class _SettingsState extends State<Settings> {
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const SizedBox(height: 50),
+            const Spacer(),
+            // خيار الألوان تم نقله للأسفل
             Center(
               child: DropdownMenu(
                 label: Text(name),
-                width: MediaQuery.of(context).size.width * 0.8,
+                width: MediaQuery.of(context).size.width * 0.85,
                 onSelected: (value) {
                   if (value != null) {
                     providerMode.setMode(value);
@@ -56,10 +58,10 @@ class _SettingsState extends State<Settings> {
                 ],
               ),
             ),
-            const Spacer(),
-            // زر التحديث الجديد في الأسفل
+            const SizedBox(height: 20),
+            // زر التحديث أصبح في الأسفل ولونه يتغير مع الثيم
             SizedBox(
-              width: double.infinity,
+              width: MediaQuery.of(context).size.width * 0.85,
               child: ElevatedButton.icon(
                 onPressed: _launchUpdateUrl,
                 icon: const Icon(Icons.system_update, color: Colors.white),
@@ -68,17 +70,20 @@ class _SettingsState extends State<Settings> {
                   style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                 ),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Theme.of(context).hoverColor,
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                  backgroundColor: Theme.of(context).dividerColor, // اللون يتغير مع الثيم
+                  padding: const EdgeInsets.symmetric(vertical: 15),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                  elevation: 5,
                 ),
               ),
             ),
             const SizedBox(height: 20),
+            // رقم الإصدار فقط في الأسفل
             const Text(
               "Version 1.0.0",
               style: TextStyle(color: Colors.black54, fontWeight: FontWeight.w500),
             ),
+            const SizedBox(height: 10),
           ],
         ),
       ),

@@ -1,9 +1,11 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:englich_kids/services/tts_service.dart';
 import 'package:provider/provider.dart';
-import 'package:englich_kids/theme/porvider.dart';
+import 'package:englich_kids/theme/provider.dart';
 
 class AiChatScreen extends StatefulWidget {
   const AiChatScreen({super.key});
@@ -24,9 +26,18 @@ class _AiChatScreenState extends State<AiChatScreen> {
   final List<String> _apiKeys = [
     'AQ.Ab8RN6KUNZmV_P3r2iQTCzgzQD7LczIS497upUfPVNsV_sGtBg', // المفتاح الأول
     'AQ.Ab8RN6J5A6d4PxmWh6hWvN_7yWIfT5r5417LBWPrCN6Wa3l0zA',
-     'AQ.Ab8RN6I3UTL28YOveedfv8--m5oR3u5iikqXos0cszShJQzldw',
+    'AQ.Ab8RN6I3UTL28YOveedfv8--m5oR3u5iikqXos0cszShJQzldw',
   ];
   int _currentKeyIndex = 0;
+
+  // 🔑 DeepSeek API Keys
+  final List<String> _deepSeekKeys = [
+    '',
+    '',
+    '',
+  ];
+  int _currentDeepSeekKeyIndex = 0;
+  final String _deepSeekUrl = 'https://api.deepseek.com/chat/completions';
 
   late GenerativeModel _model;
   late ChatSession _chat;
@@ -110,11 +121,57 @@ class _AiChatScreenState extends State<AiChatScreen> {
           _switchToNextKey();
           _getResponseFromAi(userMessage); // إعادة المحاولة بالمفتاح الجديد
         } else {
+          // إذا انتهت كل مفاتيح Gemini، نجرب DeepSeek
+          _getResponseFromDeepSeek(userMessage);
+        }
+      } else {
+        // أي خطأ آخر، نحاول DeepSeek لضمان العمل
+        _getResponseFromDeepSeek(userMessage);
+      }
+    }
+  }
+
+  Future<void> _getResponseFromDeepSeek(String userMessage) async {
+    try {
+      final response = await http.post(
+        Uri.parse(_deepSeekUrl),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ${_deepSeekKeys[_currentDeepSeekKeyIndex]}',
+        },
+        body: jsonEncode({
+          'model': 'deepseek-chat',
+          'messages': [
+            {
+              'role': 'system',
+              'content': 'You are a joyful AI teacher for children (ages 3-7). '
+                         'STRICT RULE: Always respond in ENGLISH, even if the child speaks in Arabic. '
+                         'Tell a short story or explanation in 3 to 5 clear sentences. '
+                         'End with [IMAGE: keyword] with a simple English noun.'
+            },
+            {'role': 'user', 'content': userMessage}
+          ],
+          'stream': false
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(utf8.decode(response.bodyBytes));
+        String fullText = data['choices'][0]['message']['content'] ?? '';
+        _processAiResponse(fullText);
+      } else if (response.statusCode == 429) {
+        // إذا كان الخطأ بسبب الليمت، نحاول التبديل للمفتاح التالي
+        if (_currentDeepSeekKeyIndex < _deepSeekKeys.length - 1) {
+          _currentDeepSeekKeyIndex++;
+          _getResponseFromDeepSeek(userMessage);
+        } else {
           setState(() => _aiResponse = 'لقد انتهى الحد المسموح به لليوم. حاول مرة أخرى غداً.\nDaily limit reached.');
         }
       } else {
-        setState(() => _aiResponse = 'Error: $e');
+        setState(() => _aiResponse = 'لقد انتهى الحد المسموح به لليوم. حاول مرة أخرى غداً.\nDaily limit reached.');
       }
+    } catch (e) {
+      setState(() => _aiResponse = 'Error: $e');
     }
   }
 

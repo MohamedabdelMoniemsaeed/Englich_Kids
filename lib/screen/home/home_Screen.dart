@@ -8,7 +8,7 @@ import 'package:englich_kids/screen/settings/settings.dart';
 import 'package:englich_kids/screen/widget/home_icon.dart';
 import 'package:englich_kids/screen/animals/animals_screen.dart';
 import 'package:englich_kids/services/internet_service.dart';
-import 'package:englich_kids/theme/porvider.dart';
+import 'package:englich_kids/theme/provider.dart';
 import 'package:englich_kids/widgets/home_banner_ad.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
