@@ -60,7 +60,6 @@ class _AiChatScreenState extends State<AiChatScreen> {
     if (_apiKeys.length > 1) {
       _currentKeyIndex = (_currentKeyIndex + 1) % _apiKeys.length;
       _initAi(); // إعادة تهيئة الموديل بالمفتاح الجديد
-      print('Switched to API Key index: $_currentKeyIndex');
     }
   }
 
@@ -148,7 +147,11 @@ class _AiChatScreenState extends State<AiChatScreen> {
       body: Stack(
         children: [
           Positioned.fill(child: Image.asset(mode.backgroundImage, fit: BoxFit.cover)),
-          Positioned.fill(child: Container(color: Colors.white.withOpacity(0.85))),
+          Positioned.fill(
+            child: Container(
+              color: Colors.white.withValues(alpha: 0.85),
+            ),
+          ),
           Column(
             children: [
               Expanded(
@@ -216,9 +219,15 @@ class _AiChatScreenState extends State<AiChatScreen> {
                   borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
                 ),
                 child: GestureDetector(
-                  onTap: _aiResponse == '...' ? null : () {
-                    if (_isListening) _stopListening(); else _startListening();
-                  },
+                  onTap: _aiResponse == '...'
+                      ? null
+                      : () {
+                          if (_isListening) {
+                            _stopListening();
+                          } else {
+                            _startListening();
+                          }
+                        },
                   child: CircleAvatar(
                     radius: 40,
                     backgroundColor: _isListening ? Colors.red : accentColor,
