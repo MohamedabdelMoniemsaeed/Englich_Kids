@@ -22,9 +22,9 @@ class _AiChatScreenState extends State<AiChatScreen> {
   // 🔑 قائمة المفاتيح لضمان عدم توقف الشات (API Key Rotation)
   // يمكنك إضافة المزيد من المفاتيح هنا من حسابات مختلفة
   final List<String> _apiKeys = [
-    'YOUR_API_KEY_1', // المفتاح الأول
-    'YOUR_API_KEY_2',
-     'YOUR_API_KEY_3',
+    'AQ.Ab8RN6KUNZmV_P3r2iQTCzgzQD7LczIS497upUfPVNsV_sGtBg', // المفتاح الأول
+    'AQ.Ab8RN6J5A6d4PxmWh6hWvN_7yWIfT5r5417LBWPrCN6Wa3l0zA',
+     'AQ.Ab8RN6I3UTL28YOveedfv8--m5oR3u5iikqXos0cszShJQzldw',
   ];
   int _currentKeyIndex = 0;
 
