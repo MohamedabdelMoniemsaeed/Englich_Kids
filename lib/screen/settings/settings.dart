@@ -55,6 +55,7 @@ class _SettingsState extends State<Settings> {
                 dropdownMenuEntries: const [
                   DropdownMenuEntry(value: AppTheme.boy, label: "Blue (Boys)"),
                   DropdownMenuEntry(value: AppTheme.girl, label: "Pink (Girls)"),
+                  DropdownMenuEntry(value: AppTheme.orange, label: "Orange"),
                 ],
               ),
             ),

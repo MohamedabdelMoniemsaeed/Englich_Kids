@@ -118,7 +118,9 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Stack(
         children: [
           Positioned.fill(
-            child: Image.asset(mode.backgroundImage, fit: BoxFit.cover),
+            child: mode.backgroundImage.isNotEmpty
+                ? Image.asset(mode.backgroundImage, fit: BoxFit.cover)
+                : Container(color: Colors.orange.shade300), // خلفية لون سادة للثيم البرتقالي
           ),
           Positioned.fill(
             child: Container(

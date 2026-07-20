@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 
-enum AppTheme { boy, girl }
+enum AppTheme { boy, girl, orange }
 
 class ThemeApp {
   static const String boyBackground = 'assets/images/boy_background.png';
   static const String girlBackground = 'assets/images/girl_background.png';
+ // static const String orangeBackground = 'assets/images/boy_background.png'; // Placeholder
 
   static final ThemeData boyTheme = ThemeData(
     appBarTheme: AppBarTheme(
@@ -35,6 +36,21 @@ class ThemeApp {
     hoverColor: Colors.pink.shade400,
     dividerColor: Colors.pink,
   );
+
+  static final ThemeData orangeTheme = ThemeData(
+    appBarTheme: AppBarTheme(
+      centerTitle: true,
+      backgroundColor: Colors.orange.shade400,
+      titleTextStyle: const TextStyle(
+        color: Colors.white,
+        fontSize: 30,
+        fontWeight: FontWeight.bold,
+      ),
+    ),
+    primaryColor: Colors.orange.shade100,
+    hoverColor: Colors.orange.shade400,
+    dividerColor: Colors.orange,
+  );
 }
 
 extension AppThemeExtension on AppTheme {
@@ -44,6 +60,8 @@ extension AppThemeExtension on AppTheme {
         return ThemeApp.girlTheme;
       case AppTheme.boy:
         return ThemeApp.boyTheme;
+      case AppTheme.orange:
+        return ThemeApp.orangeTheme;
     }
   }
 
@@ -53,6 +71,8 @@ extension AppThemeExtension on AppTheme {
         return ThemeApp.girlBackground;
       case AppTheme.boy:
         return ThemeApp.boyBackground;
+      case AppTheme.orange:
+        return ""; // لا توجد صورة لخلفية البرتقالي
     }
   }
 }

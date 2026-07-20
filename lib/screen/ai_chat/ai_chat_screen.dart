@@ -203,7 +203,11 @@ class _AiChatScreenState extends State<AiChatScreen> {
       appBar: AppBar(title: const Text('AI Friend')),
       body: Stack(
         children: [
-          Positioned.fill(child: Image.asset(mode.backgroundImage, fit: BoxFit.cover)),
+          Positioned.fill(
+            child: mode.backgroundImage.isNotEmpty
+                ? Image.asset(mode.backgroundImage, fit: BoxFit.cover)
+                : Container(color: Colors.orange.shade300),
+          ),
           Positioned.fill(
             child: Container(
               color: Colors.white.withValues(alpha: 0.85),
