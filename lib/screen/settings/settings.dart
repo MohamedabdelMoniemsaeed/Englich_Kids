@@ -2,7 +2,11 @@ import 'package:englich_kids/theme/provider.dart';
 import 'package:englich_kids/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:shorebird_code_push/shorebird_code_push.dart';
+import 'package:restart_app/restart_app.dart';
+
+// Initialize Shorebird Updater
+final shorebirdUpdater = ShorebirdUpdater();
 
 class Settings extends StatefulWidget {
   const Settings({super.key});
@@ -14,17 +18,65 @@ class Settings extends StatefulWidget {
 class _SettingsState extends State<Settings> {
   late Mode providerMode;
   String name = 'Theme Colors';
+  bool _isCheckingForUpdates = false;
+  String _buttonText = "Check for Updates";
 
-  // رابط مستودع المشروع على جيت هاب لرؤية الإصدارات
-  final String githubUrl = "https://github.com/MohamedabdelMoniemsaeed/APP/tree/main/English%20Kids";
+  void _updateButtonText(String message, {bool resetAfter = false}) {
+    if (!mounted) return;
+    setState(() {
+      _buttonText = message;
+    });
+    
+    if (resetAfter) {
+      Future.delayed(const Duration(seconds: 4), () {
+        if (mounted) {
+          setState(() {
+            _buttonText = "Check for Updates";
+          });
+        }
+      });
+    }
+  }
 
-  Future<void> _launchUpdateUrl() async {
-    final Uri url = Uri.parse(githubUrl);
-    if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
+  Future<void> _checkForUpdates() async {
+    setState(() {
+      _isCheckingForUpdates = true;
+    });
+    _updateButtonText("Checking...");
+
+    try {
+      // 1. Check for update status
+      final status = await shorebirdUpdater.checkForUpdate();
+
+      if (!mounted) return;
+
+      if (status == UpdateStatus.outdated) {
+        _updateButtonText("Downloading...");
+
+        // 3. Download the patch
+        await shorebirdUpdater.update();
+
+        if (!mounted) return;
+
+        // 4. Force Strong Automatic Restart immediately
+        _updateButtonText("Restarting...");
+        await Future.delayed(const Duration(seconds: 1));
+        await Restart.restartApp();
+      } else if (status == UpdateStatus.restartRequired) {
+        // If already downloaded, just restart strongly
+        _updateButtonText("Restarting...");
+        await Future.delayed(const Duration(milliseconds: 500));
+        await Restart.restartApp();
+      } else {
+        _updateButtonText("Up to Date", resetAfter: true);
+      }
+    } catch (e) {
+      _updateButtonText("Error: Try Again", resetAfter: true);
+    } finally {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Could not open update link')),
-        );
+        setState(() {
+          _isCheckingForUpdates = false;
+        });
       }
     }
   }
@@ -60,18 +112,24 @@ class _SettingsState extends State<Settings> {
               ),
             ),
             const SizedBox(height: 20),
-            // زر التحديث أصبح في الأسفل ولونه يتغير مع الثيم
+            // زر التحديث أصبح ذكياً الآن
             SizedBox(
               width: MediaQuery.of(context).size.width * 0.85,
               child: ElevatedButton.icon(
-                onPressed: _launchUpdateUrl,
-                icon: const Icon(Icons.system_update, color: Colors.white),
-                label: const Text(
-                  "Check for Updates",
-                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                onPressed: _isCheckingForUpdates ? null : _checkForUpdates,
+                icon: _isCheckingForUpdates 
+                  ? const SizedBox(
+                      width: 20, 
+                      height: 20, 
+                      child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2)
+                    )
+                  : const Icon(Icons.system_update, color: Colors.white),
+                label: Text(
+                  _buttonText,
+                  style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                 ),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Theme.of(context).dividerColor, // اللون يتغير مع الثيم
+                  backgroundColor: Theme.of(context).dividerColor,
                   padding: const EdgeInsets.symmetric(vertical: 15),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                   elevation: 5,

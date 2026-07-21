@@ -552,6 +552,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.1.0"
+  restart_app:
+    dependency: "direct main"
+    description:
+      name: restart_app
+      sha256: "400dd401b77b599e2defef55fd4c22af3ff80af48616a82f01c2a07070e3e368"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.8.3"
+  shorebird_code_push:
+    dependency: "direct main"
+    description:
+      name: shorebird_code_push
+      sha256: "32df9946782c6ca95d7065c7f2156df74675e931b816d0dc391a3d8f8917930f"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.7"
   sky_engine:
     dependency: transitive
     description: flutter
