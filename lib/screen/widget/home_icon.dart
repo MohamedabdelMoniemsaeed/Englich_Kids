@@ -6,18 +6,22 @@ class TapRow extends StatelessWidget {
   Color color = Colors.white54;
   String image;
   Function() onTap;
+  bool isLocked;
+  String? lockedText;
 
   TapRow({
     super.key,
     required this.name,
     required this.image,
     required this.onTap,
+    this.isLocked = false,
+    this.lockedText,
   });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap,
+      onTap: isLocked ? null : onTap,
       child: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
@@ -54,7 +58,41 @@ class TapRow extends StatelessWidget {
                   ),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(20),
-                    child: Image.asset(image, fit: BoxFit.cover),
+                    child: Stack(
+                      children: [
+                        Positioned.fill(
+                          child: Image.asset(image, fit: BoxFit.cover),
+                        ),
+                        if (isLocked)
+                          Positioned.fill(
+                            child: Container(
+                              color: Colors.black54,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const Icon(
+                                    Icons.lock,
+                                    color: Colors.white,
+                                    size: 40,
+                                  ),
+                                  if (lockedText != null)
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 4),
+                                      child: Text(
+                                        lockedText!,
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                ],
+                              ),
+                            ),
+                          ),
+                      ],
+                    ),
                   ),
                 ),
               ),

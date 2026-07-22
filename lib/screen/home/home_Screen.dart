@@ -101,6 +101,8 @@ class _HomeScreenState extends State<HomeScreen> {
       TapRow(
         name: 'AI Friend',
         image: 'assets/images/AI Friend.png',
+        isLocked: true,
+        lockedText: 'قريباً',
         onTap: () {
           Navigator.push(
             context,
