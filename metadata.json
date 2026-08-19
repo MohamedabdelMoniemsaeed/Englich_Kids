@@ -1,0 +1,6 @@
+{
+  "name": "English Kids",
+  "description": "Interactive educational English learning web application for kids with alphabet ABC, numbers, animals, colors, family members, audio speech, flashcards, and an AI conversational tutor.",
+  "requestFramePermissions": ["microphone"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
