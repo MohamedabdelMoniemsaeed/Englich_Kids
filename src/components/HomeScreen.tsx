@@ -1,6 +1,6 @@
 import React from 'react';
 import { ScreenId, ThemeConfig } from '../types';
-import { Sparkles } from 'lucide-react';
+import { Sparkles, Shapes as ShapesIcon } from 'lucide-react';
 import { playChime } from '../utils/sound';
 
 interface HomeScreenProps {
@@ -12,9 +12,9 @@ interface HomeCardItem {
   id: ScreenId;
   name: string;
   arabicName: string;
-  image: string;
+  image?: string;
   badge?: string;
-  isSpecial?: boolean;
+  isShapes?: boolean;
 }
 
 export const HomeScreen: React.FC<HomeScreenProps> = ({ themeConfig, onNavigate }) => {
@@ -50,12 +50,11 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ themeConfig, onNavigate 
       image: '/assets/images/abc/backgroundimage.jpg',
     },
     {
-      id: 'ai_chat',
-      name: 'AI Friend',
-      arabicName: 'الصديق الذكي',
-      image: '/assets/images/AI Friend.png',
-      badge: 'AI Smart',
-      isSpecial: true,
+      id: 'shapes',
+      name: 'Shapes',
+      arabicName: 'الأشكال الهندسية',
+      badge: 'New 🔺⭐',
+      isShapes: true,
     },
   ];
 
@@ -71,7 +70,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ themeConfig, onNavigate 
         </p>
       </div>
 
-      {/* 2-Column Responsive Card Grid matching Flutter layout */}
+      {/* 2-Column Responsive Card Grid */}
       <div className="grid grid-cols-2 gap-4 sm:gap-6">
         {cards.map((card) => (
           <button
@@ -82,27 +81,41 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ themeConfig, onNavigate 
               onNavigate(card.id);
             }}
             className={`group relative overflow-hidden rounded-3xl bg-white shadow-md hover:shadow-xl hover:-translate-y-1 active:scale-95 transition-all duration-300 border-4 border-white/80 focus:outline-none focus:ring-4 focus:ring-amber-400 text-left flex flex-col h-44 sm:h-56 ${
-              card.isSpecial ? 'ring-2 ring-amber-400 shadow-amber-200/50' : ''
+              card.isShapes ? 'ring-2 ring-indigo-400 shadow-indigo-100' : ''
             }`}
           >
             {/* Background Image / Illustration */}
             <div className="relative w-full flex-1 bg-slate-100 overflow-hidden flex items-center justify-center">
-              <img
-                src={card.image}
-                alt={card.name}
-                className={`w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ${
-                  card.isSpecial ? 'p-4 object-contain max-h-36' : ''
-                }`}
-                onError={(e) => {
-                  const target = e.target as HTMLImageElement;
-                  target.src = '/assets/images/iconHome.png';
-                }}
-              />
+              {card.isShapes ? (
+                /* Vibrant Geometric Shapes Graphic for Shapes Card */
+                <div className="w-full h-full bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 flex items-center justify-center p-4 relative overflow-hidden">
+                  <div className="absolute -top-4 -left-4 w-20 h-20 rounded-full bg-yellow-400/30 blur-sm" />
+                  <div className="absolute -bottom-4 -right-4 w-24 h-24 rounded-full bg-pink-400/30 blur-sm" />
+                  
+                  {/* Floating shapes */}
+                  <div className="flex items-center justify-center gap-2 sm:gap-3 z-10">
+                    <span className="text-3xl sm:text-4xl animate-bounce" style={{ animationDuration: '2s' }}>🔺</span>
+                    <span className="text-3xl sm:text-4xl animate-pulse" style={{ animationDuration: '2.5s' }}>⏹️</span>
+                    <span className="text-3xl sm:text-4xl animate-bounce" style={{ animationDuration: '2.2s', animationDelay: '0.3s' }}>⭐</span>
+                    <span className="text-3xl sm:text-4xl animate-pulse" style={{ animationDuration: '2.8s' }}>🔵</span>
+                  </div>
+                </div>
+              ) : (
+                <img
+                  src={card.image}
+                  alt={card.name}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.src = '/assets/images/iconHome.png';
+                  }}
+                />
+              )}
               <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity" />
 
               {/* Special Badge if any */}
               {card.badge && (
-                <div className="absolute top-2.5 right-2.5 bg-gradient-to-r from-amber-500 to-orange-500 text-white text-[11px] font-extrabold px-2.5 py-1 rounded-full shadow-md flex items-center gap-1 animate-pulse">
+                <div className="absolute top-2.5 right-2.5 bg-gradient-to-r from-amber-500 to-orange-500 text-white text-[11px] font-extrabold px-2.5 py-1 rounded-full shadow-md flex items-center gap-1">
                   <Sparkles className="w-3 h-3 text-yellow-200" />
                   {card.badge}
                 </div>

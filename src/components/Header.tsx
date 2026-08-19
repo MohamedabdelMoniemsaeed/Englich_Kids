@@ -19,7 +19,7 @@ const TITLE_MAP: Record<ScreenId, { en: string; ar: string }> = {
   animals: { en: 'Animals', ar: 'الحيوانات' },
   colors: { en: 'Colors', ar: 'الألوان' },
   abc: { en: 'A B C Alphabet', ar: 'الحروف الإنجليزية' },
-  ai_chat: { en: 'AI Friend', ar: 'الصديق الذكي' },
+  shapes: { en: 'Shapes', ar: 'الأشكال الهندسية' },
 };
 
 export const Header: React.FC<HeaderProps> = ({
@@ -71,7 +71,7 @@ export const Header: React.FC<HeaderProps> = ({
         <div className="text-center flex-1">
           <h1 className="font-fun text-xl sm:text-2xl font-extrabold tracking-wide drop-shadow-sm flex items-center justify-center gap-1.5">
             {info.en}
-            {currentScreen === 'ai_chat' && <Sparkles className="w-5 h-5 text-yellow-200 animate-spin" style={{ animationDuration: '4s' }} />}
+            {currentScreen === 'shapes' && <Sparkles className="w-5 h-5 text-yellow-200" />}
           </h1>
           <span className="text-xs sm:text-sm font-medium text-white/85 block mt-0.5">
             {info.ar}

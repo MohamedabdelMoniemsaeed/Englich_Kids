@@ -9,7 +9,7 @@ import { NumbersScreen } from './components/NumbersScreen';
 import { AnimalsScreen } from './components/AnimalsScreen';
 import { ColorsScreen } from './components/ColorsScreen';
 import { FamilyScreen } from './components/FamilyScreen';
-import { AiChatScreen } from './components/AiChatScreen';
+import { ShapesScreen } from './components/ShapesScreen';
 
 export const App: React.FC = () => {
   const [currentScreen, setCurrentScreen] = useState<ScreenId>('home');
@@ -83,8 +83,8 @@ export const App: React.FC = () => {
             soundEnabled={soundEnabled}
           />
         )}
-        {currentScreen === 'ai_chat' && (
-          <AiChatScreen
+        {currentScreen === 'shapes' && (
+          <ShapesScreen
             themeConfig={themeConfig}
             speechRate={speechRate}
             soundEnabled={soundEnabled}

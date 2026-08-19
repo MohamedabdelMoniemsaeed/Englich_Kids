@@ -1,6 +1,6 @@
 export type AppTheme = 'boy' | 'girl' | 'orange';
 
-export type ScreenId = 'home' | 'numbers' | 'family' | 'animals' | 'colors' | 'abc' | 'ai_chat';
+export type ScreenId = 'home' | 'numbers' | 'family' | 'animals' | 'colors' | 'abc' | 'shapes';
 
 export interface ThemeConfig {
   id: AppTheme;
@@ -34,6 +34,9 @@ export interface AnimalItem {
   nameEnglish: string;
   nameArabic: string;
   image: string;
+  emoji?: string;
+  phonetic?: string;
+  soundCue?: string;
 }
 
 export interface ColorItem {
@@ -52,10 +55,16 @@ export interface FamilyItem {
   image: string;
 }
 
-export interface ChatMessage {
+export interface ShapeItem {
   id: string;
-  sender: 'user' | 'ai';
-  text: string;
-  imageUrl?: string;
-  timestamp: number;
+  nameEnglish: string;
+  nameArabic: string;
+  shapeType: 'triangle' | 'square' | 'circle' | 'rectangle' | 'star' | 'heart' | 'diamond' | 'oval' | 'pentagon' | 'hexagon' | 'octagon' | 'crescent';
+  sides: number;
+  color: string;
+  realLifeExample: string;
+  realLifeExampleArabic: string;
+  realLifeEmoji: string;
+  description: string;
+  descriptionArabic: string;
 }
