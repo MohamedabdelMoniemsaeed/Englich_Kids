@@ -1,0 +1,27 @@
+name: english_kids_flutter
+description: Complete Flutter app for English Kids learning and games.
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_tts: ^3.8.5
+  audioplayers: ^5.2.1
+  confetti: ^0.7.0
+  shared_preferences: ^2.2.2
+  google_fonts: ^6.1.0
+  flutter_staggered_animations: ^1.1.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/images/
