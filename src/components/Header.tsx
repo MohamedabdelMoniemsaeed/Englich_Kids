@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowLeft, Settings, Sparkles, Volume2, VolumeX } from 'lucide-react';
+import { ArrowLeft, Settings, Sparkles, Volume2, VolumeX, Gamepad2 } from 'lucide-react';
 import { ScreenId, ThemeConfig } from '../types';
 import { playChime } from '../utils/sound';
 
@@ -15,11 +15,17 @@ interface HeaderProps {
 const TITLE_MAP: Record<ScreenId, { en: string; ar: string }> = {
   home: { en: 'English Kids', ar: 'إنجليزي للأطفال' },
   numbers: { en: 'Numbers', ar: 'الأرقام' },
-  family: { en: 'Family', ar: 'العائلة' },
+  family: { en: 'Family Members', ar: 'أفراد العائلة' },
   animals: { en: 'Animals', ar: 'الحيوانات' },
   colors: { en: 'Colors', ar: 'الألوان' },
   abc: { en: 'A B C Alphabet', ar: 'الحروف الإنجليزية' },
   shapes: { en: 'Shapes', ar: 'الأشكال الهندسية' },
+  fruits: { en: 'Fruits & Vegetables', ar: 'الفواكه والخضروات' },
+  vehicles: { en: 'Vehicles & Transport', ar: 'المواصلات والمركبات' },
+  body: { en: 'Body Parts', ar: 'أجزاء جسم الإنسان' },
+  jobs: { en: 'Jobs & Professions', ar: 'المهن والوظائف' },
+  clothes: { en: 'Clothes & Outfits', ar: 'الملابس والأزياء' },
+  games: { en: 'Kids Games Hub', ar: 'ألعاب وأنشطة تفاعلية' },
 };
 
 export const Header: React.FC<HeaderProps> = ({
@@ -31,11 +37,11 @@ export const Header: React.FC<HeaderProps> = ({
   onToggleSound,
 }) => {
   const isHome = currentScreen === 'home';
-  const info = TITLE_MAP[currentScreen];
+  const info = TITLE_MAP[currentScreen] || TITLE_MAP.home;
 
   return (
     <header className={`sticky top-0 z-40 bg-gradient-to-r ${themeConfig.primaryColor} shadow-md text-white px-4 py-3 sm:py-4 transition-all duration-300`}>
-      <div className="max-w-4xl mx-auto flex items-center justify-between gap-3">
+      <div className="max-w-5xl mx-auto flex items-center justify-between gap-3">
         {/* Left Side: Back button or cute App Icon */}
         <div className="flex items-center gap-2">
           {!isHome ? (
@@ -45,7 +51,7 @@ export const Header: React.FC<HeaderProps> = ({
                 playChime('pop');
                 onNavigate('home');
               }}
-              className="flex items-center gap-1.5 px-3 py-2 bg-white/20 hover:bg-white/30 active:scale-95 rounded-2xl font-bold transition-all shadow-sm"
+              className="flex items-center gap-1.5 px-3.5 py-2 bg-white/20 hover:bg-white/30 active:scale-95 rounded-2xl font-bold transition-all shadow-sm"
               aria-label="Back to Home"
             >
               <ArrowLeft className="w-5 h-5 text-white" />
@@ -71,15 +77,30 @@ export const Header: React.FC<HeaderProps> = ({
         <div className="text-center flex-1">
           <h1 className="font-fun text-xl sm:text-2xl font-extrabold tracking-wide drop-shadow-sm flex items-center justify-center gap-1.5">
             {info.en}
+            {currentScreen === 'games' && <Gamepad2 className="w-5 h-5 text-yellow-300 animate-pulse" />}
             {currentScreen === 'shapes' && <Sparkles className="w-5 h-5 text-yellow-200" />}
           </h1>
-          <span className="text-xs sm:text-sm font-medium text-white/85 block mt-0.5">
+          <span className="text-xs sm:text-sm font-medium text-white/90 block mt-0.5">
             {info.ar}
           </span>
         </div>
 
         {/* Right Side: Sound Toggle & Settings */}
         <div className="flex items-center gap-2">
+          {isHome && (
+            <button
+              id="header-games-btn"
+              onClick={() => {
+                playChime('pop');
+                onNavigate('games');
+              }}
+              className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 bg-yellow-400 hover:bg-yellow-300 active:scale-95 text-slate-900 rounded-2xl font-fun font-black text-xs transition-all shadow-md"
+            >
+              <Gamepad2 className="w-4 h-4" />
+              <span>Play Games</span>
+            </button>
+          )}
+
           <button
             id="sound-toggle-button"
             onClick={() => {

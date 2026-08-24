@@ -10,6 +10,12 @@ import { AnimalsScreen } from './components/AnimalsScreen';
 import { ColorsScreen } from './components/ColorsScreen';
 import { FamilyScreen } from './components/FamilyScreen';
 import { ShapesScreen } from './components/ShapesScreen';
+import { FruitsScreen } from './components/FruitsScreen';
+import { VehiclesScreen } from './components/VehiclesScreen';
+import { BodyPartsScreen } from './components/BodyPartsScreen';
+import { JobsScreen } from './components/JobsScreen';
+import { ClothesScreen } from './components/ClothesScreen';
+import { KidsGamesScreen } from './components/KidsGamesScreen';
 
 export const App: React.FC = () => {
   const [currentScreen, setCurrentScreen] = useState<ScreenId>('home');
@@ -41,7 +47,7 @@ export const App: React.FC = () => {
       />
 
       {/* Main Content View */}
-      <main className="flex-1 relative z-10 w-full overflow-y-auto">
+      <main className="flex-1 relative z-10 w-full overflow-y-auto pb-8">
         {currentScreen === 'home' && (
           <HomeScreen
             themeConfig={themeConfig}
@@ -85,6 +91,48 @@ export const App: React.FC = () => {
         )}
         {currentScreen === 'shapes' && (
           <ShapesScreen
+            themeConfig={themeConfig}
+            speechRate={speechRate}
+            soundEnabled={soundEnabled}
+          />
+        )}
+        {currentScreen === 'fruits' && (
+          <FruitsScreen
+            themeConfig={themeConfig}
+            speechRate={speechRate}
+            soundEnabled={soundEnabled}
+          />
+        )}
+        {currentScreen === 'vehicles' && (
+          <VehiclesScreen
+            themeConfig={themeConfig}
+            speechRate={speechRate}
+            soundEnabled={soundEnabled}
+          />
+        )}
+        {currentScreen === 'body' && (
+          <BodyPartsScreen
+            themeConfig={themeConfig}
+            speechRate={speechRate}
+            soundEnabled={soundEnabled}
+          />
+        )}
+        {currentScreen === 'jobs' && (
+          <JobsScreen
+            themeConfig={themeConfig}
+            speechRate={speechRate}
+            soundEnabled={soundEnabled}
+          />
+        )}
+        {currentScreen === 'clothes' && (
+          <ClothesScreen
+            themeConfig={themeConfig}
+            speechRate={speechRate}
+            soundEnabled={soundEnabled}
+          />
+        )}
+        {currentScreen === 'games' && (
+          <KidsGamesScreen
             themeConfig={themeConfig}
             speechRate={speechRate}
             soundEnabled={soundEnabled}

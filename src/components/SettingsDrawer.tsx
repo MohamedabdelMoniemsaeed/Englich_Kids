@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, Palette, Volume2, Sparkles, CheckCircle2, RefreshCw } from 'lucide-react';
+import { X, Palette, Volume2, CheckCircle2, RefreshCw } from 'lucide-react';
 import { AppTheme, ThemeConfig } from '../types';
 import { THEMES } from '../data/learningData';
 import { playChime } from '../utils/sound';
@@ -47,8 +47,8 @@ export const SettingsDrawer: React.FC<SettingsDrawerProps> = ({
               ⚙️
             </div>
             <div>
-              <h2 className="font-fun text-xl font-bold text-slate-800">Settings</h2>
-              <p className="text-xs text-slate-500 font-medium">Customize your learning space</p>
+              <h2 className="font-fun text-xl font-bold text-slate-800">Settings / الإعدادات</h2>
+              <p className="text-xs text-slate-500 font-medium">Customize App & Audio</p>
             </div>
           </div>
           <button
@@ -152,14 +152,6 @@ export const SettingsDrawer: React.FC<SettingsDrawerProps> = ({
               <RefreshCw className={`w-4 h-4 ${checkingUpdate ? 'animate-spin' : ''}`} />
               <span>{updateStatus}</span>
             </button>
-
-            <div className="bg-amber-50 rounded-2xl p-4 border border-amber-200/70 text-xs text-amber-900 flex items-start gap-2.5">
-              <Sparkles className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
-              <div>
-                <strong className="block font-bold">AI Friend Feature:</strong>
-                Talk with the AI tutor by voice or text. Configured with Gemini for interactive English conversations!
-              </div>
-            </div>
           </div>
         </div>
 

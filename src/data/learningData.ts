@@ -1,4 +1,18 @@
-import { AbcItem, NumberItem, AnimalItem, ColorItem, FamilyItem, ShapeItem, ThemeConfig, AppTheme } from '../types';
+import {
+  AbcItem,
+  NumberItem,
+  AnimalItem,
+  ColorItem,
+  FamilyItem,
+  ShapeItem,
+  FruitItem,
+  VehicleItem,
+  BodyPartItem,
+  JobItem,
+  ClothesItem,
+  ThemeConfig,
+  AppTheme,
+} from '../types';
 
 export const THEMES: Record<AppTheme, ThemeConfig> = {
   boy: {
@@ -301,4 +315,81 @@ export const SHAPES_DATA: ShapeItem[] = [
     description: 'A curved shape resembling the beautiful new moon.',
     descriptionArabic: 'شكل منحني يمثل هلال القمر في السماء.',
   },
+];
+
+export const FRUITS_DATA: FruitItem[] = [
+  { id: 'apple', nameEnglish: 'Apple', nameArabic: 'تفاح', emoji: '🍎', color: '#EF4444', category: 'fruit', phonetic: '/ˈæp.əl/', fact: 'Sweet and crunchy!', factArabic: 'حلوة ومقرمشة ومفيدة جداً للصحة!' },
+  { id: 'banana', nameEnglish: 'Banana', nameArabic: 'موز', emoji: '🍌', color: '#FACC15', category: 'fruit', phonetic: '/bəˈnæn.ə/', fact: 'Monkeys love bananas!', factArabic: 'غني بالطاقة ويحبه القردة!' },
+  { id: 'strawberry', nameEnglish: 'Strawberry', nameArabic: 'فراولة', emoji: '🍓', color: '#E11D48', category: 'fruit', phonetic: '/ˈstrɔː.bər.i/', fact: 'Has tiny seeds on the outside!', factArabic: 'بذورها اللذيذة توجد على السطح الخارجي!' },
+  { id: 'watermelon', nameEnglish: 'Watermelon', nameArabic: 'بطيخ', emoji: '🍉', color: '#10B981', category: 'fruit', phonetic: '/ˈwɔː.təˌmel.ən/', fact: 'Super juicy and refreshing!', factArabic: 'مليء بالماء المنعش في الصيف!' },
+  { id: 'orange_fruit', nameEnglish: 'Orange', nameArabic: 'برتقال', emoji: '🍊', color: '#F97316', category: 'fruit', phonetic: '/ˈɒr.ɪndʒ/', fact: 'Packed with Vitamin C!', factArabic: 'غني بفيتامين C لتقوية المناعة!' },
+  { id: 'grapes', nameEnglish: 'Grapes', nameArabic: 'عنب', emoji: '🍇', color: '#8B5CF6', category: 'fruit', phonetic: '/ɡreɪps/', fact: 'Grows in tasty bunches!', factArabic: 'ينمو في عناقيد جميلة ولذيذة!' },
+  { id: 'pineapple', nameEnglish: 'Pineapple', nameArabic: 'أناناس', emoji: '🍍', color: '#EAB308', category: 'fruit', phonetic: '/ˈpaɪnˌæp.əl/', fact: 'Wears a crown of leaves!', factArabic: 'تتوج بتاج من الأوراق الخضراء!' },
+  { id: 'mango', nameEnglish: 'Mango', nameArabic: 'مانجو', emoji: '🥭', color: '#FB923C', category: 'fruit', phonetic: '/ˈmæŋ.ɡoʊ/', fact: 'The king of tropical fruits!', factArabic: 'ملكة الفواكه الاستوائية الشهية!' },
+  { id: 'cherry', nameEnglish: 'Cherry', nameArabic: 'كرز', emoji: '🍒', color: '#BE123C', category: 'fruit', phonetic: '/ˈtʃer.i/', fact: 'Small, sweet, and bright red!', factArabic: 'صغيرة وحمراء ولذيذة جداً!' },
+  { id: 'lemon', nameEnglish: 'Lemon', nameArabic: 'ليمون', emoji: '🍋', color: '#FDE047', category: 'fruit', phonetic: '/ˈlem.ən/', fact: 'Sour, zesty, and refreshing!', factArabic: 'حامض ومنعش يصنع ألذ عصير!' },
+  { id: 'carrot', nameEnglish: 'Carrot', nameArabic: 'جزر', emoji: '🥕', color: '#EA580C', category: 'vegetable', phonetic: '/ˈkær.ət/', fact: 'Good for healthy eyes and rabbits!', factArabic: 'يقوي النظر وطعام الأرانب المفضل!' },
+  { id: 'tomato', nameEnglish: 'Tomato', nameArabic: 'طماطم', emoji: '🍅', color: '#DC2626', category: 'vegetable', phonetic: '/təˈmɑː.toʊ/', fact: 'Red and juicy vegetable!', factArabic: 'حمراء ولذيذة في السلطة والصلصة!' },
+  { id: 'broccoli', nameEnglish: 'Broccoli', nameArabic: 'بروكلي', emoji: '🥦', color: '#15803D', category: 'vegetable', phonetic: '/ˈbrɒk.əl.i/', fact: 'Looks like a little green tree!', factArabic: 'يشبه شجرة خضراء صغيرة مليئة بالقوة!' },
+  { id: 'corn', nameEnglish: 'Corn', nameArabic: 'ذرة', emoji: '🌽', color: '#CA8A04', category: 'vegetable', phonetic: '/kɔːn/', fact: 'Popped to make popcorn!', factArabic: 'تتحول لحبوب فشار لذيذة عند التسخين!' },
+  { id: 'cucumber', nameEnglish: 'Cucumber', nameArabic: 'خيار', emoji: '🥒', color: '#16A34A', category: 'vegetable', phonetic: '/ˈkjuː.kʌm.bər/', fact: 'Cool and crunchy in salads!', factArabic: 'بارد ومقرمش ومنعش في السلطات!' },
+  { id: 'potato', nameEnglish: 'Potato', nameArabic: 'بطاطس', emoji: '🥔', color: '#A16207', category: 'vegetable', phonetic: '/pəˈteɪ.toʊ/', fact: 'Used to make crispy french fries!', factArabic: 'يصنع منها أشهى بطاطس مقلية وهريس!' },
+];
+
+export const VEHICLES_DATA: VehicleItem[] = [
+  { id: 'car', nameEnglish: 'Car', nameArabic: 'سيارة', emoji: '🚗', type: 'land', phonetic: '/kɑːr/', soundCue: 'Beep beep! Vroom!', description: 'Drives on the road with four wheels.', descriptionArabic: 'تسير على الطريق بأربع عجلات وتأخذنا في نزهة.' },
+  { id: 'airplane', nameEnglish: 'Airplane', nameArabic: 'طائرة', emoji: '✈️', type: 'air', phonetic: '/ˈeə.pleɪn/', soundCue: 'Whoooosh!', description: 'Flies high in the sky across clouds.', descriptionArabic: 'تطير عالياً في السماء بين السحب وتسافر لبلدان بعيدة.' },
+  { id: 'bus', nameEnglish: 'Bus', nameArabic: 'حافلة / باص', emoji: '🚌', type: 'land', phonetic: '/bʌs/', soundCue: 'Honk honk!', description: 'Takes all students together to school.', descriptionArabic: 'ينقل الأصدقاء والطلاب معاً إلى المدرسة كل صباح.' },
+  { id: 'train', nameEnglish: 'Train', nameArabic: 'قطار', emoji: '🚆', type: 'land', phonetic: '/treɪn/', soundCue: 'Choo choo! Chug chug!', description: 'Runs smoothly on long railway tracks.', descriptionArabic: 'يمشي على قضبان السكة الحديدية وله عربات متصلة.' },
+  { id: 'bicycle', nameEnglish: 'Bicycle', nameArabic: 'دراجة هوائية', emoji: '🚲', type: 'land', phonetic: '/ˈbaɪ.sɪ.kəl/', soundCue: 'Ring ring!', description: 'Pedal with your feet for healthy fun.', descriptionArabic: 'ندوس على الدواسات بأرجلنا للرياضة والتنزه.' },
+  { id: 'ship', nameEnglish: 'Ship', nameArabic: 'سفينة', emoji: '🚢', type: 'water', phonetic: '/ʃɪp/', soundCue: 'Tooooot!', description: 'Floats on the ocean water.', descriptionArabic: 'تبحر في أعماق البحار والمحيطات وتحمل البضائع والمسافرين.' },
+  { id: 'rocket', nameEnglish: 'Rocket', nameArabic: 'صاروخ فضائي', emoji: '🚀', type: 'air', phonetic: '/ˈrɒk.ɪt/', soundCue: '3.. 2.. 1.. Blast off!', description: 'Shoots fast to space and the moon.', descriptionArabic: 'ينطلق بسرعة هائلة إلى الفضاء الخارجي والقمر.' },
+  { id: 'helicopter', nameEnglish: 'Helicopter', nameArabic: 'هليكوبتر', emoji: '🚁', type: 'air', phonetic: '/ˈhel.ɪˌkɒp.tər/', soundCue: 'Chop chop chop!', description: 'Has spinning blades to lift straight up.', descriptionArabic: 'لها مروحة كبيرة في الأعلى تطير بها عمودياً في السماء.' },
+  { id: 'ambulance', nameEnglish: 'Ambulance', nameArabic: 'سيارة إسعاف', emoji: '🚑', type: 'land', phonetic: '/ˈæm.bjə.ləns/', soundCue: 'Wee-woo wee-woo!', description: 'Rushes quickly to help sick people.', descriptionArabic: 'تسارع لإنقاذ المرضى ومساعدتهم بسرعة إلى المستشفى.' },
+  { id: 'firetruck', nameEnglish: 'Fire Truck', nameArabic: 'سيارة إطفاء', emoji: '🚒', type: 'land', phonetic: '/ˈfaɪə ˌtrʌk/', soundCue: 'Siren sound & splash!', description: 'Carries ladders and water to put out fires.', descriptionArabic: 'شاحنة حمراء مجهزة بخرطوم ماء وسلم لإطفاء الحرائق.' },
+  { id: 'motorcycle', nameEnglish: 'Motorcycle', nameArabic: 'دراجة نارية', emoji: '🏍️', type: 'land', phonetic: '/ˈmoʊ.tərˌsaɪ.kəl/', soundCue: 'Braaaap vroom!', description: 'Fast two-wheeled vehicle with a helmet.', descriptionArabic: 'مركبة سريعة بعجلتين يرتدي سائقها خوذة الأمان.' },
+  { id: 'boat', nameEnglish: 'Sailboat', nameArabic: 'قارب شراعي', emoji: '⛵', type: 'water', phonetic: '/ˈseɪl.boʊt/', soundCue: 'Splash wave!', description: 'Sails smoothly propelled by sea breeze.', descriptionArabic: 'قارب صغير تدفعه نسمات الرياح على سطح الماء.' },
+];
+
+export const BODY_PARTS_DATA: BodyPartItem[] = [
+  { id: 'eye', nameEnglish: 'Eyes', nameArabic: 'عينان', emoji: '👀', phonetic: '/aɪz/', action: 'We use our eyes to see the world!', actionArabic: 'نرى بها جمال العالم والألوان والأشكال.' },
+  { id: 'ear', nameEnglish: 'Ears', nameArabic: 'أذنان', emoji: '👂', phonetic: '/ɪəz/', action: 'We use our ears to listen to sounds!', actionArabic: 'نسمع بها الأصوات والموسيقى وكلام الأصدقاء.' },
+  { id: 'nose', nameEnglish: 'Nose', nameArabic: 'أنف', emoji: '👃', phonetic: '/noʊz/', action: 'We smell sweet flowers with our nose!', actionArabic: 'نشم به الروائح العطرة والورود الجميلة.' },
+  { id: 'mouth', nameEnglish: 'Mouth', nameArabic: 'فم', emoji: '👄', phonetic: '/maʊθ/', action: 'We smile, talk, and eat delicious food!', actionArabic: 'نبتسم به ونتحدث ونتناول الطعام اللذيذ.' },
+  { id: 'hand', nameEnglish: 'Hands', nameArabic: 'يدان', emoji: '🖐️', phonetic: '/hændz/', action: 'We clap, write, and give warm high-fives!', actionArabic: 'نصفق بهما ونرسم ونصافح أصدقاءنا بحرارة.' },
+  { id: 'foot', nameEnglish: 'Feet', nameArabic: 'قدمان', emoji: '🦶', phonetic: '/fiːt/', action: 'We jump, run, and dance on our feet!', actionArabic: 'نركض ونقفز ونلعب كرة القدم بهما بنشاط.' },
+  { id: 'head', nameEnglish: 'Head', nameArabic: 'رأس', emoji: '👶', phonetic: '/hed/', action: 'Holds our brain and thinking cap!', actionArabic: 'يحمي عقلنا الذكي الذي نفكر ونتعلم به.' },
+  { id: 'hair', nameEnglish: 'Hair', nameArabic: 'شعر', emoji: '💇', phonetic: '/heər/', action: 'Grows on our head in different styles!', actionArabic: 'ينمو على رؤوسنا ونمشطه ليكون مرتباً وجميلاً.' },
+  { id: 'teeth', nameEnglish: 'Teeth', nameArabic: 'أسنان', emoji: '🦷', phonetic: '/tiːθ/', action: 'We brush our teeth to keep them shining white!', actionArabic: 'ننظفها بالفرشاة والمعجون لتكون بيضاء وصحية.' },
+  { id: 'arm', nameEnglish: 'Arms', nameArabic: 'ذراعان', emoji: '💪', phonetic: '/ɑːmz/', action: 'Give strong hugs and lift toys!', actionArabic: 'نعانق بها أحباءنا ونرفع بها الأشياء بقوة.' },
+  { id: 'leg', nameEnglish: 'Legs', nameArabic: 'ساقان', emoji: '🦵', phonetic: '/leɡz/', action: 'Help us walk tall and pedal bicycles!', actionArabic: 'تساعدنا على المشي وركوب الدراجة والتسلق.' },
+  { id: 'heart_body', nameEnglish: 'Heart', nameArabic: 'قلب', emoji: '❤️', phonetic: '/hɑːt/', action: 'Beats rhythmically: Thump-thump, thump-thump!', actionArabic: 'ينبض بالحب والحياة في صدورنا دون توقف.' },
+];
+
+export const JOBS_DATA: JobItem[] = [
+  { id: 'doctor', nameEnglish: 'Doctor', nameArabic: 'طبيب / دكتور', emoji: '👨‍⚕️', workplace: 'Hospital', workplaceArabic: 'المستشفى والعيادة', tool: 'Stethoscope', toolEmoji: '🩺', phonetic: '/ˈdɒk.tər/' },
+  { id: 'teacher', nameEnglish: 'Teacher', nameArabic: 'معلم / أستاذ', emoji: '👩‍🏫', workplace: 'School', workplaceArabic: 'المدرسة والفصل', tool: 'Books & Board', toolEmoji: '📚', phonetic: '/ˈtiː.tʃər/' },
+  { id: 'pilot', nameEnglish: 'Pilot', nameArabic: 'طيار', emoji: '👨‍✈️', workplace: 'Airplane cockpit', workplaceArabic: 'مقصورة الطائرة في السماء', tool: 'Flight controls', toolEmoji: '✈️', phonetic: '/ˈpaɪ.lət/' },
+  { id: 'firefighter', nameEnglish: 'Firefighter', nameArabic: 'رجل إطفاء', emoji: '👨‍🚒', workplace: 'Fire Station', workplaceArabic: 'محطة الإطفاء والإنقاذ', tool: 'Water Hose & Ladder', toolEmoji: '🚒', phonetic: '/ˈfaɪəˌfaɪ.tər/' },
+  { id: 'police', nameEnglish: 'Police Officer', nameArabic: 'شرطي', emoji: '👮‍♂️', workplace: 'Police Station', workplaceArabic: 'مركز الشرطة والشارع', tool: 'Badge & Whistle', toolEmoji: '🛡️', phonetic: '/pəˈliːs ˈɒf.ɪ.sər/' },
+  { id: 'chef', nameEnglish: 'Chef / Cook', nameArabic: 'طاهي / شيف', emoji: '👨‍🍳', workplace: 'Restaurant kitchen', workplaceArabic: 'مطبخ المطعم اللذيذ', tool: 'Pot & Spatula', toolEmoji: '🍳', phonetic: '/ʃef/' },
+  { id: 'engineer', nameEnglish: 'Engineer', nameArabic: 'مهندس', emoji: '👷‍♂️', workplace: 'Construction site', workplaceArabic: 'موقع البناء والمشاريع', tool: 'Helmet & Blueprints', toolEmoji: '📐', phonetic: '/ˌen.dʒɪˈnɪər/' },
+  { id: 'astronaut', nameEnglish: 'Astronaut', nameArabic: 'رائد فضاء', emoji: '👨‍🚀', workplace: 'Space Station', workplaceArabic: 'محطة الفضاء الدولية', tool: 'Spacesuit & Helmet', toolEmoji: '🚀', phonetic: '/ˈæs.trə.nɔːt/' },
+  { id: 'farmer', nameEnglish: 'Farmer', nameArabic: 'مزارع / فلاح', emoji: '👨‍🌾', workplace: 'Green Farm', workplaceArabic: 'المزرعة والحقول الخضراء', tool: 'Tractor & Plants', toolEmoji: '🚜', phonetic: '/ˈfɑː.mər/' },
+  { id: 'artist', nameEnglish: 'Artist', nameArabic: 'فنان / رسام', emoji: '👨‍🎨', workplace: 'Art Studio', workplaceArabic: 'مرسم الفن والإبداع', tool: 'Paintbrush & Palette', toolEmoji: '🎨', phonetic: '/ˈɑː.tɪst/' },
+  { id: 'scientist', nameEnglish: 'Scientist', nameArabic: 'عالم / باحث', emoji: '👨‍🔬', workplace: 'Science Lab', workplaceArabic: 'مختبر الأبحاث والاكتشافات', tool: 'Microscope & Beaker', toolEmoji: '🔬', phonetic: '/ˈsaɪən.tɪst/' },
+  { id: 'dentist', nameEnglish: 'Dentist', nameArabic: 'طبيب أسنان', emoji: '🦷', workplace: 'Dental Clinic', workplaceArabic: 'عيادة فحص الأسنان', tool: 'Mirror & Toothbrush', toolEmoji: '🪥', phonetic: '/ˈden.tɪst/' },
+];
+
+export const CLOTHES_DATA: ClothesItem[] = [
+  { id: 'shirt', nameEnglish: 'T-Shirt', nameArabic: 'قميص / تي شيرت', emoji: '👕', season: 'summer', phonetic: '/ˈtiː.ʃɜːt/', descriptionArabic: 'قميص قطني خفيف مريح للارتداء اليومي.' },
+  { id: 'pants', nameEnglish: 'Pants / Trousers', nameArabic: 'بنطال', emoji: '👖', season: 'all', phonetic: '/pænts/', descriptionArabic: 'بنطال جينز أو قماش نرتديه في أرجلنا.' },
+  { id: 'dress', nameEnglish: 'Dress', nameArabic: 'فستان', emoji: '👗', season: 'summer', phonetic: '/dres/', descriptionArabic: 'فستان ملون وجميل للحفلات والمناسبات.' },
+  { id: 'shoes', nameEnglish: 'Shoes', nameArabic: 'حذاء', emoji: '👟', season: 'all', phonetic: '/ʃuːz/', descriptionArabic: 'حذاء رياضي نحمي به أقدامنا عند الجري.' },
+  { id: 'hat', nameEnglish: 'Hat / Cap', nameArabic: 'قبعة', emoji: '🧢', season: 'summer', phonetic: '/hæt/', descriptionArabic: 'قبعة تقينا من أشعة الشمس الساطعة.' },
+  { id: 'jacket', nameEnglish: 'Jacket / Coat', nameArabic: 'سترة / جاكيت', emoji: '🧥', season: 'winter', phonetic: '/ˈdʒæk.ɪt/', descriptionArabic: 'جاكيت دافئ نلبسه في أيام الشتاء الباردة.' },
+  { id: 'socks', nameEnglish: 'Socks', nameArabic: 'جوارب', emoji: '🧦', season: 'all', phonetic: '/sɒks/', descriptionArabic: 'جوارب صوفية ناعمة نرتديها داخل الحذاء.' },
+  { id: 'glasses', nameEnglish: 'Glasses', nameArabic: 'نظارة', emoji: '👓', season: 'all', phonetic: '/ˈɡlɑː.sɪz/', descriptionArabic: 'نظارة للقراءة وحماية العينين من الغبار.' },
+  { id: 'scarf', nameEnglish: 'Scarf', nameArabic: 'وشاح / كوفية', emoji: '🧣', season: 'winter', phonetic: '/skɑːf/', descriptionArabic: 'وشاح دافئ نلفه حول رقبتنا عند هبوب الرياح.' },
+  { id: 'gloves', nameEnglish: 'Gloves', nameArabic: 'قفازات', emoji: '🧤', season: 'winter', phonetic: '/ɡlʌvz/', descriptionArabic: 'قفازات دافئة تحمي أصابعنا من البرد القارس.' },
 ];
