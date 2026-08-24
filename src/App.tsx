@@ -11,6 +11,9 @@ import { ColorsScreen } from './components/ColorsScreen';
 import { FamilyScreen } from './components/FamilyScreen';
 import { ShapesScreen } from './components/ShapesScreen';
 import { FruitsScreen } from './components/FruitsScreen';
+import { VegetablesScreen } from './components/VegetablesScreen';
+import { WeatherScreen } from './components/WeatherScreen';
+import { SeasonsScreen } from './components/SeasonsScreen';
 import { VehiclesScreen } from './components/VehiclesScreen';
 import { BodyPartsScreen } from './components/BodyPartsScreen';
 import { JobsScreen } from './components/JobsScreen';
@@ -98,6 +101,27 @@ export const App: React.FC = () => {
         )}
         {currentScreen === 'fruits' && (
           <FruitsScreen
+            themeConfig={themeConfig}
+            speechRate={speechRate}
+            soundEnabled={soundEnabled}
+          />
+        )}
+        {currentScreen === 'vegetables' && (
+          <VegetablesScreen
+            themeConfig={themeConfig}
+            speechRate={speechRate}
+            soundEnabled={soundEnabled}
+          />
+        )}
+        {currentScreen === 'weather' && (
+          <WeatherScreen
+            themeConfig={themeConfig}
+            speechRate={speechRate}
+            soundEnabled={soundEnabled}
+          />
+        )}
+        {currentScreen === 'seasons' && (
+          <SeasonsScreen
             themeConfig={themeConfig}
             speechRate={speechRate}
             soundEnabled={soundEnabled}

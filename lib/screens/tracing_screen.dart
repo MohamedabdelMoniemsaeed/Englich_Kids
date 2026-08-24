@@ -29,7 +29,7 @@ class _TracingScreenState extends State<TracingScreen> {
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.delete_outline_rounded, color: Colors.rose),
+            icon: const Icon(Icons.delete_outline_rounded, color: Color(0xFFF43F5E)),
             onPressed: () => setState(() => _points.clear()),
           ),
         ],
@@ -90,7 +90,6 @@ class _TracingScreenState extends State<TracingScreen> {
                     // Drawing Gesture Area
                     GestureDetector(
                       onPanUpdate: (details) {
-                        RenderBox renderBox = context.findRenderObject() as RenderBox;
                         setState(() {
                           _points.add(details.localPosition);
                         });

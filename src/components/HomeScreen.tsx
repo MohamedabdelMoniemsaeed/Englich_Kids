@@ -57,24 +57,54 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ themeConfig, onNavigate 
       image: '/assets/images/animals/animalshome.jpg',
       categoryType: 'learning',
     },
-    // 5. Fruits & Vegetables
+    // 5. Fruits (منفصلة)
     {
       id: 'fruits',
-      name: 'Fruits & Veggies',
-      arabicName: 'الفواكه والخضروات',
-      badge: 'New 🍓🥕',
-      customIcon: '🍎🍌🍓🥦🥕',
-      gradientBg: 'from-emerald-400 via-rose-400 to-amber-400',
+      name: 'Fruits',
+      arabicName: 'الفواكه اللذيذة',
+      badge: '🍎🍓',
+      customIcon: '🍎🍌🍓🍉🍊🍇',
+      gradientBg: 'from-rose-400 via-red-500 to-pink-500',
       categoryType: 'learning',
     },
-    // 6. Vehicles & Transport
+    // 6. Vegetables (منفصلة)
+    {
+      id: 'vegetables',
+      name: 'Vegetables',
+      arabicName: 'الخضروات الصحية',
+      badge: '🥕🥦',
+      customIcon: '🥕🥦🍅🥒🌽🥔',
+      gradientBg: 'from-emerald-400 via-green-500 to-teal-600',
+      categoryType: 'learning',
+    },
+    // 7. Weather (حالات الطقس - منفصلة)
+    {
+      id: 'weather',
+      name: 'Weather',
+      arabicName: 'حالات الطقس والجو',
+      badge: '☀️🌧️',
+      customIcon: '☀️🌧️☁️❄️💨🌈',
+      gradientBg: 'from-sky-400 via-blue-500 to-cyan-500',
+      categoryType: 'learning',
+    },
+    // 8. Seasons (فصول السنة - منفصلة)
+    {
+      id: 'seasons',
+      name: 'Seasons',
+      arabicName: 'فصول السنة الأربعة',
+      badge: '🌸🏖️',
+      customIcon: '🌸🏖️🍂⛄',
+      gradientBg: 'from-amber-400 via-orange-500 to-rose-500',
+      categoryType: 'learning',
+    },
+    // 9. Vehicles & Transport
     {
       id: 'vehicles',
       name: 'Vehicles',
       arabicName: 'المواصلات والمركبات',
       badge: 'New 🚗✈️',
       customIcon: '🚗✈️🚆🚀🚢',
-      gradientBg: 'from-sky-400 via-blue-500 to-indigo-600',
+      gradientBg: 'from-indigo-400 via-purple-500 to-violet-600',
       categoryType: 'learning',
     },
     // 7. Colors

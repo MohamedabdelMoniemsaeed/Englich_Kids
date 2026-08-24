@@ -12,8 +12,11 @@ class _SpellingBeeScreenState extends State<SpellingBeeScreen> {
   final List<Map<String, String>> words = [
     {'word': 'CAT', 'emoji': '🐱', 'ar': 'قطة', 'hint': 'Says Meow!'},
     {'word': 'DOG', 'emoji': '🐶', 'ar': 'كلب', 'hint': 'Says Woof!'},
-    {'word': 'SUN', 'emoji': '☀️', 'ar': 'شمس', 'hint': 'Bright and warm'},
+    {'word': 'SUN', 'emoji': '☀️', 'ar': 'شمس / مشمس', 'hint': 'Bright and warm in summer'},
+    {'word': 'RAIN', 'emoji': '🌧️', 'ar': 'مطر', 'hint': 'Water drops from clouds'},
+    {'word': 'CORN', 'emoji': '🌽', 'ar': 'ذرة صفراء', 'hint': 'Sweet yellow vegetable'},
     {'word': 'CAR', 'emoji': '🚗', 'ar': 'سيارة', 'hint': 'Beep beep!'},
+    {'word': 'COLD', 'emoji': '🥶', 'ar': 'بارد', 'hint': 'Winter weather'},
     {'word': 'STAR', 'emoji': '⭐', 'ar': 'نجمة', 'hint': 'Shines high'},
     {'word': 'FISH', 'emoji': '🐟', 'ar': 'سمكة', 'hint': 'Swims in water'},
   ];

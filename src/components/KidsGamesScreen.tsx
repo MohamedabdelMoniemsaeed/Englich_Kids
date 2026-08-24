@@ -35,7 +35,10 @@ type ActiveGame = 'menu' | 'memory' | 'tracing' | 'spelling' | 'listening' | 'so
 const SPELLING_WORDS = [
   { word: 'CAT', arabic: 'قطة', emoji: '🐱', hint: 'Says Meow!' },
   { word: 'DOG', arabic: 'كلب', emoji: '🐶', hint: 'Says Woof!' },
-  { word: 'SUN', arabic: 'شمس', emoji: '☀️', hint: 'Bright and hot!' },
+  { word: 'SUN', arabic: 'شمس', emoji: '☀️', hint: 'Bright and hot in summer!' },
+  { word: 'RAIN', arabic: 'مطر', emoji: '🌧️', hint: 'Water drops falling down' },
+  { word: 'CORN', arabic: 'ذرة صفراء', emoji: '🌽', hint: 'Sweet crunchy yellow veggie' },
+  { word: 'COLD', arabic: 'بارد', emoji: '🥶', hint: 'Winter chilly weather' },
   { word: 'CAR', arabic: 'سيارة', emoji: '🚗', hint: 'Beep beep!' },
   { word: 'FISH', arabic: 'سمكة', emoji: '🐟', hint: 'Swims in water' },
   { word: 'LION', arabic: 'أسد', emoji: '🦁', hint: 'King of jungle' },
@@ -51,6 +54,10 @@ const SPELLING_WORDS = [
 const LISTENING_POOL = [
   { word: 'Elephant', arabic: 'فيل', emoji: '🐘', options: ['🐘', '🦒', '🦁', '🐵'] },
   { word: 'Banana', arabic: 'موز', emoji: '🍌', options: ['🍎', '🍌', '🍓', '🍇'] },
+  { word: 'Carrot', arabic: 'جزر', emoji: '🥕', options: ['🥦', '🥕', '🍅', '🌽'] },
+  { word: 'Sunny', arabic: 'مشمس', emoji: '☀️', options: ['🌧️', '☀️', '❄️', '🌈'] },
+  { word: 'Rainbow', arabic: 'قوس قزح', emoji: '🌈', options: ['☁️', '💨', '🌈', '☀️'] },
+  { word: 'Winter', arabic: 'شتاء', emoji: '⛄', options: ['🌸', '🏖️', '🍂', '⛄'] },
   { word: 'Airplane', arabic: 'طائرة', emoji: '✈️', options: ['🚗', '✈️', '🚆', '🚢'] },
   { word: 'Red', arabic: 'أحمر', emoji: '🔴', options: ['🔵', '🔴', '🟢', '🟡'] },
   { word: 'Doctor', arabic: 'طبيب', emoji: '👨‍⚕️', options: ['👨‍⚕️', '👩‍🏫', '👨‍🚒', '👮‍♂️'] },

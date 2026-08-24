@@ -9,6 +9,9 @@ export type ScreenId =
   | 'shapes'
   | 'family'
   | 'fruits'
+  | 'vegetables'
+  | 'weather'
+  | 'seasons'
   | 'vehicles'
   | 'body'
   | 'jobs'
@@ -100,10 +103,49 @@ export interface FruitItem {
   nameArabic: string;
   emoji: string;
   color: string;
-  category: 'fruit' | 'vegetable';
+  category?: 'fruit' | 'vegetable';
   phonetic: string;
   fact: string;
   factArabic: string;
+}
+
+export interface VegetableItem {
+  id: string;
+  nameEnglish: string;
+  nameArabic: string;
+  emoji: string;
+  color: string;
+  phonetic: string;
+  benefit: string;
+  benefitArabic: string;
+}
+
+export interface WeatherItem {
+  id: string;
+  nameEnglish: string;
+  nameArabic: string;
+  emoji: string;
+  color: string;
+  phonetic: string;
+  activity: string;
+  activityArabic: string;
+  clothingTip: string;
+  clothingTipArabic: string;
+}
+
+export interface SeasonItem {
+  id: string;
+  nameEnglish: string;
+  nameArabic: string;
+  emoji: string;
+  color: string;
+  phonetic: string;
+  months: string;
+  monthsArabic: string;
+  features: string;
+  featuresArabic: string;
+  activities: string;
+  activitiesArabic: string;
 }
 
 export interface VehicleItem {

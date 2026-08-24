@@ -12,6 +12,10 @@ class _ListeningGameScreenState extends State<ListeningGameScreen> {
   final List<Map<String, dynamic>> _pool = [
     {'word': 'Elephant', 'correct': '🐘', 'options': ['🐘', '🦁', '🦒', '🐵']},
     {'word': 'Banana', 'correct': '🍌', 'options': ['🍎', '🍌', '🍓', '🍇']},
+    {'word': 'Carrot', 'correct': '🥕', 'options': ['🥦', '🥕', '🍅', '🌽']},
+    {'word': 'Sunny', 'correct': '☀️', 'options': ['🌧️', '☀️', '❄️', '🌈']},
+    {'word': 'Rainbow', 'correct': '🌈', 'options': ['☁️', '💨', '🌈', '☀️']},
+    {'word': 'Winter', 'correct': '⛄', 'options': ['🌸', '🏖️', '🍂', '⛄']},
     {'word': 'Airplane', 'correct': '✈️', 'options': ['🚗', '✈️', '🚆', '🚢']},
     {'word': 'Doctor', 'correct': '👨‍⚕️', 'options': ['👨‍⚕️', '👩‍🏫', '👨‍🚒', '👮‍♂️']},
   ];
