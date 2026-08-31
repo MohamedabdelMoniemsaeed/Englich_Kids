@@ -4,14 +4,14 @@ workflows:
     environment:
       flutter: stable
     scripts:
-      - name: Clean old Android
+      - name: Remove old Android
         script: |
           rm -rf android
           rm -rf build
-      - name: Create fresh Flutter Android
+      - name: Create Flutter Android
         script: |
           flutter create --platforms=android .
-      - name: Build Release APK
+      - name: Build APK
         script: |
           flutter clean
           flutter pub get
