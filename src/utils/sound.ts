@@ -1,6 +1,6 @@
 // Audio synthesizer & Web Speech API integration
-
 let audioCtx: AudioContext | null = null;
+let cachedVoices: SpeechSynthesisVoice[] = [];
 
 function getAudioContext(): AudioContext {
   if (!audioCtx) {
@@ -8,9 +8,31 @@ function getAudioContext(): AudioContext {
     audioCtx = new AudioCtxClass();
   }
   if (audioCtx.state === 'suspended') {
-    audioCtx.resume();
+    audioCtx.resume().catch(() => {});
   }
   return audioCtx;
+}
+
+// Unlock audio on first user touch/click
+if (typeof window !== 'undefined') {
+  const unlockAudio = () => {
+    if (audioCtx && audioCtx.state === 'suspended') {
+      audioCtx.resume().catch(() => {});
+    }
+    window.removeEventListener('click', unlockAudio);
+    window.removeEventListener('touchstart', unlockAudio);
+  };
+  window.addEventListener('click', unlockAudio, { passive: true });
+  window.addEventListener('touchstart', unlockAudio, { passive: true });
+
+  // Pre-fetch speech voices
+  if ('speechSynthesis' in window) {
+    const updateVoices = () => {
+      cachedVoices = window.speechSynthesis.getVoices();
+    };
+    updateVoices();
+    window.speechSynthesis.onvoiceschanged = updateVoices;
+  }
 }
 
 // Play pleasant kid celebration sound
@@ -82,40 +104,69 @@ export function playChime(type: 'success' | 'click' | 'pop' | 'star' = 'click') 
 // Text to speech with English accents & slow speed for kids
 export function speakWord(text: string, rate = 0.85, onEnd?: () => void) {
   if (!('speechSynthesis' in window)) {
-    console.warn('Speech synthesis not supported');
     onEnd?.();
     return;
   }
 
-  window.speechSynthesis.cancel(); // Stop any pending speech
+  try {
+    window.speechSynthesis.cancel(); // Stop any pending speech
 
-  const cleanText = text.replace(/\[IMAGE:.*?\]/gi, '').trim();
-  if (!cleanText) {
+    const cleanText = text
+      .replace(/\[IMAGE:.*?\]/gi, '')
+      .replace(/[\u0600-\u06FF]/g, '') // remove Arabic text if combined so English synthesizer speaks cleanly
+      .replace(/[•\-_—]/g, ' ')
+      .trim();
+
+    if (!cleanText) {
+      onEnd?.();
+      return;
+    }
+
+    const utterance = new SpeechSynthesisUtterance(cleanText);
+    utterance.rate = Math.max(0.4, Math.min(rate, 1.2));
+    utterance.pitch = 1.08; // Friendly, clear kid tone
+    utterance.lang = 'en-US';
+
+    const voices = cachedVoices.length > 0 ? cachedVoices : window.speechSynthesis.getVoices();
+    const preferredVoice =
+      voices.find(
+        v =>
+          (v.lang === 'en-US' || v.lang.startsWith('en')) &&
+          (v.name.includes('Google') ||
+            v.name.includes('Natural') ||
+            v.name.includes('Samantha') ||
+            v.name.includes('Ava') ||
+            v.name.includes('Zira'))
+      ) || voices.find(v => v.lang.startsWith('en'));
+
+    if (preferredVoice) {
+      utterance.voice = preferredVoice;
+    }
+
+    let finished = false;
+    const finish = () => {
+      if (!finished) {
+        finished = true;
+        onEnd?.();
+      }
+    };
+
+    utterance.onend = finish;
+    utterance.onerror = finish;
+
+    // Safety timeout in case browser gets stuck
+    setTimeout(() => {
+      if (!finished && window.speechSynthesis.speaking) {
+        // Still speaking, that's fine
+      } else if (!finished) {
+        finish();
+      }
+    }, 5000);
+
+    window.speechSynthesis.speak(utterance);
+  } catch (e) {
     onEnd?.();
-    return;
   }
-
-  const utterance = new SpeechSynthesisUtterance(cleanText);
-  utterance.rate = rate;
-  utterance.pitch = 1.1; // Slightly friendly higher pitch for kids
-  utterance.lang = 'en-US';
-
-  // Try to find natural high quality English voices
-  const voices = window.speechSynthesis.getVoices();
-  const preferredVoice = voices.find(
-    v => (v.lang === 'en-US' || v.lang.startsWith('en')) && (v.name.includes('Google') || v.name.includes('Natural') || v.name.includes('Samantha') || v.name.includes('Zira'))
-  ) || voices.find(v => v.lang.startsWith('en'));
-
-  if (preferredVoice) {
-    utterance.voice = preferredVoice;
-  }
-
-  if (onEnd) {
-    utterance.onend = () => onEnd();
-    utterance.onerror = () => onEnd();
-  }
-
-  window.speechSynthesis.speak(utterance);
 }
 
 // Sequence speaker (e.g. speak letter "A", pause slightly, then speak word "Apple")
@@ -142,7 +193,7 @@ export function speakSequence(words: string[], rate = 0.85, onComplete?: () => v
 }
 
 export function stopSpeaking() {
-  if ('speechSynthesis' in window) {
+  if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
     window.speechSynthesis.cancel();
   }
 }
