@@ -11,7 +11,7 @@ class TtsService {
     try {
       await _tts.setLanguage("en-US");
       await _tts.setSpeechRate(0.42); // Slow, clear rate for kids
-      await _tts.setPitch(1.1);       // Friendly kid tone
+      await _tts.setPitch(1.1); // Friendly kid tone
       await _tts.setVolume(1.0);
 
       if (!kIsWeb && Platform.isIOS) {
@@ -38,7 +38,8 @@ class TtsService {
 
       final cleanText = text
           .replaceAll(RegExp(r'\[IMAGE:.*?\]'), '')
-          .replaceAll(RegExp(r'[\u0600-\u06FF]'), '') // remove Arabic parts for clear English speech
+          .replaceAll(RegExp(r'[\u0600-\u06FF]'),
+              '') // remove Arabic parts for clear English speech
           .trim();
 
       if (cleanText.isEmpty) return;
@@ -58,4 +59,3 @@ class TtsService {
     } catch (_) {}
   }
 }
-

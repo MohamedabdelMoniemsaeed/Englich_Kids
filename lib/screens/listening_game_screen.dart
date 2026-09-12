@@ -10,14 +10,46 @@ class ListeningGameScreen extends StatefulWidget {
 
 class _ListeningGameScreenState extends State<ListeningGameScreen> {
   final List<Map<String, dynamic>> _pool = [
-    {'word': 'Elephant', 'correct': '🐘', 'options': ['🐘', '🦁', '🦒', '🐵']},
-    {'word': 'Banana', 'correct': '🍌', 'options': ['🍎', '🍌', '🍓', '🍇']},
-    {'word': 'Carrot', 'correct': '🥕', 'options': ['🥦', '🥕', '🍅', '🌽']},
-    {'word': 'Sunny', 'correct': '☀️', 'options': ['🌧️', '☀️', '❄️', '🌈']},
-    {'word': 'Rainbow', 'correct': '🌈', 'options': ['☁️', '💨', '🌈', '☀️']},
-    {'word': 'Winter', 'correct': '⛄', 'options': ['🌸', '🏖️', '🍂', '⛄']},
-    {'word': 'Airplane', 'correct': '✈️', 'options': ['🚗', '✈️', '🚆', '🚢']},
-    {'word': 'Doctor', 'correct': '👨‍⚕️', 'options': ['👨‍⚕️', '👩‍🏫', '👨‍🚒', '👮‍♂️']},
+    {
+      'word': 'Elephant',
+      'correct': '🐘',
+      'options': ['🐘', '🦁', '🦒', '🐵']
+    },
+    {
+      'word': 'Banana',
+      'correct': '🍌',
+      'options': ['🍎', '🍌', '🍓', '🍇']
+    },
+    {
+      'word': 'Carrot',
+      'correct': '🥕',
+      'options': ['🥦', '🥕', '🍅', '🌽']
+    },
+    {
+      'word': 'Sunny',
+      'correct': '☀️',
+      'options': ['🌧️', '☀️', '❄️', '🌈']
+    },
+    {
+      'word': 'Rainbow',
+      'correct': '🌈',
+      'options': ['☁️', '💨', '🌈', '☀️']
+    },
+    {
+      'word': 'Winter',
+      'correct': '⛄',
+      'options': ['🌸', '🏖️', '🍂', '⛄']
+    },
+    {
+      'word': 'Airplane',
+      'correct': '✈️',
+      'options': ['🚗', '✈️', '🚆', '🚢']
+    },
+    {
+      'word': 'Doctor',
+      'correct': '👨‍⚕️',
+      'options': ['👨‍⚕️', '👩‍🏫', '👨‍🚒', '👮‍♂️']
+    },
   ];
 
   int _index = 0;
@@ -50,14 +82,18 @@ class _ListeningGameScreenState extends State<ListeningGameScreen> {
   @override
   Widget build(BuildContext context) {
     final item = _pool[_index];
+    final colors = Theme.of(context).colorScheme;
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF8FAFC),
       appBar: AppBar(
-        title: Text('Listen & Tap 🎧 (Score: $_score)', style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16)),
-        backgroundColor: const Color(0xFFF43F5E),
+        title: Text('Listen & Tap 🎧 (Score: $_score)',
+            style: const TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 16)),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
+          icon:
+              const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
           onPressed: () => Navigator.pop(context),
         ),
       ),
@@ -67,7 +103,11 @@ class _ListeningGameScreenState extends State<ListeningGameScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Text('اسمع الصوت واختر الصورة الصحيحة:', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Color(0xFF475569))),
+              const Text('اسمع الصوت واختر الصورة الصحيحة:',
+                  style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF475569))),
               const SizedBox(height: 20),
 
               // Audio speaker button
@@ -80,10 +120,14 @@ class _ListeningGameScreenState extends State<ListeningGameScreen> {
                     color: Color(0xFFF43F5E),
                     shape: BoxShape.circle,
                     boxShadow: [
-                      BoxShadow(color: Colors.redAccent, blurRadius: 10, offset: Offset(0, 4)),
+                      BoxShadow(
+                          color: Colors.redAccent,
+                          blurRadius: 10,
+                          offset: Offset(0, 4)),
                     ],
                   ),
-                  child: const Icon(Icons.volume_up_rounded, size: 50, color: Colors.white),
+                  child: const Icon(Icons.volume_up_rounded,
+                      size: 50, color: Colors.white),
                 ),
               ),
               const SizedBox(height: 36),
@@ -100,8 +144,11 @@ class _ListeningGameScreenState extends State<ListeningGameScreen> {
 
                   Color borderCol = Colors.grey.shade300;
                   if (_selected != null) {
-                    if (isCorrect) borderCol = Colors.green;
-                    else if (isChosen) borderCol = Colors.red;
+                    if (isCorrect) {
+                      borderCol = Colors.green;
+                    } else if (isChosen) {
+                      borderCol = Colors.red;
+                    }
                   }
 
                   return InkWell(
@@ -112,7 +159,9 @@ class _ListeningGameScreenState extends State<ListeningGameScreen> {
                         borderRadius: BorderRadius.circular(22),
                         border: Border.all(color: borderCol, width: 3),
                         boxShadow: [
-                          BoxShadow(color: Colors.black.withOpacity(0.04), blurRadius: 6),
+                          BoxShadow(
+                              color: Colors.black.withValues(alpha: 0.04),
+                              blurRadius: 6),
                         ],
                       ),
                       child: Center(
@@ -127,9 +176,11 @@ class _ListeningGameScreenState extends State<ListeningGameScreen> {
               if (_selected != null)
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFFF43F5E),
-                    padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                    backgroundColor: colors.primary,
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 32, vertical: 12),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16)),
                   ),
                   onPressed: () {
                     setState(() {
@@ -138,7 +189,8 @@ class _ListeningGameScreenState extends State<ListeningGameScreen> {
                       _playAudio();
                     });
                   },
-                  child: const Text('Next Challenge ➜', style: TextStyle(color: Colors.white, fontSize: 16)),
+                  child: const Text('Next Challenge ➜',
+                      style: TextStyle(color: Colors.white, fontSize: 16)),
                 ),
             ],
           ),

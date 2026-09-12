@@ -12,9 +12,24 @@ class _SpellingBeeScreenState extends State<SpellingBeeScreen> {
   final List<Map<String, String>> words = [
     {'word': 'CAT', 'emoji': '🐱', 'ar': 'قطة', 'hint': 'Says Meow!'},
     {'word': 'DOG', 'emoji': '🐶', 'ar': 'كلب', 'hint': 'Says Woof!'},
-    {'word': 'SUN', 'emoji': '☀️', 'ar': 'شمس / مشمس', 'hint': 'Bright and warm in summer'},
-    {'word': 'RAIN', 'emoji': '🌧️', 'ar': 'مطر', 'hint': 'Water drops from clouds'},
-    {'word': 'CORN', 'emoji': '🌽', 'ar': 'ذرة صفراء', 'hint': 'Sweet yellow vegetable'},
+    {
+      'word': 'SUN',
+      'emoji': '☀️',
+      'ar': 'شمس / مشمس',
+      'hint': 'Bright and warm in summer'
+    },
+    {
+      'word': 'RAIN',
+      'emoji': '🌧️',
+      'ar': 'مطر',
+      'hint': 'Water drops from clouds'
+    },
+    {
+      'word': 'CORN',
+      'emoji': '🌽',
+      'ar': 'ذرة صفراء',
+      'hint': 'Sweet yellow vegetable'
+    },
     {'word': 'CAR', 'emoji': '🚗', 'ar': 'سيارة', 'hint': 'Beep beep!'},
     {'word': 'COLD', 'emoji': '🥶', 'ar': 'بارد', 'hint': 'Winter weather'},
     {'word': 'STAR', 'emoji': '⭐', 'ar': 'نجمة', 'hint': 'Shines high'},
@@ -65,14 +80,15 @@ class _SpellingBeeScreenState extends State<SpellingBeeScreen> {
   @override
   Widget build(BuildContext context) {
     final current = words[currentIndex];
+    final colors = Theme.of(context).colorScheme;
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF8FAFC),
       appBar: AppBar(
-        title: const Text('Spelling Bee 🔤', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-        backgroundColor: const Color(0xFF10B981),
+        title: const Text('Spelling Bee 🔤',
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
+          icon:
+              const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
           onPressed: () => Navigator.pop(context),
         ),
       ),
@@ -84,34 +100,52 @@ class _SpellingBeeScreenState extends State<SpellingBeeScreen> {
             children: [
               Text(current['emoji']!, style: const TextStyle(fontSize: 85)),
               const SizedBox(height: 6),
-              Text(current['ar']!, style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Color(0xFF1E293B))),
-              Text('💡 ${current['hint']!}', style: const TextStyle(fontSize: 13, color: Color(0xFFD97706), fontWeight: FontWeight.w600)),
+              Text(current['ar']!,
+                  style: const TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF1E293B))),
+              Text('💡 ${current['hint']!}',
+                  style: const TextStyle(
+                      fontSize: 13,
+                      color: Color(0xFFD97706),
+                      fontWeight: FontWeight.w600)),
               const SizedBox(height: 28),
 
               // Letter Slots
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: List.generate(current['word']!.length, (index) {
-                  String char = index < userLetters.length ? userLetters[index] : '';
+                  String char =
+                      index < userLetters.length ? userLetters[index] : '';
                   return Container(
                     margin: const EdgeInsets.all(6),
                     width: 58,
                     height: 64,
                     decoration: BoxDecoration(
-                      color: char.isNotEmpty ? const Color(0xFFD1FAE5) : Colors.white,
+                      color: char.isNotEmpty
+                          ? const Color(0xFFD1FAE5)
+                          : Colors.white,
                       border: Border.all(
-                        color: char.isNotEmpty ? const Color(0xFF10B981) : Colors.grey.shade300,
+                        color: char.isNotEmpty
+                            ? const Color(0xFF10B981)
+                            : Colors.grey.shade300,
                         width: 2.5,
                       ),
                       borderRadius: BorderRadius.circular(18),
                       boxShadow: [
-                        BoxShadow(color: Colors.black.withOpacity(0.04), blurRadius: 4),
+                        BoxShadow(
+                            color: Colors.black.withValues(alpha: 0.04),
+                            blurRadius: 4),
                       ],
                     ),
                     child: Center(
                       child: Text(
                         char,
-                        style: const TextStyle(fontSize: 30, fontWeight: FontWeight.w900, color: Color(0xFF065F46)),
+                        style: const TextStyle(
+                            fontSize: 30,
+                            fontWeight: FontWeight.w900,
+                            color: Color(0xFF065F46)),
                       ),
                     ),
                   );
@@ -125,13 +159,19 @@ class _SpellingBeeScreenState extends State<SpellingBeeScreen> {
                 children: scrambled.map((char) {
                   return ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF10B981),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
-                      padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 14),
+                      backgroundColor: colors.primary,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(18)),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 22, vertical: 14),
                       elevation: 4,
                     ),
                     onPressed: () => _addLetter(char),
-                    child: Text(char, style: const TextStyle(fontSize: 26, fontWeight: FontWeight.w900, color: Colors.white)),
+                    child: Text(char,
+                        style: const TextStyle(
+                            fontSize: 26,
+                            fontWeight: FontWeight.w900,
+                            color: Colors.white)),
                   );
                 }).toList(),
               ),
@@ -140,9 +180,11 @@ class _SpellingBeeScreenState extends State<SpellingBeeScreen> {
               if (isCompleted)
                 ElevatedButton.icon(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF059669),
-                    padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                    backgroundColor: colors.secondary,
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 32, vertical: 14),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20)),
                     elevation: 5,
                   ),
                   onPressed: () {
@@ -151,8 +193,13 @@ class _SpellingBeeScreenState extends State<SpellingBeeScreen> {
                       _loadWord();
                     });
                   },
-                  icon: const Icon(Icons.arrow_forward_rounded, color: Colors.white),
-                  label: const Text('Next Word / الكلمة التالية', style: TextStyle(fontSize: 16, color: Colors.white, fontWeight: FontWeight.bold)),
+                  icon: const Icon(Icons.arrow_forward_rounded,
+                      color: Colors.white),
+                  label: const Text('Next Word / الكلمة التالية',
+                      style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold)),
                 ),
             ],
           ),

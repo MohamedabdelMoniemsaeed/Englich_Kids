@@ -3,25 +3,32 @@ import 'spelling_bee_screen.dart';
 import 'memory_game_screen.dart';
 import 'tracing_screen.dart';
 import 'listening_game_screen.dart';
+import 'color_match_screen.dart';
 
 class GamesHubScreen extends StatelessWidget {
   const GamesHubScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
     return Scaffold(
-      backgroundColor: const Color(0xFFF8FAFC),
       appBar: AppBar(
-        backgroundColor: const Color(0xFF8B5CF6),
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
+          icon: const Icon(Icons.arrow_back_ios_new_rounded),
           onPressed: () => Navigator.pop(context),
         ),
-        title: const Column(
+        title: Column(
           children: [
-            Text('🎮 Kids Games Hub', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 18)),
-            Text('ألعاب وأنشطة تفاعلية مسلية', style: TextStyle(color: Colors.white70, fontSize: 11)),
+            Text('🎮 Kids Games Hub',
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: colors.onPrimary,
+                    fontSize: 18)),
+            Text('ألعاب وأنشطة تفاعلية مسلية',
+                style: TextStyle(
+                    color: colors.onPrimary.withValues(alpha: 0.8),
+                    fontSize: 11)),
           ],
         ),
         centerTitle: true,
@@ -39,7 +46,19 @@ class GamesHubScreen extends StatelessWidget {
               subtitle: 'لعبة تركيب الكلمات',
               emoji: '🔤',
               color: const Color(0xFF10B981),
-              onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const SpellingBeeScreen())),
+              onTap: () => Navigator.push(context,
+                  MaterialPageRoute(builder: (_) => const SpellingBeeScreen())),
+            ),
+            _buildGameCard(
+              context,
+              title: 'Color Match',
+              subtitle: 'طابق اللون مع اسمه',
+              emoji: '🎨',
+              color: colors.primary,
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const ColorMatchScreen()),
+              ),
             ),
             _buildGameCard(
               context,
@@ -47,7 +66,8 @@ class GamesHubScreen extends StatelessWidget {
               subtitle: 'لعبة الذاكرة والبطاقات',
               emoji: '🧠',
               color: const Color(0xFF8B5CF6),
-              onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const MemoryGameScreen())),
+              onTap: () => Navigator.push(context,
+                  MaterialPageRoute(builder: (_) => const MemoryGameScreen())),
             ),
             _buildGameCard(
               context,
@@ -55,7 +75,8 @@ class GamesHubScreen extends StatelessWidget {
               subtitle: 'سبورة تتبع الحروف',
               emoji: '✍️',
               color: const Color(0xFF3B82F6),
-              onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const TracingScreen())),
+              onTap: () => Navigator.push(context,
+                  MaterialPageRoute(builder: (_) => const TracingScreen())),
             ),
             _buildGameCard(
               context,
@@ -63,7 +84,10 @@ class GamesHubScreen extends StatelessWidget {
               subtitle: 'تحدي الاستماع السريع',
               emoji: '🎧',
               color: const Color(0xFFF43F5E),
-              onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const ListeningGameScreen())),
+              onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (_) => const ListeningGameScreen())),
             ),
           ],
         ),
@@ -81,11 +105,14 @@ class GamesHubScreen extends StatelessWidget {
   }) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).colorScheme.surfaceContainerHighest,
         borderRadius: BorderRadius.circular(22),
-        border: Border.all(color: color.withOpacity(0.3), width: 2),
+        border: Border.all(color: color.withValues(alpha: 0.3), width: 2),
         boxShadow: [
-          BoxShadow(color: color.withOpacity(0.1), blurRadius: 8, offset: const Offset(0, 3)),
+          BoxShadow(
+              color: color.withValues(alpha: 0.1),
+              blurRadius: 8,
+              offset: const Offset(0, 3)),
         ],
       ),
       child: Material(
@@ -100,9 +127,17 @@ class GamesHubScreen extends StatelessWidget {
               children: [
                 Text(emoji, style: const TextStyle(fontSize: 42)),
                 const SizedBox(height: 8),
-                Text(title, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: color)),
+                Text(title,
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                        color: color)),
                 const SizedBox(height: 2),
-                Text(subtitle, style: const TextStyle(fontSize: 11, color: Color(0xFF64748B)), textAlign: TextAlign.center),
+                Text(subtitle,
+                    style: TextStyle(
+                        fontSize: 11,
+                        color: Theme.of(context).colorScheme.onSurfaceVariant),
+                    textAlign: TextAlign.center),
               ],
             ),
           ),

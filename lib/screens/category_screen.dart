@@ -9,24 +9,29 @@ class CategoryScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
     return Scaffold(
-      backgroundColor: const Color(0xFFF8FAFC),
       appBar: AppBar(
-        backgroundColor: category.primaryColor,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
+          icon: Icon(Icons.arrow_back_ios_new_rounded, color: colors.onPrimary),
           onPressed: () => Navigator.pop(context),
         ),
         title: Column(
           children: [
             Text(
               '${category.iconEmoji} ${category.titleEn}',
-              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Colors.white),
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                  color: colors.onPrimary),
             ),
             Text(
               category.titleAr,
-              style: const TextStyle(fontSize: 12, color: Colors.white70),
+              style: TextStyle(
+                fontSize: 12,
+                color: colors.onPrimary.withValues(alpha: 0.8),
+              ),
             ),
           ],
         ),
@@ -41,12 +46,13 @@ class CategoryScreen extends StatelessWidget {
           return Container(
             margin: const EdgeInsets.only(bottom: 14),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: colors.surfaceContainerHighest,
               borderRadius: BorderRadius.circular(22),
-              border: Border.all(color: category.primaryColor.withOpacity(0.2), width: 1.5),
+              border: Border.all(
+                  color: colors.primary.withValues(alpha: 0.2), width: 1.5),
               boxShadow: [
                 BoxShadow(
-                  color: category.primaryColor.withOpacity(0.06),
+                  color: colors.primary.withValues(alpha: 0.06),
                   blurRadius: 10,
                   offset: const Offset(0, 4),
                 ),
@@ -68,7 +74,7 @@ class CategoryScreen extends StatelessWidget {
                         width: 65,
                         height: 65,
                         decoration: BoxDecoration(
-                          color: category.primaryColor.withOpacity(0.1),
+                          color: colors.primary.withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(18),
                         ),
                         child: Center(
@@ -87,10 +93,10 @@ class CategoryScreen extends StatelessWidget {
                           children: [
                             Text(
                               item.nameEnglish,
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
-                                color: Color(0xFF1E293B),
+                                color: Theme.of(context).colorScheme.onSurface,
                               ),
                             ),
                             const SizedBox(height: 2),
@@ -99,16 +105,18 @@ class CategoryScreen extends StatelessWidget {
                               style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w600,
-                                color: category.secondaryColor,
+                                color: colors.secondary,
                               ),
                             ),
                             if (item.detail != null) ...[
                               const SizedBox(height: 4),
                               Text(
                                 item.detail!,
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontSize: 11,
-                                  color: Color(0xFF94A3B8),
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onSurfaceVariant,
                                 ),
                               ),
                             ]
@@ -120,7 +128,7 @@ class CategoryScreen extends StatelessWidget {
                       Container(
                         padding: const EdgeInsets.all(10),
                         decoration: BoxDecoration(
-                          color: category.primaryColor,
+                          color: colors.primary,
                           shape: BoxShape.circle,
                         ),
                         child: const Icon(

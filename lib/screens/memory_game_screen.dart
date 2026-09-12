@@ -87,16 +87,21 @@ class _MemoryGameScreenState extends State<MemoryGameScreen> {
     bool allMatched = _matched.every((m) => m);
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF8FAFC),
       appBar: AppBar(
-        title: Text('Memory Match 🧠 (Moves: $_moves)', style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16)),
-        backgroundColor: const Color(0xFF8B5CF6),
+        title: Text('Memory Match 🧠 (Moves: $_moves)',
+            style: const TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 16)),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
+          icon:
+              const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
           onPressed: () => Navigator.pop(context),
         ),
         actions: [
-          IconButton(icon: const Icon(Icons.refresh_rounded, color: Colors.white), onPressed: _resetGame),
+          IconButton(
+              icon: const Icon(Icons.refresh_rounded, color: Colors.white),
+              onPressed: _resetGame),
         ],
       ),
       body: Padding(
@@ -112,7 +117,10 @@ class _MemoryGameScreenState extends State<MemoryGameScreen> {
                   borderRadius: BorderRadius.circular(16),
                   border: Border.all(color: Colors.amber),
                 ),
-                child: const Text('🎉 مبروك! لقد قمت بمطابقة جميع البطاقات بنجاح! ⭐', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black87)),
+                child: const Text(
+                    '🎉 مبروك! لقد قمت بمطابقة جميع البطاقات بنجاح! ⭐',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold, color: Colors.black87)),
               ),
             Expanded(
               child: GridView.builder(
@@ -133,11 +141,16 @@ class _MemoryGameScreenState extends State<MemoryGameScreen> {
                         color: show ? Colors.white : const Color(0xFF8B5CF6),
                         borderRadius: BorderRadius.circular(20),
                         border: Border.all(
-                          color: _matched[index] ? const Color(0xFF10B981) : const Color(0xFF7C3AED),
+                          color: _matched[index]
+                              ? const Color(0xFF10B981)
+                              : const Color(0xFF7C3AED),
                           width: _matched[index] ? 3 : 2,
                         ),
                         boxShadow: [
-                          BoxShadow(color: Colors.black.withOpacity(0.08), blurRadius: 6, offset: const Offset(0, 3)),
+                          BoxShadow(
+                              color: Colors.black.withValues(alpha: 0.08),
+                              blurRadius: 6,
+                              offset: const Offset(0, 3)),
                         ],
                       ),
                       child: Center(

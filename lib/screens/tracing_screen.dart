@@ -11,7 +11,7 @@ class TracingScreen extends StatefulWidget {
 class _TracingScreenState extends State<TracingScreen> {
   final List<String> _chars = ['A', 'B', 'C', 'D', '1', '2', '3', '⭐', '❤️'];
   int _charIndex = 0;
-  List<Offset?> _points = [];
+  final List<Offset?> _points = [];
   Color _currentColor = Colors.blue;
 
   @override
@@ -19,17 +19,18 @@ class _TracingScreenState extends State<TracingScreen> {
     String currentChar = _chars[_charIndex];
 
     return Scaffold(
-      backgroundColor: const Color(0xFF0F172A),
       appBar: AppBar(
-        title: const Text('Tracing Board ✍️', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-        backgroundColor: const Color(0xFF1E293B),
+        title: const Text('Tracing Board ✍️',
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
+          icon:
+              const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
           onPressed: () => Navigator.pop(context),
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.delete_outline_rounded, color: Color(0xFFF43F5E)),
+            icon: const Icon(Icons.delete_outline_rounded,
+                color: Color(0xFFF43F5E)),
             onPressed: () => setState(() => _points.clear()),
           ),
         ],
@@ -46,7 +47,11 @@ class _TracingScreenState extends State<TracingScreen> {
                 return Padding(
                   padding: const EdgeInsets.only(right: 8),
                   child: ChoiceChip(
-                    label: Text(_chars[i], style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: active ? Colors.white : Colors.black)),
+                    label: Text(_chars[i],
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                            color: active ? Colors.white : Colors.black)),
                     selected: active,
                     selectedColor: Colors.blue,
                     onSelected: (val) {
@@ -72,7 +77,8 @@ class _TracingScreenState extends State<TracingScreen> {
                 decoration: BoxDecoration(
                   color: const Color(0xFF1E293B),
                   borderRadius: BorderRadius.circular(24),
-                  border: Border.all(color: Colors.blue.withOpacity(0.5), width: 3),
+                  border: Border.all(
+                      color: Colors.blue.withValues(alpha: 0.5), width: 3),
                 ),
                 child: Stack(
                   children: [
@@ -83,7 +89,7 @@ class _TracingScreenState extends State<TracingScreen> {
                         style: TextStyle(
                           fontSize: 180,
                           fontWeight: FontWeight.w900,
-                          color: Colors.white.withOpacity(0.12),
+                          color: Colors.white.withValues(alpha: 0.12),
                         ),
                       ),
                     ),
@@ -96,7 +102,8 @@ class _TracingScreenState extends State<TracingScreen> {
                       },
                       onPanEnd: (details) => _points.add(null),
                       child: CustomPaint(
-                        painter: DrawingPainter(points: _points, color: _currentColor),
+                        painter: DrawingPainter(
+                            points: _points, color: _currentColor),
                         size: Size.infinite,
                       ),
                     ),
@@ -111,7 +118,13 @@ class _TracingScreenState extends State<TracingScreen> {
             padding: const EdgeInsets.only(bottom: 24.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: [Colors.blue, Colors.red, Colors.green, Colors.amber, Colors.purple].map((c) {
+              children: [
+                Colors.blue,
+                Colors.red,
+                Colors.green,
+                Colors.amber,
+                Colors.purple
+              ].map((c) {
                 return GestureDetector(
                   onTap: () => setState(() => _currentColor = c),
                   child: Container(
@@ -121,7 +134,11 @@ class _TracingScreenState extends State<TracingScreen> {
                     decoration: BoxDecoration(
                       color: c,
                       shape: BoxShape.circle,
-                      border: Border.all(color: _currentColor == c ? Colors.white : Colors.transparent, width: 3),
+                      border: Border.all(
+                          color: _currentColor == c
+                              ? Colors.white
+                              : Colors.transparent,
+                          width: 3),
                     ),
                   ),
                 );
