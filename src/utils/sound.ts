@@ -36,7 +36,7 @@ if (typeof window !== 'undefined') {
 }
 
 // Play pleasant kid celebration sound
-export function playChime(type: 'success' | 'click' | 'pop' | 'star' = 'click') {
+export function playChime(type: 'success' | 'click' | 'pop' | 'star' | 'fanfare' | 'wrong' | 'balloon' = 'click') {
   try {
     const ctx = getAudioContext();
     const now = ctx.currentTime;
@@ -56,6 +56,55 @@ export function playChime(type: 'success' | 'click' | 'pop' | 'star' = 'click') 
         osc.start(now + i * 0.1);
         osc.stop(now + i * 0.1 + 0.4);
       });
+    } else if (type === 'fanfare') {
+      // Victorious level-up fanfare chord
+      const chords = [
+        [523.25, 659.25], // C5, E5
+        [587.33, 698.46], // D5, F5
+        [659.25, 783.99], // E5, G5
+        [783.99, 1046.5, 1318.5], // G5, C6, E6
+      ];
+      chords.forEach((chord, step) => {
+        const time = now + step * 0.14;
+        chord.forEach((freq) => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(freq, time);
+          gain.gain.setValueAtTime(0.18, time);
+          gain.gain.exponentialRampToValueAtTime(0.001, time + (step === chords.length - 1 ? 0.6 : 0.2));
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(time);
+          osc.stop(time + (step === chords.length - 1 ? 0.65 : 0.22));
+        });
+      });
+    } else if (type === 'balloon') {
+      // Fun bubble pop sound
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(250, now);
+      osc.frequency.exponentialRampToValueAtTime(800, now + 0.05);
+      gain.gain.setValueAtTime(0.35, now);
+      gain.gain.exponentialRampToValueAtTime(0.01, now + 0.08);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(now);
+      osc.stop(now + 0.09);
+    } else if (type === 'wrong') {
+      // Gentle soft boing / oops tone
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sawtooth';
+      osc.frequency.setValueAtTime(220, now);
+      osc.frequency.exponentialRampToValueAtTime(140, now + 0.15);
+      gain.gain.setValueAtTime(0.15, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(now);
+      osc.stop(now + 0.22);
     } else if (type === 'pop') {
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
@@ -98,6 +147,26 @@ export function playChime(type: 'success' | 'click' | 'pop' | 'star' = 'click') 
     }
   } catch (err) {
     // Ignore audio context errors if browser blocks auto-audio
+  }
+}
+
+// Play a cheerful synthesizer note for karaoke/games
+export function playNote(freq: number, duration = 0.25) {
+  try {
+    const ctx = getAudioContext();
+    const now = ctx.currentTime;
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(freq, now);
+    gain.gain.setValueAtTime(0.15, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start(now);
+    osc.stop(now + duration + 0.05);
+  } catch (e) {
+    // Ignore
   }
 }
 

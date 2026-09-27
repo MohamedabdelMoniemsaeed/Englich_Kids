@@ -1,7 +1,23 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ScreenId, ThemeConfig } from '../types';
-import { Sparkles, Gamepad2, BookOpen, Star } from 'lucide-react';
+import { Sparkles, Gamepad2, BookOpen, Star, Trophy } from 'lucide-react';
 import { playChime } from '../utils/sound';
+import { getPlayerProfile, calculateLevel } from '../utils/scoreManager';
+import animalsHomeImage from '../assets/images/animals_home_icon_1790508242701.jpg';
+import abcHomeImage from '../assets/images/abc_home_icon_1790508433803.jpg';
+import numbersHomeImage from '../assets/images/numbers_home_icon_1790508451631.jpg';
+import colorsHomeImage from '../assets/images/colors_home_icon_1790508464303.jpg';
+import familyHomeImage from '../assets/images/family_home_icon_1790508476854.jpg';
+import fruitsHomeImage from '../assets/images/fruits_home_icon_1790508591332.jpg';
+import vegetablesHomeImage from '../assets/images/vegetables_home_icon_1790508603425.jpg';
+import vehiclesHomeImage from '../assets/images/vehicles_home_icon_1790508619237.jpg';
+import shapesHomeImage from '../assets/images/shapes_home_icon_1790508629638.jpg';
+import weatherHomeImage from '../assets/images/weather_home_icon_1790508640179.jpg';
+import seasonsHomeImage from '../assets/images/seasons_home_icon_1790508691289.jpg';
+import jobsHomeImage from '../assets/images/jobs_home_icon_1790508654219.jpg';
+import clothesHomeImage from '../assets/images/clothes_home_icon_new_1790508880079.jpg';
+import bodyHomeImage from '../assets/images/body_home_icon_1790508679809.jpg';
+import gamesHubHomeImage from '../assets/images/games_hub_icon_1790509002829.jpg';
 
 interface HomeScreenProps {
   themeConfig: ThemeConfig;
@@ -21,16 +37,22 @@ interface HomeCardItem {
 
 export const HomeScreen: React.FC<HomeScreenProps> = ({ themeConfig, onNavigate }) => {
   const [activeTab, setActiveTab] = useState<'all' | 'learning' | 'games'>('all');
+  const [playerProfile, setPlayerProfile] = useState(() => getPlayerProfile());
+
+  useEffect(() => {
+    setPlayerProfile(getPlayerProfile());
+  }, []);
+
+  const currentLevel = calculateLevel(playerProfile.totalXp);
 
   const cards: HomeCardItem[] = [
     // 1. Games Hub Spotlight Card
     {
       id: 'games',
       name: 'Games Hub',
-      arabicName: 'ألعاب وأنشطة تفاعلية',
-      badge: '6 Games 🎮⭐',
-      customIcon: '🎮🧠✍️🔤',
-      gradientBg: 'from-amber-400 via-rose-500 to-purple-600',
+      arabicName: 'ألعاب وأنشطة تفاعلية (9 ألعاب)',
+      image: gamesHubHomeImage,
+      badge: '9 Games 🎮🎈🧩⭐',
       categoryType: 'games',
     },
     // 2. ABC Alphabet
@@ -38,7 +60,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ themeConfig, onNavigate 
       id: 'abc',
       name: 'A B C',
       arabicName: 'الحروف الإنجليزية',
-      image: '/assets/images/abc/backgroundimage.jpg',
+      image: abcHomeImage,
       categoryType: 'learning',
     },
     // 3. Numbers
@@ -46,7 +68,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ themeConfig, onNavigate 
       id: 'numbers',
       name: 'Numbers',
       arabicName: 'الأرقام',
-      image: '/assets/images/numbers/backgroundimage.jpg',
+      image: numbersHomeImage,
       categoryType: 'learning',
     },
     // 4. Animals
@@ -54,47 +76,39 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ themeConfig, onNavigate 
       id: 'animals',
       name: 'Animals',
       arabicName: 'الحيوانات',
-      image: '/assets/images/animals/animalshome.jpg',
+      image: animalsHomeImage,
       categoryType: 'learning',
     },
-    // 5. Fruits (منفصلة)
+    // 5. Fruits
     {
       id: 'fruits',
       name: 'Fruits',
       arabicName: 'الفواكه اللذيذة',
-      badge: '🍎🍓',
-      customIcon: '🍎🍌🍓🍉🍊🍇',
-      gradientBg: 'from-rose-400 via-red-500 to-pink-500',
+      image: fruitsHomeImage,
       categoryType: 'learning',
     },
-    // 6. Vegetables (منفصلة)
+    // 6. Vegetables
     {
       id: 'vegetables',
       name: 'Vegetables',
       arabicName: 'الخضروات الصحية',
-      badge: '🥕🥦',
-      customIcon: '🥕🥦🍅🥒🌽🥔',
-      gradientBg: 'from-emerald-400 via-green-500 to-teal-600',
+      image: vegetablesHomeImage,
       categoryType: 'learning',
     },
-    // 7. Weather (حالات الطقس - منفصلة)
+    // 7. Weather
     {
       id: 'weather',
       name: 'Weather',
       arabicName: 'حالات الطقس والجو',
-      badge: '☀️🌧️',
-      customIcon: '☀️🌧️☁️❄️💨🌈',
-      gradientBg: 'from-sky-400 via-blue-500 to-cyan-500',
+      image: weatherHomeImage,
       categoryType: 'learning',
     },
-    // 8. Seasons (فصول السنة - منفصلة)
+    // 8. Seasons
     {
       id: 'seasons',
       name: 'Seasons',
       arabicName: 'فصول السنة الأربعة',
-      badge: '🌸🏖️',
-      customIcon: '🌸🏖️🍂⛄',
-      gradientBg: 'from-amber-400 via-orange-500 to-rose-500',
+      image: seasonsHomeImage,
       categoryType: 'learning',
     },
     // 9. Vehicles & Transport
@@ -102,65 +116,55 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ themeConfig, onNavigate 
       id: 'vehicles',
       name: 'Vehicles',
       arabicName: 'المواصلات والمركبات',
-      badge: 'New 🚗✈️',
-      customIcon: '🚗✈️🚆🚀🚢',
-      gradientBg: 'from-indigo-400 via-purple-500 to-violet-600',
+      image: vehiclesHomeImage,
       categoryType: 'learning',
     },
-    // 7. Colors
+    // 10. Colors
     {
       id: 'colors',
       name: 'Colors',
       arabicName: 'الألوان',
-      image: '/assets/images/colors/backgroundimage.jpg',
+      image: colorsHomeImage,
       categoryType: 'learning',
     },
-    // 8. Shapes
+    // 11. Shapes
     {
       id: 'shapes',
       name: 'Shapes',
       arabicName: 'الأشكال الهندسية',
-      badge: '🔺⭐',
-      customIcon: '🔺⏹️⭐🔵❤️',
-      gradientBg: 'from-indigo-500 via-purple-500 to-pink-500',
+      image: shapesHomeImage,
       categoryType: 'learning',
     },
-    // 9. Body Parts
+    // 12. Body Parts
     {
       id: 'body',
       name: 'Body Parts',
       arabicName: 'أجزاء الجسم',
-      badge: 'New 👀👂',
-      customIcon: '👀👂👃👄🖐️',
-      gradientBg: 'from-purple-400 via-pink-400 to-rose-400',
+      image: bodyHomeImage,
       categoryType: 'learning',
     },
-    // 10. Jobs & Careers
+    // 13. Jobs & Careers
     {
       id: 'jobs',
       name: 'Jobs & Careers',
       arabicName: 'المهن والوظائف',
-      badge: 'New 👨‍⚕️👩‍🏫',
-      customIcon: '👨‍⚕️👩‍🏫👨‍🚒👮‍♂️🚀',
-      gradientBg: 'from-amber-400 via-orange-500 to-red-500',
+      image: jobsHomeImage,
       categoryType: 'learning',
     },
-    // 11. Clothes & Fashion
+    // 14. Clothes & Fashion
     {
       id: 'clothes',
       name: 'Clothes',
       arabicName: 'الملابس والأزياء',
-      badge: 'New 👕👟',
-      customIcon: '👕👖👗👟🧢',
-      gradientBg: 'from-teal-400 via-cyan-500 to-blue-500',
+      image: clothesHomeImage,
       categoryType: 'learning',
     },
-    // 12. Family
+    // 15. Family
     {
       id: 'family',
       name: 'Family',
       arabicName: 'أفراد العائلة',
-      image: '/assets/images/family_members/backgroundimage.jpg',
+      image: familyHomeImage,
       categoryType: 'learning',
     },
   ];
@@ -181,6 +185,27 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ themeConfig, onNavigate 
         <p className="text-slate-600 font-bold text-sm sm:text-base mt-1">
           اختر قسماً أو العب ألعاباً مسلية لتعلم الإنجليزية بسهولة ومرح
         </p>
+
+        {/* Quick Player Stats Chip */}
+        <div className="flex items-center justify-center gap-2 mt-3">
+          <button
+            onClick={() => {
+              playChime('pop');
+              onNavigate('games');
+            }}
+            className="flex items-center gap-2 bg-white/90 hover:bg-white active:scale-95 py-1.5 px-3.5 rounded-2xl shadow-sm border border-amber-200 transition-all text-xs font-fun font-bold text-slate-800"
+            title="View Score & Games"
+          >
+            <span className="text-lg">{playerProfile.avatar}</span>
+            <span>{playerProfile.playerName}</span>
+            <span className="bg-amber-100 text-amber-800 px-2 py-0.5 rounded-full text-[11px]">
+              Lv.{currentLevel.level} • {currentLevel.titleEn}
+            </span>
+            <span className="flex items-center gap-1 text-amber-500 font-black">
+              ⭐ {playerProfile.stars}
+            </span>
+          </button>
+        </div>
 
         {/* Filter Navigation Tabs */}
         <div className="flex items-center justify-center gap-2 mt-4">
@@ -271,6 +296,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ themeConfig, onNavigate 
                   <img
                     src={card.image}
                     alt={card.name}
+                    referrerPolicy="no-referrer"
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     onError={(e) => {
                       const target = e.target as HTMLImageElement;
