@@ -3,18 +3,14 @@ workflows:
     name: Android APK Build
     environment:
       flutter: stable
+      java: 17
     scripts:
-      - name: Remove old Android
-        script: |
-          rm -rf android
-          rm -rf build
-      - name: Create Flutter Android
-        script: |
-          flutter create --platforms=android .
-      - name: Build APK
+      - name: Flutter Pub Get
         script: |
           flutter clean
           flutter pub get
+      - name: Build Android Release APK
+        script: |
           flutter build apk --release
     artifacts:
       - build/app/outputs/flutter-apk/app-release.apk
