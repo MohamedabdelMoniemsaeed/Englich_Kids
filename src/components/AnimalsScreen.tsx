@@ -43,7 +43,6 @@ export const AnimalsScreen: React.FC<AnimalsScreenProps> = ({ themeConfig, speec
     if (!soundEnabled) return;
     const target = animal || currentAnimal;
     setIsSpeaking(true);
-    playChime('pop');
     speakWord(target.nameEnglish, speechRate, () => {
       setIsSpeaking(false);
     });

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, Palette, Volume2, CheckCircle2, RefreshCw } from 'lucide-react';
+import { X, Palette, Volume2, CheckCircle2, RefreshCw, Bell, ChevronRight } from 'lucide-react';
 import { AppTheme, ThemeConfig } from '../types';
 import { THEMES } from '../data/learningData';
 import { playChime } from '../utils/sound';
@@ -11,6 +11,7 @@ interface SettingsDrawerProps {
   onSelectTheme: (theme: AppTheme) => void;
   speechRate: number;
   onSelectSpeechRate: (rate: number) => void;
+  onOpenNotifications: () => void;
 }
 
 export const SettingsDrawer: React.FC<SettingsDrawerProps> = ({
@@ -20,6 +21,7 @@ export const SettingsDrawer: React.FC<SettingsDrawerProps> = ({
   onSelectTheme,
   speechRate,
   onSelectSpeechRate,
+  onOpenNotifications,
 }) => {
   const [checkingUpdate, setCheckingUpdate] = useState(false);
   const [updateStatus, setUpdateStatus] = useState('Check for Updates');
@@ -139,6 +141,67 @@ export const SettingsDrawer: React.FC<SettingsDrawerProps> = ({
                 🐰 Normal
               </button>
             </div>
+          </div>
+
+          {/* Separate Notifications Card */}
+          <div className="pt-2 border-t border-slate-100">
+            <button
+              id="settings-notifications-btn"
+              onClick={() => {
+                playChime('pop');
+                onClose();
+                onOpenNotifications();
+              }}
+              className="w-full flex items-center justify-between p-4 rounded-2xl border-2 border-amber-300 bg-amber-50/70 hover:bg-amber-100/70 transition-all text-left group"
+            >
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-amber-500 text-white flex items-center justify-center font-bold text-lg shadow-sm">
+                  🔔
+                </div>
+                <div>
+                  <div className="font-bold text-slate-800 text-sm sm:text-base flex items-center gap-1.5">
+                    <span>الإشعارات المنفصلة</span>
+                    <span className="text-[10px] px-2 py-0.5 rounded-full bg-amber-200 text-amber-900 font-bold">جديد</span>
+                  </div>
+                  <div className="text-xs text-slate-500">
+                    تذكيرات يومية خارجية على شاشة الهاتف
+                  </div>
+                </div>
+              </div>
+              <ChevronRight className="w-5 h-5 text-amber-600 group-hover:translate-x-1 transition-transform" />
+            </button>
+          </div>
+
+          {/* Status Bar & Safe Area Info */}
+          <div className="p-3 bg-slate-50 border border-slate-200 rounded-2xl flex items-center justify-between text-xs text-slate-700">
+            <div className="flex items-center gap-2">
+              <span className="text-base">📶</span>
+              <div>
+                <span className="font-bold block">شريط الشبكة والبطارية العلوي</span>
+                <span className="text-[11px] text-slate-500">منفصل وظاهر دائماً طوال تشغيل البرنامج</span>
+              </div>
+            </div>
+            <span className="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-bold border border-emerald-300">
+              دائم الظهور ✓
+            </span>
+          </div>
+
+          {/* Mobile Download & APK */}
+          <div className="pt-2 border-t border-slate-100 space-y-3">
+            <div className="flex items-center gap-2 mb-1">
+              <span className="text-xl">📱</span>
+              <label className="text-sm font-bold text-slate-700">تطبيق الهاتف / Mobile App</label>
+            </div>
+            <a
+              href="./English_Kids.apk"
+              download="English_Kids.apk"
+              className="w-full flex items-center justify-center gap-2 py-3 px-4 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 active:scale-98 text-white rounded-2xl font-bold transition-all shadow-md text-sm"
+            >
+              <span>📥 تحميل تطبيق الأندرويد الكامل APK (23MB)</span>
+            </a>
+            <p className="text-[11px] text-slate-500 text-center leading-relaxed">
+              تطبيق أندرويد مستقل بالكامل، يعمل بدون إنترنت (Offline) ولا يحتاج لفتح متصفح.
+            </p>
           </div>
 
           {/* Smart Update & Status */}

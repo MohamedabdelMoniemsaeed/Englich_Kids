@@ -2,13 +2,19 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/png" href="/assets/images/iconHome.png" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/manifest.json" />
-    <meta name="theme-color" content="#3B82F6" />
+    <meta name="theme-color" content="#020617" />
+    <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="apple-mobile-web-app-title" content="EnglishKids" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
     <title>English Kids</title>
+    <meta name="description" content="Interactive educational English learning web application for kids with alphabet ABC, numbers, animals, colors, family members, audio speech, flashcards, and an AI conversational tutor." />
+    <meta property="og:title" content="English Kids" />
+    <meta property="og:description" content="Interactive educational English learning web application for kids with alphabet ABC, numbers, animals, colors, family members, audio speech, flashcards, and an AI conversational tutor." />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700;800&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
@@ -16,5 +22,14 @@
   <body class="bg-amber-50 font-['Nunito',sans-serif] text-slate-800 antialiased select-none">
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js', { scope: '/' })
+            .then((reg) => console.log('PWA ServiceWorker registered with scope:', reg.scope))
+            .catch((err) => console.warn('PWA ServiceWorker registration error:', err));
+        });
+      }
+    </script>
   </body>
 </html>

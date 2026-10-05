@@ -166,12 +166,14 @@ export const ALL_BADGES: BadgeItem[] = [
 
 export const AVATAR_OPTIONS = ['🦁', '🚀', '🐱', '🦄', '🐼', '🦖', '⭐', '👑', '🐶', '🦊'];
 
+import { safeStorage } from './safeStorage';
+
 const STORAGE_KEY = 'english_kids_profile_v2';
 const LEGACY_STARS_KEY = 'english_kids_stars';
 
 export function getPlayerProfile(): PlayerProfile {
   try {
-    const data = localStorage.getItem(STORAGE_KEY);
+    const data = safeStorage.getItem(STORAGE_KEY);
     if (data) {
       return JSON.parse(data);
     }
@@ -179,14 +181,15 @@ export function getPlayerProfile(): PlayerProfile {
     // ignore
   }
 
-  // Fallback to legacy stars if existing
-  const legacyStars = parseInt(localStorage.getItem(LEGACY_STARS_KEY) || '25', 10);
+  // Safe fallback to legacy stars if existing
+  const legacyStarsStr = safeStorage.getItem(LEGACY_STARS_KEY);
+  const legacyStars = parseInt(legacyStarsStr || '25', 10);
 
   const initialProfile: PlayerProfile = {
     playerName: 'Super Star',
     avatar: '🦁',
-    stars: legacyStars,
-    totalXp: legacyStars * 10,
+    stars: isNaN(legacyStars) ? 25 : legacyStars,
+    totalXp: (isNaN(legacyStars) ? 25 : legacyStars) * 10,
     level: 1,
     currentStreak: 0,
     highestStreak: 0,
@@ -211,8 +214,8 @@ export function getPlayerProfile(): PlayerProfile {
 
 export function savePlayerProfile(profile: PlayerProfile): void {
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(profile));
-    localStorage.setItem(LEGACY_STARS_KEY, profile.stars.toString());
+    safeStorage.setItem(STORAGE_KEY, JSON.stringify(profile));
+    safeStorage.setItem(LEGACY_STARS_KEY, profile.stars.toString());
   } catch (e) {
     // ignore
   }

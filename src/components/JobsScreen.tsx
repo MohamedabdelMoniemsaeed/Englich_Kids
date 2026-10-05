@@ -35,7 +35,6 @@ export const JobsScreen: React.FC<JobsScreenProps> = ({ speechRate, soundEnabled
     if (!soundEnabled) return;
     const target = item || currentItem;
     setIsSpeaking(true);
-    playChime('pop');
     speakWord(target.nameEnglish, speechRate, () => {
       setIsSpeaking(false);
     });

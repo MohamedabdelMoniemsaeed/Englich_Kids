@@ -34,6 +34,8 @@ export interface AbcItem {
   letter: string;
   word: string;
   image: string;
+  emoji?: string;
+  color?: string;
   arabic?: string;
   soundSequence: string[];
 }
@@ -43,6 +45,9 @@ export interface NumberItem {
   word: string;
   arabic: string;
   image: string;
+  emoji?: string;
+  color?: string;
+  countItems?: string[];
 }
 
 export interface AnimalItem {
@@ -69,6 +74,8 @@ export interface FamilyItem {
   nameEnglish: string;
   nameArabic: string;
   image: string;
+  emoji?: string;
+  color?: string;
 }
 
 export interface ShapeItem {

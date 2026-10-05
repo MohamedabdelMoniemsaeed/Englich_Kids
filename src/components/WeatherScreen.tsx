@@ -34,7 +34,6 @@ export const WeatherScreen: React.FC<WeatherScreenProps> = ({ themeConfig, speec
     if (!soundEnabled) return;
     const target = item || currentItem;
     setIsSpeaking(true);
-    playChime('pop');
     speakWord(target.nameEnglish, speechRate, () => {
       setIsSpeaking(false);
     });

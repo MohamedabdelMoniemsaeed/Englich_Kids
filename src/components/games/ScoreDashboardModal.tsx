@@ -22,6 +22,7 @@ import {
   Sparkles,
 } from 'lucide-react';
 import { playChime } from '../../utils/sound';
+import { safeStorage } from '../../utils/safeStorage';
 import confetti from 'canvas-confetti';
 
 interface ScoreDashboardModalProps {
@@ -40,6 +41,7 @@ export const ScoreDashboardModal: React.FC<ScoreDashboardModalProps> = ({
   const [activeTab, setActiveTab] = useState<'profile' | 'highscores' | 'badges'>('profile');
   const [isEditingName, setIsEditingName] = useState(false);
   const [playerNameInput, setPlayerNameInput] = useState(profile.playerName);
+  const [showResetConfirm, setShowResetConfirm] = useState(false);
 
   if (!isOpen) return null;
 
@@ -74,14 +76,13 @@ export const ScoreDashboardModal: React.FC<ScoreDashboardModalProps> = ({
     setIsEditingName(false);
   };
 
-  const handleResetConfirm = () => {
-    if (window.confirm('هل تريد تصفير النقاط والبدء من جديد؟ / Reset score progress?')) {
-      localStorage.removeItem('english_kids_profile_v2');
-      localStorage.removeItem('english_kids_stars');
-      const fresh = getPlayerProfile();
-      onProfileUpdate(fresh);
-      playChime('pop');
-    }
+  const handlePerformReset = () => {
+    safeStorage.removeItem('english_kids_profile_v2');
+    safeStorage.removeItem('english_kids_stars');
+    const fresh = getPlayerProfile();
+    onProfileUpdate(fresh);
+    setShowResetConfirm(false);
+    playChime('pop');
   };
 
   return (
@@ -259,13 +260,35 @@ export const ScoreDashboardModal: React.FC<ScoreDashboardModalProps> = ({
 
               {/* Reset Score Action */}
               <div className="pt-2 text-center">
-                <button
-                  onClick={handleResetConfirm}
-                  className="text-xs text-slate-400 hover:text-rose-500 transition-colors flex items-center justify-center gap-1 mx-auto"
-                >
-                  <RotateCcw className="w-3.5 h-3.5" />
-                  <span>Reset Progress / إعادة ضبط النقاط</span>
-                </button>
+                {showResetConfirm ? (
+                  <div className="p-3 bg-rose-50 border border-rose-200 rounded-2xl space-y-2 animate-fadeIn">
+                    <p className="text-xs text-rose-700 font-bold">
+                      هل تريد تصفير النقاط والبدء من جديد؟ / Reset score progress?
+                    </p>
+                    <div className="flex items-center justify-center gap-2">
+                      <button
+                        onClick={handlePerformReset}
+                        className="px-3 py-1 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-bold transition-all shadow-xs"
+                      >
+                        نعم، تصفير / Yes
+                      </button>
+                      <button
+                        onClick={() => setShowResetConfirm(false)}
+                        className="px-3 py-1 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded-lg text-xs font-bold transition-all"
+                      >
+                        إلغاء / Cancel
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <button
+                    onClick={() => setShowResetConfirm(true)}
+                    className="text-xs text-slate-400 hover:text-rose-500 transition-colors flex items-center justify-center gap-1 mx-auto"
+                  >
+                    <RotateCcw className="w-3.5 h-3.5" />
+                    <span>Reset Progress / إعادة ضبط النقاط</span>
+                  </button>
+                )}
               </div>
             </div>
           )}

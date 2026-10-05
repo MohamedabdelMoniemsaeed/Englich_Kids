@@ -1,8 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { AppTheme, ScreenId } from './types';
 import { THEMES } from './data/learningData';
 import { Header } from './components/Header';
+import { TopStatusBarStrip } from './components/TopStatusBarStrip';
 import { SettingsDrawer } from './components/SettingsDrawer';
+import { NotificationsModal } from './components/NotificationsModal';
+import { SystemNotificationBanner } from './components/SystemNotificationBanner';
+import { initNotificationScheduler } from './utils/notifications';
 import { HomeScreen } from './components/HomeScreen';
 import { AbcScreen } from './components/AbcScreen';
 import { NumbersScreen } from './components/NumbersScreen';
@@ -20,12 +24,60 @@ import { JobsScreen } from './components/JobsScreen';
 import { ClothesScreen } from './components/ClothesScreen';
 import { KidsGamesScreen } from './components/KidsGamesScreen';
 
+const VALID_SCREENS: ScreenId[] = [
+  'home', 'abc', 'numbers', 'animals', 'colors', 'family',
+  'shapes', 'fruits', 'vegetables', 'weather', 'seasons',
+  'vehicles', 'body', 'jobs', 'clothes', 'games'
+];
+
+function getScreenFromHash(): ScreenId {
+  if (typeof window === 'undefined') return 'home';
+  const cleanHash = window.location.hash.replace(/^#\/?/, '').trim();
+  return VALID_SCREENS.includes(cleanHash as ScreenId) ? (cleanHash as ScreenId) : 'home';
+}
+
 export const App: React.FC = () => {
-  const [currentScreen, setCurrentScreen] = useState<ScreenId>('home');
+  const [currentScreen, setCurrentScreenState] = useState<ScreenId>(() => getScreenFromHash());
   const [currentTheme, setCurrentTheme] = useState<AppTheme>('boy');
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [speechRate, setSpeechRate] = useState(0.85);
+
+  // Initialize background notification scheduler for separate system alerts
+  useEffect(() => {
+    const cleanup = initNotificationScheduler();
+    return () => {
+      cleanup();
+    };
+  }, []);
+
+  // HashRouter Navigation handler
+  const handleNavigate = (screen: ScreenId) => {
+    setCurrentScreenState(screen);
+    if (typeof window !== 'undefined') {
+      const targetHash = screen === 'home' ? '' : `#${screen}`;
+      if (window.location.hash !== targetHash) {
+        window.history.pushState(null, '', targetHash || window.location.pathname);
+      }
+    }
+  };
+
+  // Synchronize with Android Hardware Back button & browser history
+  useEffect(() => {
+    const handleHashChange = () => {
+      const targetScreen = getScreenFromHash();
+      setCurrentScreenState(targetScreen);
+    };
+
+    window.addEventListener('hashchange', handleHashChange);
+    window.addEventListener('popstate', handleHashChange);
+
+    return () => {
+      window.removeEventListener('hashchange', handleHashChange);
+      window.removeEventListener('popstate', handleHashChange);
+    };
+  }, []);
 
   const themeConfig = THEMES[currentTheme] || THEMES.boy;
 
@@ -39,22 +91,26 @@ export const App: React.FC = () => {
         />
       ) : null}
 
-      {/* App Header */}
-      <Header
-        currentScreen={currentScreen}
-        themeConfig={themeConfig}
-        onNavigate={setCurrentScreen}
-        onOpenSettings={() => setIsSettingsOpen(true)}
-        soundEnabled={soundEnabled}
-        onToggleSound={() => setSoundEnabled((prev) => !prev)}
-      />
+      {/* Sticky Top Status Bar & App Header */}
+      <div className="sticky top-0 z-40 w-full flex flex-col shadow-md">
+        <TopStatusBarStrip onOpenNotifications={() => setIsNotificationsOpen(true)} />
+        <Header
+          currentScreen={currentScreen}
+          themeConfig={themeConfig}
+          onNavigate={handleNavigate}
+          onOpenSettings={() => setIsSettingsOpen(true)}
+          onOpenNotifications={() => setIsNotificationsOpen(true)}
+          soundEnabled={soundEnabled}
+          onToggleSound={() => setSoundEnabled((prev) => !prev)}
+        />
+      </div>
 
       {/* Main Content View */}
       <main className="flex-1 relative z-10 w-full overflow-y-auto pb-8">
         {currentScreen === 'home' && (
           <HomeScreen
             themeConfig={themeConfig}
-            onNavigate={setCurrentScreen}
+            onNavigate={handleNavigate}
           />
         )}
         {currentScreen === 'abc' && (
@@ -172,7 +228,17 @@ export const App: React.FC = () => {
         onSelectTheme={setCurrentTheme}
         speechRate={speechRate}
         onSelectSpeechRate={setSpeechRate}
+        onOpenNotifications={() => setIsNotificationsOpen(true)}
       />
+
+      {/* Separate Notifications Modal */}
+      <NotificationsModal
+        isOpen={isNotificationsOpen}
+        onClose={() => setIsNotificationsOpen(false)}
+      />
+
+      {/* Floating System Notification Banner (Drop-down alert) */}
+      <SystemNotificationBanner />
     </div>
   );
 };

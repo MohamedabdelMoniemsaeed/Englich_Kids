@@ -16,7 +16,6 @@ export const ColorsScreen: React.FC<ColorsScreenProps> = ({ themeConfig, speechR
 
   const handleColorClick = (color: ColorItem) => {
     setActiveColorId(color.id);
-    playChime('pop');
     if (soundEnabled) {
       speakWord(color.nameEnglish, speechRate, () => {
         setActiveColorId(null);

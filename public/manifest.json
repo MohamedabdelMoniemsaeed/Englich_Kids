@@ -1,22 +1,33 @@
 {
-  "short_name": "EnglishKids",
+  "id": "/",
   "name": "English Kids - إنجليزي للأطفال",
-  "description": "Educational English learning app for kids with letters, numbers, animals, colors, and shapes",
+  "short_name": "EnglishKids",
+  "description": "Educational English learning app for kids with letters, numbers, animals, colors, family, and games",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "theme_color": "#020617",
+  "background_color": "#020617",
+  "categories": ["education", "kids", "games"],
   "icons": [
     {
-      "src": "/assets/images/iconHome.png",
+      "src": "/icon-192.png",
+      "sizes": "192x192",
       "type": "image/png",
-      "sizes": "192x192"
+      "purpose": "any"
     },
     {
-      "src": "/assets/images/iconHome.png",
+      "src": "/icon-512.png",
+      "sizes": "512x512",
       "type": "image/png",
-      "sizes": "512x512"
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
-  ],
-  "start_url": "/",
-  "background_color": "#3B82F6",
-  "theme_color": "#3B82F6",
-  "display": "standalone",
-  "orientation": "portrait"
+  ]
 }

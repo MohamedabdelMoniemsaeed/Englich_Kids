@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowLeft, Settings, Sparkles, Volume2, VolumeX, Gamepad2 } from 'lucide-react';
+import { ArrowLeft, Settings, Sparkles, Volume2, VolumeX, Gamepad2, Bell } from 'lucide-react';
 import { ScreenId, ThemeConfig } from '../types';
 import { playChime } from '../utils/sound';
 
@@ -8,6 +8,7 @@ interface HeaderProps {
   themeConfig: ThemeConfig;
   onNavigate: (screen: ScreenId) => void;
   onOpenSettings: () => void;
+  onOpenNotifications: () => void;
   soundEnabled: boolean;
   onToggleSound: () => void;
 }
@@ -36,6 +37,7 @@ export const Header: React.FC<HeaderProps> = ({
   themeConfig,
   onNavigate,
   onOpenSettings,
+  onOpenNotifications,
   soundEnabled,
   onToggleSound,
 }) => {
@@ -43,7 +45,7 @@ export const Header: React.FC<HeaderProps> = ({
   const info = TITLE_MAP[currentScreen] || TITLE_MAP.home;
 
   return (
-    <header className={`sticky top-0 z-40 bg-gradient-to-r ${themeConfig.primaryColor} shadow-md text-white px-4 py-3 sm:py-4 transition-all duration-300`}>
+    <header className={`w-full bg-gradient-to-r ${themeConfig.primaryColor} shadow-md text-white px-3 sm:px-4 py-2.5 sm:py-3 transition-all duration-300 border-t border-white/10`}>
       <div className="max-w-5xl mx-auto flex items-center justify-between gap-3">
         {/* Left Side: Back button or cute App Icon */}
         <div className="flex items-center gap-2">
@@ -64,11 +66,16 @@ export const Header: React.FC<HeaderProps> = ({
             <div className="flex items-center gap-2.5">
               <div className="w-10 h-10 rounded-2xl bg-white/25 p-1 shadow-inner flex items-center justify-center">
                 <img
-                  src="/assets/images/iconHome.png"
+                  src="./icon-192.png"
                   alt="English Kids Logo"
                   className="w-8 h-8 object-contain drop-shadow"
                   onError={(e) => {
-                    (e.target as HTMLImageElement).style.display = 'none';
+                    const img = e.target as HTMLImageElement;
+                    if (!img.src.includes('iconHome.png')) {
+                      img.src = './assets/images/iconHome.png';
+                    } else {
+                      img.style.display = 'none';
+                    }
                   }}
                 />
               </div>
@@ -88,8 +95,8 @@ export const Header: React.FC<HeaderProps> = ({
           </span>
         </div>
 
-        {/* Right Side: Sound Toggle & Settings */}
-        <div className="flex items-center gap-2">
+        {/* Right Side: Sound Toggle, Notifications & Settings */}
+        <div className="flex items-center gap-1.5 sm:gap-2">
           {isHome && (
             <button
               id="header-games-btn"
@@ -103,6 +110,20 @@ export const Header: React.FC<HeaderProps> = ({
               <span>Play Games</span>
             </button>
           )}
+
+          {/* Separate Notifications Button */}
+          <button
+            id="notifications-button"
+            onClick={() => {
+              playChime('pop');
+              onOpenNotifications();
+            }}
+            className="relative p-2 sm:p-2.5 bg-white/25 hover:bg-white/35 active:scale-90 rounded-2xl text-white transition-all shadow-sm"
+            title="إشعارات النظام المنفصلة / Separate Notifications"
+          >
+            <Bell className="w-5 h-5" />
+            <span className="absolute -top-1 -right-1 w-3 h-3 bg-amber-400 border-2 border-white rounded-full animate-pulse" />
+          </button>
 
           <button
             id="sound-toggle-button"

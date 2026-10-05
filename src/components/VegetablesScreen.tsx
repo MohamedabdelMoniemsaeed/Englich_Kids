@@ -44,7 +44,6 @@ export const VegetablesScreen: React.FC<VegetablesScreenProps> = ({ themeConfig,
     if (!soundEnabled) return;
     const target = item || currentItem;
     setIsSpeaking(true);
-    playChime('pop');
     speakWord(target.nameEnglish, speechRate, () => {
       setIsSpeaking(false);
     });

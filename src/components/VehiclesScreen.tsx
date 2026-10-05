@@ -41,7 +41,6 @@ export const VehiclesScreen: React.FC<VehiclesScreenProps> = ({ speechRate, soun
     if (!soundEnabled) return;
     const target = item || currentItem;
     setIsSpeaking(true);
-    playChime('pop');
     speakWord(target.nameEnglish, speechRate, () => {
       setIsSpeaking(false);
     });

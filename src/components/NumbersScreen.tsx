@@ -21,7 +21,6 @@ export const NumbersScreen: React.FC<NumbersScreenProps> = ({ themeConfig, speec
   const handleSpeak = (text?: string) => {
     if (!soundEnabled) return;
     setIsSpeaking(true);
-    playChime('pop');
     speakWord(text || currentItem.word, speechRate, () => {
       setIsSpeaking(false);
     });
@@ -97,16 +96,33 @@ export const NumbersScreen: React.FC<NumbersScreenProps> = ({ themeConfig, speec
               <Volume2 className="w-6 h-6" />
             </button>
 
-            {/* Illustration */}
-            <div className="h-64 sm:h-72 w-full bg-slate-50 flex items-center justify-center p-6 border-b border-slate-100">
-              <img
-                src={currentItem.image}
-                alt={currentItem.word}
-                className="max-h-full max-w-full object-contain drop-shadow-md group-hover:scale-105 transition-transform duration-300"
-                onError={(e) => {
-                  (e.target as HTMLImageElement).src = '/assets/images/numbers/backgroundimage.jpg';
-                }}
-              />
+            {/* Interactive Counting Illustration Board */}
+            <div
+              className="h-64 sm:h-72 w-full flex flex-col items-center justify-center p-6 border-b border-slate-100 select-none"
+              style={{
+                background: `radial-gradient(circle, ${currentItem.color || '#F97316'}18 0%, #FFFFFF 85%)`,
+              }}
+            >
+              {/* Giant 3D styled number */}
+              <div
+                className="font-fun text-7xl sm:text-8xl font-black drop-shadow-sm mb-3 select-none"
+                style={{ color: currentItem.color || '#F97316' }}
+              >
+                {currentItem.number}
+              </div>
+
+              {/* Counting items grid */}
+              <div className="flex flex-wrap items-center justify-center gap-2 max-w-xs">
+                {Array.from({ length: currentItem.number }).map((_, i) => (
+                  <span
+                    key={i}
+                    className="text-3xl sm:text-4xl animate-bounce-gentle select-none transition-transform hover:scale-125"
+                    style={{ animationDelay: `${i * 120}ms` }}
+                  >
+                    {currentItem.emoji || '⭐'}
+                  </span>
+                ))}
+              </div>
             </div>
 
             {/* Words and Number */}
@@ -178,12 +194,16 @@ export const NumbersScreen: React.FC<NumbersScreenProps> = ({ themeConfig, speec
               }}
               className="bg-white rounded-2xl shadow-sm hover:shadow-lg border-2 border-slate-100 hover:border-amber-400 p-4 flex flex-col items-center text-center cursor-pointer transition-all active:scale-95 group"
             >
-              <div className="w-20 h-20 rounded-xl overflow-hidden bg-slate-50 flex items-center justify-center p-2 mb-2">
-                <img
-                  src={item.image}
-                  alt={item.word}
-                  className="max-w-full max-h-full object-contain group-hover:scale-110 transition-transform"
-                />
+              <div
+                className="w-20 h-20 rounded-2xl overflow-hidden flex flex-col items-center justify-center p-2 mb-2 select-none shadow-inner"
+                style={{
+                  backgroundColor: `${item.color || '#F97316'}15`,
+                  border: `2px solid ${item.color || '#F97316'}30`,
+                }}
+              >
+                <span className="text-3xl filter drop-shadow-xs transition-transform group-hover:scale-125">
+                  {item.emoji || '⭐'}
+                </span>
               </div>
               <span className="font-fun text-4xl font-black text-slate-800">{item.number}</span>
               <span className="text-base font-bold text-amber-600 font-fun">{item.word}</span>

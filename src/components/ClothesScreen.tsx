@@ -41,7 +41,6 @@ export const ClothesScreen: React.FC<ClothesScreenProps> = ({ speechRate, soundE
     if (!soundEnabled) return;
     const target = item || currentItem;
     setIsSpeaking(true);
-    playChime('pop');
     speakWord(target.nameEnglish, speechRate, () => {
       setIsSpeaking(false);
     });

@@ -34,7 +34,6 @@ export const AbcScreen: React.FC<AbcScreenProps> = ({ themeConfig, speechRate, s
   const handleSpeak = (words?: string[]) => {
     if (!soundEnabled) return;
     setIsSpeaking(true);
-    playChime('pop');
     speakSequence(words || currentItem.soundSequence, speechRate, () => {
       setIsSpeaking(false);
     });
@@ -180,18 +179,24 @@ export const AbcScreen: React.FC<AbcScreenProps> = ({ themeConfig, speechRate, s
               <Volume2 className="w-6 h-6" />
             </button>
 
-            {/* Object Image */}
-            <div className="relative h-64 sm:h-72 w-full bg-slate-100 overflow-hidden flex items-center justify-center p-4">
-              <img
-                src={currentItem.image}
-                alt={currentItem.word}
-                className="w-full h-full object-cover rounded-2xl border-2 border-slate-200 shadow-inner group-hover:scale-105 transition-transform duration-300"
-                onError={(e) => {
-                  (e.target as HTMLImageElement).src = '/assets/images/abc/backgroundimage.jpg';
-                }}
-              />
-              <div className="absolute bottom-3 bg-black/60 backdrop-blur-xs text-white px-5 py-1.5 rounded-full font-fun text-2xl font-bold shadow-md">
-                {currentItem.word}
+            {/* Object Illustration Card */}
+            <div
+              className="relative h-64 sm:h-72 w-full overflow-hidden flex flex-col items-center justify-center p-6 border-b border-slate-100 select-none"
+              style={{
+                background: `radial-gradient(circle, ${currentItem.color || '#3B82F6'}18 0%, #FFFFFF 85%)`,
+              }}
+            >
+              <div className="text-8xl sm:text-9xl drop-shadow-md select-none transform transition-transform group-hover:scale-110 duration-300">
+                {currentItem.emoji || '⭐'}
+              </div>
+              <div
+                className="mt-4 text-white px-5 py-1.5 rounded-full font-fun text-xl sm:text-2xl font-bold shadow-md flex items-center gap-2"
+                style={{ backgroundColor: currentItem.color || '#3B82F6' }}
+              >
+                <span>{currentItem.word}</span>
+                {currentItem.arabic && (
+                  <span className="text-sm font-semibold opacity-90 font-sans">({currentItem.arabic})</span>
+                )}
               </div>
             </div>
 
@@ -266,12 +271,14 @@ export const AbcScreen: React.FC<AbcScreenProps> = ({ themeConfig, speechRate, s
               }}
               className="bg-white rounded-2xl shadow-sm hover:shadow-lg border-2 border-slate-100 hover:border-amber-400 p-3.5 flex flex-col items-center text-center cursor-pointer transition-all active:scale-95 group"
             >
-              <div className="w-full h-28 rounded-xl overflow-hidden bg-slate-100 mb-2.5">
-                <img
-                  src={item.image}
-                  alt={item.word}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                />
+              <div
+                className="w-full h-24 rounded-xl overflow-hidden mb-2.5 flex items-center justify-center text-5xl transition-transform group-hover:scale-110 select-none shadow-inner"
+                style={{
+                  backgroundColor: `${item.color || '#3B82F6'}15`,
+                  border: `2px solid ${item.color || '#3B82F6'}40`,
+                }}
+              >
+                {item.emoji || '⭐'}
               </div>
               <span className="font-fun text-3xl font-black text-slate-800 block">{item.letter}</span>
               <span className="text-sm font-bold text-amber-600 font-fun">{item.word}</span>
@@ -290,12 +297,16 @@ export const AbcScreen: React.FC<AbcScreenProps> = ({ themeConfig, speechRate, s
           <p className="text-slate-500 font-semibold mb-6">أي حرف يبدأ بهذه الكلمة؟</p>
 
           {/* Picture of word */}
-          <div className="w-48 h-48 mx-auto rounded-2xl overflow-hidden shadow-md border-4 border-amber-200 mb-4 relative">
-            <img
-              src={ABC_DATA[quizQuestion.correctIndex].image}
-              alt="Quiz clue"
-              className="w-full h-full object-cover"
-            />
+          <div
+            className="w-44 h-44 mx-auto rounded-3xl overflow-hidden shadow-lg mb-4 flex items-center justify-center select-none"
+            style={{
+              background: `radial-gradient(circle, ${ABC_DATA[quizQuestion.correctIndex].color || '#F59E0B'}25 0%, #FFFFFF 80%)`,
+              border: `4px solid ${ABC_DATA[quizQuestion.correctIndex].color || '#F59E0B'}`,
+            }}
+          >
+            <span className="text-8xl drop-shadow-md">
+              {ABC_DATA[quizQuestion.correctIndex].emoji || '⭐'}
+            </span>
           </div>
 
           <div className="font-fun text-3xl font-black text-amber-600 mb-6">

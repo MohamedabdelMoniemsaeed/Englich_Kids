@@ -35,7 +35,6 @@ export const BodyPartsScreen: React.FC<BodyPartsScreenProps> = ({ speechRate, so
     if (!soundEnabled) return;
     const target = item || currentItem;
     setIsSpeaking(true);
-    playChime('pop');
     speakWord(target.nameEnglish, speechRate, () => {
       setIsSpeaking(false);
     });

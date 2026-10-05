@@ -44,7 +44,6 @@ export const FruitsScreen: React.FC<FruitsScreenProps> = ({ speechRate, soundEna
     if (!soundEnabled) return;
     const target = item || currentItem;
     setIsSpeaking(true);
-    playChime('pop');
     speakWord(target.nameEnglish, speechRate, () => {
       setIsSpeaking(false);
     });

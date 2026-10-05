@@ -186,8 +186,8 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ themeConfig, onNavigate 
           اختر قسماً أو العب ألعاباً مسلية لتعلم الإنجليزية بسهولة ومرح
         </p>
 
-        {/* Quick Player Stats Chip */}
-        <div className="flex items-center justify-center gap-2 mt-3">
+        {/* Quick Player Stats Chip & Mobile Install */}
+        <div className="flex flex-wrap items-center justify-center gap-2 mt-3">
           <button
             onClick={() => {
               playChime('pop');

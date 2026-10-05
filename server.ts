@@ -27,6 +27,13 @@ async function startServer() {
     res.json({ status: 'ok', app: 'English Kids' });
   });
 
+  // Direct APK download routes
+  app.get(['/English_Kids.apk', '/app-release.apk', '/download-apk'], (req, res) => {
+    const apkFile = path.join(process.cwd(), 'English_Kids.apk');
+    res.setHeader('Content-Type', 'application/vnd.android.package-archive');
+    res.download(apkFile, 'English_Kids.apk');
+  });
+
   // AI Friend Chat endpoint
   app.post('/api/chat', async (req, res) => {
     try {

@@ -15,7 +15,6 @@ export const FamilyScreen: React.FC<FamilyScreenProps> = ({ themeConfig, speechR
 
   const handleMemberClick = (member: FamilyItem) => {
     setSelectedMember(member);
-    playChime('pop');
     if (soundEnabled) {
       speakWord(member.nameEnglish, speechRate);
     }
@@ -40,16 +39,17 @@ export const FamilyScreen: React.FC<FamilyScreenProps> = ({ themeConfig, speechR
             onClick={() => handleMemberClick(member)}
             className="group relative bg-white rounded-3xl p-4 shadow-md hover:shadow-xl border-4 border-white hover:border-amber-300 transition-all duration-300 flex flex-col items-center text-center transform active:scale-95"
           >
-            {/* Avatar Circle */}
-            <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-full overflow-hidden border-4 border-slate-100 shadow-inner mb-3 bg-slate-50 p-1 flex items-center justify-center">
-              <img
-                src={member.image}
-                alt={member.nameEnglish}
-                className="w-full h-full object-cover rounded-full group-hover:scale-105 transition-transform"
-                onError={(e) => {
-                  (e.target as HTMLImageElement).src = '/assets/images/family_members/backgroundimage.jpg';
-                }}
-              />
+            {/* Avatar Circle with Offline Illustrated Character */}
+            <div
+              className="w-28 h-28 sm:w-32 sm:h-32 rounded-full overflow-hidden border-4 shadow-inner mb-3 p-1 flex items-center justify-center select-none transform transition-transform group-hover:scale-110 duration-300"
+              style={{
+                backgroundColor: `${member.color || '#3B82F6'}15`,
+                borderColor: member.color || '#3B82F6',
+              }}
+            >
+              <span className="text-6xl sm:text-7xl filter drop-shadow select-none">
+                {member.emoji || '👤'}
+              </span>
             </div>
 
             {/* Pill Name matching Flutter all_icon widget */}
@@ -76,12 +76,16 @@ export const FamilyScreen: React.FC<FamilyScreenProps> = ({ themeConfig, speechR
               <X className="w-5 h-5" />
             </button>
 
-            <div className="w-40 h-40 rounded-full overflow-hidden border-4 border-amber-300 shadow-md mb-4 bg-slate-50">
-              <img
-                src={selectedMember.image}
-                alt={selectedMember.nameEnglish}
-                className="w-full h-full object-cover"
-              />
+            <div
+              className="w-36 h-36 rounded-full overflow-hidden border-4 shadow-lg mb-4 flex items-center justify-center animate-bounce-gentle select-none"
+              style={{
+                backgroundColor: `${selectedMember.color || '#3B82F6'}20`,
+                borderColor: selectedMember.color || '#3B82F6',
+              }}
+            >
+              <span className="text-7xl filter drop-shadow select-none">
+                {selectedMember.emoji || '👤'}
+              </span>
             </div>
 
             <span className="text-2xl font-bold text-slate-500 font-sans">{selectedMember.nameArabic}</span>

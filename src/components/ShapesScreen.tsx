@@ -137,7 +137,6 @@ export const ShapesScreen: React.FC<ShapesScreenProps> = ({ themeConfig, speechR
     if (!soundEnabled) return;
     const target = shape || currentShape;
     setIsSpeaking(true);
-    playChime('pop');
     speakWord(target.nameEnglish, speechRate, () => {
       setIsSpeaking(false);
     });
