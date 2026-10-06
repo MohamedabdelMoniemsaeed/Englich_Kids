@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { ScreenId, ThemeConfig } from '../types';
-import { Sparkles, Gamepad2, BookOpen, Star, Trophy } from 'lucide-react';
+import { Sparkles, Gamepad2, BookOpen, Star, Trophy, Download, Smartphone, CheckCircle2, AlertCircle, ChevronDown, ChevronUp } from 'lucide-react';
 import { playChime } from '../utils/sound';
 import { getPlayerProfile, calculateLevel } from '../utils/scoreManager';
 import animalsHomeImage from '../assets/images/animals_home_icon_1790508242701.jpg';
@@ -38,10 +38,31 @@ interface HomeCardItem {
 export const HomeScreen: React.FC<HomeScreenProps> = ({ themeConfig, onNavigate }) => {
   const [activeTab, setActiveTab] = useState<'all' | 'learning' | 'games'>('all');
   const [playerProfile, setPlayerProfile] = useState(() => getPlayerProfile());
+  const [showInstallHelp, setShowInstallHelp] = useState(false);
+  const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
 
   useEffect(() => {
     setPlayerProfile(getPlayerProfile());
+
+    const promptHandler = (e: any) => {
+      e.preventDefault();
+      setDeferredPrompt(e);
+    };
+    window.addEventListener('beforeinstallprompt', promptHandler);
+    return () => window.removeEventListener('beforeinstallprompt', promptHandler);
   }, []);
+
+  const handlePwaInstall = async () => {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      const res = await deferredPrompt.userChoice;
+      if (res && res.outcome === 'accepted') {
+        setDeferredPrompt(null);
+      }
+    } else {
+      setShowInstallHelp(true);
+    }
+  };
 
   const currentLevel = calculateLevel(playerProfile.totalXp);
 
@@ -205,6 +226,75 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ themeConfig, onNavigate 
               ⭐ {playerProfile.stars}
             </span>
           </button>
+        </div>
+
+        {/* Android Mobile Install Banner */}
+        <div className="max-w-xl mx-auto mt-4 px-2">
+          <div className="bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 text-white rounded-3xl p-3.5 sm:p-4 shadow-lg border-2 border-emerald-400/40">
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-right">
+              <div className="flex items-center gap-3">
+                <div className="w-12 h-12 rounded-2xl bg-white/20 backdrop-blur-xs flex items-center justify-center shrink-0 shadow-inner">
+                  <Smartphone className="w-6 h-6 text-yellow-300 animate-pulse" />
+                </div>
+                <div>
+                  <h3 className="font-fun font-black text-base sm:text-lg text-white flex items-center gap-2 justify-center sm:justify-start">
+                    <span>تشغيل التطبيق على هاتف الأندرويد</span>
+                    <span className="bg-yellow-400 text-slate-900 text-[10px] font-black px-2 py-0.5 rounded-full">Android APK</span>
+                  </h3>
+                  <p className="text-emerald-100 text-xs sm:text-sm font-medium mt-0.5">
+                    ثبّت التطبيق ليعمل على الهاتف مباشرة وبدون إنترنت
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex flex-wrap items-center justify-center gap-2 w-full sm:w-auto">
+                <a
+                  href="/English_Kids.apk"
+                  download="English_Kids.apk"
+                  onClick={() => playChime('fanfare')}
+                  className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 py-2.5 bg-yellow-400 hover:bg-yellow-300 text-slate-900 font-fun font-black text-xs sm:text-sm rounded-2xl shadow-md active:scale-95 transition-all"
+                >
+                  <Download className="w-4 h-4 text-slate-900" />
+                  <span>تثبيت APK الآن</span>
+                </a>
+
+                {deferredPrompt && (
+                  <button
+                    onClick={() => {
+                      playChime('pop');
+                      handlePwaInstall();
+                    }}
+                    className="flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-3.5 py-2.5 bg-white/20 hover:bg-white/30 text-white font-fun font-bold text-xs rounded-2xl transition-all active:scale-95"
+                  >
+                    <span>⚡ تثبيت فوري</span>
+                  </button>
+                )}
+
+                <button
+                  onClick={() => setShowInstallHelp(!showInstallHelp)}
+                  className="p-2.5 bg-white/15 hover:bg-white/25 text-white rounded-2xl transition-all"
+                  title="تعليمات التثبيت وحل المشاكل"
+                >
+                  {showInstallHelp ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                </button>
+              </div>
+            </div>
+
+            {/* Expandable Help Instructions */}
+            {showInstallHelp && (
+              <div className="mt-3 pt-3 border-t border-emerald-400/30 text-right text-xs space-y-1.5 text-emerald-50 bg-black/15 p-3 rounded-2xl">
+                <p className="font-bold text-yellow-300 flex items-center gap-1.5">
+                  <AlertCircle className="w-3.5 h-3.5 shrink-0" />
+                  <span>إذا ظهرت لك رسالة &quot;التطبيق ليس مثبتاً&quot; أو لم يبدأ التثبيت:</span>
+                </p>
+                <div className="pr-4 space-y-1 text-[11px] leading-relaxed">
+                  <p>1️⃣ <strong>احذف أي نسخة قديمة</strong> من التطبيق موجودة على هاتفك أولاً لتفادي تعارض التثبيت.</p>
+                  <p>2️⃣ إذا ظهر تنبيه من <strong>حماية Play (Play Protect)</strong>، اضغط على <em>&quot;مزيد من التفاصيل&quot;</em> ثم <em>&quot;التثبيت على أي حال&quot;</em>.</p>
+                  <p>3️⃣ أو افتح الرابط في متصفح <strong>Google Chrome</strong> واضغط قائمة <strong>(⋮)</strong> ثم <strong>&quot;تثبيت التطبيق&quot;</strong> وسيعمل فوراً!</p>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Filter Navigation Tabs */}

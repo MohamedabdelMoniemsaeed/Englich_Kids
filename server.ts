@@ -1,5 +1,6 @@
 import express from 'express';
 import path from 'path';
+import fs from 'fs';
 import { GoogleGenAI } from '@google/genai';
 import dotenv from 'dotenv';
 import { createServer as createViteServer } from 'vite';
@@ -29,9 +30,13 @@ async function startServer() {
 
   // Direct APK download routes
   app.get(['/English_Kids.apk', '/app-release.apk', '/download-apk'], (req, res) => {
-    const apkFile = path.join(process.cwd(), 'English_Kids.apk');
+    const publicApk = path.join(process.cwd(), 'public', 'English_Kids.apk');
+    const distApk = path.join(process.cwd(), 'dist', 'English_Kids.apk');
+    const rootApk = path.join(process.cwd(), 'English_Kids.apk');
+    const targetFile = fs.existsSync(publicApk) ? publicApk : (fs.existsSync(distApk) ? distApk : rootApk);
     res.setHeader('Content-Type', 'application/vnd.android.package-archive');
-    res.download(apkFile, 'English_Kids.apk');
+    res.setHeader('Content-Disposition', 'attachment; filename="English_Kids.apk"');
+    res.download(targetFile, 'English_Kids.apk');
   });
 
   // Dedicated Audio static handling - prevent SPA HTML fallback on missing audio
