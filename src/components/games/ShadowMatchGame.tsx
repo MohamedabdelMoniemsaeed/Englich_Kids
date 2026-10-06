@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Volume2, Sparkles, CheckCircle2, RotateCcw, ArrowRight } from 'lucide-react';
-import { playChime, speakWord, speakSequence } from '../../utils/sound';
+import { playChime, speakWord, speakSequence, playPraise } from '../../utils/sound';
 import confetti from 'canvas-confetti';
 
 interface ShadowMatchGameProps {
@@ -99,11 +99,12 @@ export const ShadowMatchGame: React.FC<ShadowMatchGameProps> = ({
 
   const handleSelectLeft = (id: string) => {
     if (matchedIds.includes(id)) return;
-    playChime('pop');
     setSelectedLeft(id);
     const item = leftItems.find((i) => i.id === id);
     if (item && soundEnabled) {
       speakWord(item.name, speechRate);
+    } else {
+      playChime('pop');
     }
   };
 
@@ -112,14 +113,15 @@ export const ShadowMatchGame: React.FC<ShadowMatchGameProps> = ({
 
     if (selectedLeft === id) {
       // MATCH SUCCESS!
-      playChime('success');
       const nextMatched = [...matchedIds, id];
       setMatchedIds(nextMatched);
       setSelectedLeft(null);
 
       const item = leftItems.find((i) => i.id === id);
       if (item && soundEnabled) {
-        speakSequence(['Correct match!', item.name], speechRate);
+        playPraise('success', ['Correct match!', item.name], speechRate);
+      } else {
+        playChime('success');
       }
 
       if (nextMatched.length === leftItems.length) {
@@ -129,10 +131,11 @@ export const ShadowMatchGame: React.FC<ShadowMatchGameProps> = ({
       }
     } else {
       // WRONG MATCH
-      playChime('wrong');
       setSelectedLeft(null);
       if (soundEnabled) {
-        speakSequence(['Try again!'], speechRate);
+        playPraise('wrong', ['Try again!'], speechRate);
+      } else {
+        playChime('wrong');
       }
     }
   };

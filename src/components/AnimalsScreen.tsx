@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { ANIMALS_DATA } from '../data/learningData';
 import { ThemeConfig, AnimalItem } from '../types';
 import { Volume2, ChevronLeft, ChevronRight, Search, Grid, Layers, Sparkles, RotateCcw } from 'lucide-react';
-import { speakWord, speakSequence, playChime } from '../utils/sound';
+import { speakWord, speakSequence, playChime, playPraise } from '../utils/sound';
 import confetti from 'canvas-confetti';
 
 interface AnimalsScreenProps {
@@ -109,15 +109,17 @@ export const AnimalsScreen: React.FC<AnimalsScreenProps> = ({ themeConfig, speec
     }));
 
     if (isCorrect) {
-      playChime('success');
       confetti({ particleCount: 50, spread: 60, origin: { y: 0.6 } });
       if (soundEnabled) {
-        speakSequence(['Great job!', option.nameEnglish], speechRate);
+        playPraise('success', ['Great job!', option.nameEnglish], speechRate);
+      } else {
+        playChime('success');
       }
     } else {
-      playChime('click');
       if (soundEnabled) {
-        speakSequence(['This is', option.nameEnglish, 'Look for the', quizQuestion.correctAnimal.nameEnglish], speechRate);
+        playPraise('wrong', ['This is', option.nameEnglish, 'Look for the', quizQuestion.correctAnimal.nameEnglish], speechRate);
+      } else {
+        playChime('wrong');
       }
     }
   };

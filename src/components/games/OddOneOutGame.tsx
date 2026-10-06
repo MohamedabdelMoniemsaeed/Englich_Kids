@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Volume2, Sparkles, HelpCircle, ArrowRight, Flame } from 'lucide-react';
-import { playChime, speakWord, speakSequence } from '../../utils/sound';
+import { playChime, speakWord, speakSequence, playPraise } from '../../utils/sound';
 import confetti from 'canvas-confetti';
 
 interface OddOneOutGameProps {
@@ -137,19 +137,21 @@ export const OddOneOutGame: React.FC<OddOneOutGameProps> = ({
     setAnswered(true);
 
     if (item.isOdd) {
-      playChime('success');
       const nextStreak = streak + 1;
       setStreak(nextStreak);
       onWin(25, 4);
       confetti({ particleCount: 50, spread: 60 });
       if (soundEnabled) {
-        speakSequence(['Correct!', currentQ.explanationEn], speechRate);
+        playPraise('success', ['Correct!', currentQ.explanationEn], speechRate);
+      } else {
+        playChime('success');
       }
     } else {
-      playChime('wrong');
       setStreak(0);
       if (soundEnabled) {
-        speakSequence(['Try again! That belongs to the group.'], speechRate);
+        playPraise('wrong', ['Try again! That belongs to the group.'], speechRate);
+      } else {
+        playChime('wrong');
       }
     }
   };

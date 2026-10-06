@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { FRUITS_DATA } from '../data/learningData';
 import { ThemeConfig, FruitItem } from '../types';
 import { Volume2, ChevronLeft, ChevronRight, Search, Grid, Layers, Sparkles, RotateCcw, Apple, CheckCircle2, HelpCircle } from 'lucide-react';
-import { speakWord, playChime } from '../utils/sound';
+import { speakWord, playChime, playPraise } from '../utils/sound';
 import confetti from 'canvas-confetti';
 
 interface FruitsScreenProps {
@@ -105,12 +105,19 @@ export const FruitsScreen: React.FC<FruitsScreenProps> = ({ speechRate, soundEna
     }));
 
     if (isCorrect) {
-      playChime('success');
       confetti({ particleCount: 50, spread: 60, origin: { y: 0.6 } });
+      if (soundEnabled) {
+        playPraise('success', option.nameEnglish, speechRate);
+      } else {
+        playChime('success');
+      }
     } else {
-      playChime('pop');
+      if (soundEnabled) {
+        playPraise('wrong', option.nameEnglish, speechRate);
+      } else {
+        playChime('wrong');
+      }
     }
-    speakWord(option.nameEnglish, speechRate);
   };
 
   return (

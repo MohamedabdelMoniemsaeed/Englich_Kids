@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { ABC_DATA } from '../data/learningData';
 import { ThemeConfig } from '../types';
 import { Volume2, ChevronLeft, ChevronRight, Sparkles, CheckCircle2, RotateCcw, Grid, Layers } from 'lucide-react';
-import { speakSequence, playChime } from '../utils/sound';
+import { speakSequence, playChime, playPraise } from '../utils/sound';
 import confetti from 'canvas-confetti';
 
 interface AbcScreenProps {
@@ -98,15 +98,17 @@ export const AbcScreen: React.FC<AbcScreenProps> = ({ themeConfig, speechRate, s
     }));
 
     if (isCorrect) {
-      playChime('success');
       confetti({ particleCount: 60, spread: 60, origin: { y: 0.6 } });
       if (soundEnabled) {
-        speakSequence(['Awesome!', ABC_DATA[optionIdx].letter, ABC_DATA[optionIdx].word], speechRate);
+        playPraise('success', ['Awesome!', ABC_DATA[optionIdx].letter, ABC_DATA[optionIdx].word], speechRate);
+      } else {
+        playChime('success');
       }
     } else {
-      playChime('click');
       if (soundEnabled) {
-        speakSequence(['Try again!', 'This is', ABC_DATA[quizQuestion.correctIndex].word], speechRate);
+        playPraise('wrong', ['Try again!', 'This is', ABC_DATA[quizQuestion.correctIndex].word], speechRate);
+      } else {
+        playChime('wrong');
       }
     }
   };

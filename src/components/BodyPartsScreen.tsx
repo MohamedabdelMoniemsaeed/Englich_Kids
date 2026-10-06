@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { BODY_PARTS_DATA } from '../data/learningData';
 import { ThemeConfig, BodyPartItem } from '../types';
 import { Volume2, ChevronLeft, ChevronRight, Grid, Layers, Sparkles, RotateCcw } from 'lucide-react';
-import { speakWord, speakSequence, playChime } from '../utils/sound';
+import { speakWord, speakSequence, playChime, playPraise } from '../utils/sound';
 import confetti from 'canvas-confetti';
 
 interface BodyPartsScreenProps {
@@ -98,15 +98,17 @@ export const BodyPartsScreen: React.FC<BodyPartsScreenProps> = ({ speechRate, so
     }));
 
     if (isCorrect) {
-      playChime('success');
       confetti({ particleCount: 50, spread: 60, origin: { y: 0.6 } });
       if (soundEnabled) {
-        speakSequence(['Well done!', option.nameEnglish], speechRate);
+        playPraise('success', ['Well done!', option.nameEnglish], speechRate);
+      } else {
+        playChime('success');
       }
     } else {
-      playChime('click');
       if (soundEnabled) {
-        speakSequence(['These are', option.nameEnglish, 'Find your', quizQuestion.correctItem.nameEnglish], speechRate);
+        playPraise('wrong', ['These are', option.nameEnglish, 'Find your', quizQuestion.correctItem.nameEnglish], speechRate);
+      } else {
+        playChime('wrong');
       }
     }
   };

@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Sparkles, Eraser, Trash2, Volume2, CheckCircle2 } from 'lucide-react';
-import { playChime, speakWord, speakSequence } from '../../utils/sound';
+import { playChime, speakWord, speakSequence, playPraise } from '../../utils/sound';
 import confetti from 'canvas-confetti';
 
 interface TracingGameProps {
@@ -134,14 +134,15 @@ export const TracingGame: React.FC<TracingGameProps> = ({ speechRate, soundEnabl
   };
 
   const handleCelebrate = () => {
-    playChime('star');
     confetti({ particleCount: 70, spread: 80, origin: { y: 0.6 } });
     if (!completedList.includes(tracingChar)) {
       setCompletedList((prev) => [...prev, tracingChar]);
     }
     onWin(20, 5);
     if (soundEnabled) {
-      speakSequence(['Super writing artist!', tracingChar], speechRate);
+      playPraise('star', ['Super writing artist!', tracingChar], speechRate);
+    } else {
+      playChime('star');
     }
   };
 

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { RotateCcw, Trophy, Star, Sparkles, Clock, Flame } from 'lucide-react';
-import { playChime, speakWord, speakSequence } from '../../utils/sound';
+import { playChime, speakWord, speakSequence, playPraise } from '../../utils/sound';
 import confetti from 'canvas-confetti';
 
 interface MemoryGameProps {
@@ -145,8 +145,6 @@ export const MemoryGame: React.FC<MemoryGameProps> = ({ speechRate, soundEnabled
           secondCard.isMatched = true;
           setCards([...newCards]);
           setFlippedIndices([]);
-          playChime('success');
-          if (soundEnabled) speakWord(firstCard.name, speechRate);
 
           // Check if all matched
           if (newCards.every((c) => c.isMatched)) {
@@ -157,7 +155,17 @@ export const MemoryGame: React.FC<MemoryGameProps> = ({ speechRate, soundEnabled
             const starsAwarded = difficulty === 'hard' ? 15 : difficulty === 'medium' ? 10 : 6;
             onWin(finalScore, starsAwarded);
             confetti({ particleCount: 80, spread: 80 });
-            if (soundEnabled) speakSequence(['You matched them all!', 'Great job!'], speechRate);
+            if (soundEnabled) {
+              playPraise('success', ['You matched them all!', 'Great job!'], speechRate);
+            } else {
+              playChime('success');
+            }
+          } else {
+            if (soundEnabled) {
+              playPraise('success', [firstCard.name], speechRate);
+            } else {
+              playChime('success');
+            }
           }
         }, 500);
       } else {

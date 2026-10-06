@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Volume2, Flame, Sparkles, Timer, RotateCcw } from 'lucide-react';
-import { playChime, speakWord, speakSequence } from '../../utils/sound';
+import { playChime, speakWord, speakSequence, playPraise } from '../../utils/sound';
 import confetti from 'canvas-confetti';
 
 interface ListeningGameProps {
@@ -193,10 +193,11 @@ export const ListeningGame: React.FC<ListeningGameProps> = ({ speechRate, soundE
 
   const handleTimeOut = () => {
     setAnswered(true);
-    playChime('wrong');
     setStreak(0);
     if (soundEnabled) {
-      speakSequence(['Time is up!', 'The answer was', currentQ.word], speechRate);
+      playPraise('wrong', ['Time is up!', 'The answer was', currentQ.word], speechRate);
+    } else {
+      playChime('wrong');
     }
   };
 
@@ -209,19 +210,23 @@ export const ListeningGame: React.FC<ListeningGameProps> = ({ speechRate, soundE
     const isCorrect = optEmoji === currentQ.emoji;
 
     if (isCorrect) {
-      playChime('success');
       const nextStreak = streak + 1;
       setStreak(nextStreak);
       const points = 15 * (nextStreak >= 3 ? 2 : 1) + (isTimedMode ? timeLeft * 2 : 0);
       setScore((s) => s + points);
       onWin(points, 3);
       confetti({ particleCount: 50, spread: 60 });
-      if (soundEnabled) speakSequence(['Correct!', currentQ.word], speechRate);
+      if (soundEnabled) {
+        playPraise('success', ['Correct!', currentQ.word], speechRate);
+      } else {
+        playChime('success');
+      }
     } else {
-      playChime('wrong');
       setStreak(0);
       if (soundEnabled) {
-        speakSequence(['Oops! Find the', currentQ.word], speechRate);
+        playPraise('wrong', ['Oops! Find the', currentQ.word], speechRate);
+      } else {
+        playChime('wrong');
       }
     }
   };

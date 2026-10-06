@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { SHAPES_DATA } from '../data/learningData';
 import { ThemeConfig, ShapeItem } from '../types';
 import { Volume2, ChevronLeft, ChevronRight, Sparkles, Grid, Layers, RotateCcw, Award } from 'lucide-react';
-import { speakWord, speakSequence, playChime } from '../utils/sound';
+import { speakWord, speakSequence, playChime, playPraise } from '../utils/sound';
 import confetti from 'canvas-confetti';
 
 interface ShapesScreenProps {
@@ -201,15 +201,17 @@ export const ShapesScreen: React.FC<ShapesScreenProps> = ({ themeConfig, speechR
     }));
 
     if (isCorrect) {
-      playChime('success');
       confetti({ particleCount: 50, spread: 60, origin: { y: 0.6 } });
       if (soundEnabled) {
-        speakSequence(['Excellent!', option.nameEnglish], speechRate);
+        playPraise('success', ['Excellent!', option.nameEnglish], speechRate);
+      } else {
+        playChime('success');
       }
     } else {
-      playChime('click');
       if (soundEnabled) {
-        speakSequence(['This is', option.nameEnglish, 'Try finding the', quizQuestion.correctShape.nameEnglish], speechRate);
+        playPraise('wrong', ['This is', option.nameEnglish, 'Try finding the', quizQuestion.correctShape.nameEnglish], speechRate);
+      } else {
+        playChime('wrong');
       }
     }
   };

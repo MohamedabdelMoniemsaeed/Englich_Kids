@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Volume2, Sparkles, Trophy, RotateCcw, Flame } from 'lucide-react';
-import { playChime, speakWord, speakSequence } from '../../utils/sound';
+import { playChime, speakWord, speakSequence, playPraise } from '../../utils/sound';
 import confetti from 'canvas-confetti';
 
 interface BalloonPopGameProps {
@@ -136,7 +136,6 @@ export const BalloonPopGame: React.FC<BalloonPopGameProps> = ({
     if (balloon.isPopped) return;
 
     if (balloon.isTarget) {
-      playChime('balloon');
       const updated = balloons.map((b) =>
         b.id === balloon.id ? { ...b, isPopped: true } : b
       );
@@ -144,27 +143,31 @@ export const BalloonPopGame: React.FC<BalloonPopGameProps> = ({
       setStreak((s) => s + 1);
       setRoundScore((s) => s + 15);
 
-      if (soundEnabled) {
-        speakWord(balloon.text, speechRate);
-      }
-
       // Check if all targets are popped
       const remainingTargets = updated.filter((b) => b.isTarget && !b.isPopped);
       if (remainingTargets.length === 0) {
         setRoundCompleted(true);
-        playChime('success');
         onWin(35, 5);
         confetti({ particleCount: 70, spread: 80 });
         if (soundEnabled) {
-          speakSequence(['Awesome balloon popping!', 'Round cleared!'], speechRate);
+          playPraise('success', ['Awesome balloon popping!', 'Round cleared!'], speechRate);
+        } else {
+          playChime('success');
+        }
+      } else {
+        if (soundEnabled) {
+          playPraise('balloon', balloon.text, speechRate);
+        } else {
+          playChime('balloon');
         }
       }
     } else {
       // Wrong balloon clicked
-      playChime('wrong');
       setStreak(0);
       if (soundEnabled) {
-        speakSequence(['Oops! Look for the right ones!'], speechRate);
+        playPraise('wrong', ['Try again!'], speechRate);
+      } else {
+        playChime('wrong');
       }
     }
   };

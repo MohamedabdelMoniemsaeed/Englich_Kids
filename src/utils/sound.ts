@@ -1,7 +1,10 @@
 // Offline Audio Player & Web Speech API fallback for English Kids
+import { AVAILABLE_AUDIO_SET } from '../data/availableAudio';
+
 let audioCtx: AudioContext | null = null;
 let activeAudio: HTMLAudioElement | null = null;
 let persistentUtterance: SpeechSynthesisUtterance | null = null;
+let cachedVoice: SpeechSynthesisVoice | null = null;
 
 export function getAudioContext(): AudioContext {
   if (!audioCtx) {
@@ -16,6 +19,32 @@ export function getAudioContext(): AudioContext {
   return audioCtx;
 }
 
+// Find and cache the best en-US voice consistently
+function updateCachedVoice() {
+  if (typeof window === 'undefined' || !('speechSynthesis' in window)) return;
+  try {
+    const voices = window.speechSynthesis.getVoices();
+    if (voices && voices.length > 0) {
+      cachedVoice =
+        voices.find(
+          (v) =>
+            v.lang === 'en-US' &&
+            (v.name.includes('Google') ||
+              v.name.includes('Natural') ||
+              v.name.includes('Samantha') ||
+              v.name.includes('Ava') ||
+              v.name.includes('Jenny'))
+        ) ||
+        voices.find((v) => v.lang === 'en-US') ||
+        voices.find((v) => v.lang.startsWith('en')) ||
+        voices[0] ||
+        null;
+    }
+  } catch {
+    // ignore
+  }
+}
+
 // Unlock audio on first user touch/click
 if (typeof window !== 'undefined') {
   const unlockAudio = () => {
@@ -24,8 +53,11 @@ if (typeof window !== 'undefined') {
       if (ctx && ctx.state === 'suspended') {
         ctx.resume().catch(() => {});
       }
-      if ('speechSynthesis' in window && window.speechSynthesis.paused) {
-        window.speechSynthesis.resume();
+      if ('speechSynthesis' in window) {
+        if (window.speechSynthesis.paused) {
+          window.speechSynthesis.resume();
+        }
+        updateCachedVoice();
       }
     } catch {
       // ignore
@@ -34,9 +66,16 @@ if (typeof window !== 'undefined') {
 
   window.addEventListener('click', unlockAudio, { passive: true });
   window.addEventListener('touchstart', unlockAudio, { passive: true });
+
+  if ('speechSynthesis' in window) {
+    updateCachedVoice();
+    window.speechSynthesis.onvoiceschanged = () => {
+      updateCachedVoice();
+    };
+  }
 }
 
-// Map English text/letters/numbers to local MP3 audio files
+// Map English text/letters/numbers to verified local MP3 audio files
 export function resolveAudioPath(text: string): string | null {
   if (!text) return null;
 
@@ -49,19 +88,46 @@ export function resolveAudioPath(text: string): string | null {
 
   if (!clean) return null;
 
-  // Handle two-character letter strings like "Aa", "Bb", "Zz"
-  if (clean.length === 2 && clean[0] === clean[1]) {
+  // 1. Two-character letter strings like "Aa", "Bb", "Zz"
+  if (clean.length === 2 && clean[0] === clean[1] && AVAILABLE_AUDIO_SET.has(clean[0])) {
     return `./audio/${clean[0]}.mp3`;
   }
 
-  // Handle single letters: "a", "b", "c"...
-  if (clean.length === 1 && clean >= 'a' && clean <= 'z') {
+  // 2. Single letters: "a", "b", "c"...
+  if (clean.length === 1 && AVAILABLE_AUDIO_SET.has(clean)) {
     return `./audio/${clean}.mp3`;
   }
 
-  // Replace spaces with underscores
+  // 3. Numbers: "1" to "10"
+  if (AVAILABLE_AUDIO_SET.has(clean)) {
+    return `./audio/${clean}.mp3`;
+  }
+
+  // 4. Number word to digit or vice-versa
+  const numToDigit: Record<string, string> = {
+    one: '1', two: '2', three: '3', four: '4', five: '5',
+    six: '6', seven: '7', eight: '8', nine: '9', ten: '10'
+  };
+  const digitToNum: Record<string, string> = {
+    '1': 'one', '2': 'two', '3': 'three', '4': 'four', '5': 'five',
+    '6': 'six', '7': 'seven', '8': 'eight', '9': 'nine', '10': 'ten'
+  };
+  if (numToDigit[clean] && AVAILABLE_AUDIO_SET.has(numToDigit[clean])) {
+    return `./audio/${numToDigit[clean]}.mp3`;
+  }
+  if (digitToNum[clean] && AVAILABLE_AUDIO_SET.has(digitToNum[clean])) {
+    return `./audio/${digitToNum[clean]}.mp3`;
+  }
+
+  // 5. Replace spaces with underscores
   const slug = clean.replace(/\s+/g, '_');
-  return `./audio/${slug}.mp3`;
+  if (AVAILABLE_AUDIO_SET.has(slug)) {
+    return `./audio/${slug}.mp3`;
+  }
+
+  // If the file is not verified in local storage, return null immediately
+  // This guarantees zero 404 network delays and instant speech fallback!
+  return null;
 }
 
 // Play offline MP3 audio file directly within user tap event
@@ -76,7 +142,7 @@ export function playAudioFile(
   }
 
   try {
-    // Stop any previously playing audio to avoid overlapping sound
+    // Stop any previously playing audio
     if (activeAudio) {
       activeAudio.pause();
       activeAudio.currentTime = 0;
@@ -89,10 +155,17 @@ export function playAudioFile(
     activeAudio = audio;
 
     let finished = false;
+    let watchdog: any = null;
+
+    const cleanup = () => {
+      if (watchdog) clearTimeout(watchdog);
+      if (activeAudio === audio) activeAudio = null;
+    };
+
     const handleEnd = () => {
       if (!finished) {
         finished = true;
-        if (activeAudio === audio) activeAudio = null;
+        cleanup();
         onEnd?.();
       }
     };
@@ -100,13 +173,20 @@ export function playAudioFile(
     const handleError = () => {
       if (!finished) {
         finished = true;
-        if (activeAudio === audio) activeAudio = null;
+        cleanup();
         onError?.();
       }
     };
 
     audio.onended = handleEnd;
     audio.onerror = handleError;
+
+    // Safety watchdog in case audio is interrupted or muted by OS
+    watchdog = setTimeout(() => {
+      if (!finished) {
+        handleEnd();
+      }
+    }, 3800);
 
     const playPromise = audio.play();
     if (playPromise && typeof playPromise.then === 'function') {
@@ -122,7 +202,7 @@ export function playAudioFile(
   }
 }
 
-// Fallback to Web Speech API (speechSynthesis) if MP3 is unavailable
+// Fallback to Web Speech API (speechSynthesis) with strict volume and voice control
 export function speakWithSpeechSynthesis(
   text: string,
   rate = 0.85,
@@ -137,13 +217,11 @@ export function speakWithSpeechSynthesis(
     if (window.speechSynthesis.paused) {
       window.speechSynthesis.resume();
     }
-    if (window.speechSynthesis.speaking) {
-      window.speechSynthesis.cancel();
-    }
 
     const cleanText = text
       .replace(/\[IMAGE:.*?\]/gi, '')
       .replace(/[\u0600-\u06FF]/g, '')
+      .replace(/[\(\)\[\]\{\}\/\\,\.\:\;\!\?]/g, ' ')
       .trim();
 
     if (!cleanText) {
@@ -154,32 +232,26 @@ export function speakWithSpeechSynthesis(
     const utterance = new SpeechSynthesisUtterance(cleanText);
     persistentUtterance = utterance;
 
+    // Strict 100% volume for full audibility
     utterance.volume = 1.0;
-    utterance.rate = Math.max(0.6, Math.min(rate, 1.05));
-    utterance.pitch = 1.1;
+    utterance.rate = Math.max(0.65, Math.min(rate, 1.05));
+    utterance.pitch = 1.08;
     utterance.lang = 'en-US';
 
-    const voices = window.speechSynthesis.getVoices();
-    const preferredVoice =
-      voices.find(
-        (v) =>
-          v.lang === 'en-US' &&
-          (v.name.includes('Google') ||
-            v.name.includes('Natural') ||
-            v.name.includes('Samantha') ||
-            v.name.includes('Ava'))
-      ) ||
-      voices.find((v) => v.lang === 'en-US') ||
-      voices[0];
-
-    if (preferredVoice) {
-      utterance.voice = preferredVoice;
+    if (!cachedVoice) {
+      updateCachedVoice();
+    }
+    if (cachedVoice) {
+      utterance.voice = cachedVoice;
     }
 
     let finished = false;
+    let watchdog: any = null;
+
     const finish = () => {
       if (!finished) {
         finished = true;
+        if (watchdog) clearTimeout(watchdog);
         persistentUtterance = null;
         onEnd?.();
       }
@@ -188,8 +260,9 @@ export function speakWithSpeechSynthesis(
     utterance.onend = finish;
     utterance.onerror = finish;
 
-    setTimeout(() => {
-      if (!finished && !window.speechSynthesis.speaking) {
+    // Watchdog to prevent speech synthesis queue lockup
+    watchdog = setTimeout(() => {
+      if (!finished) {
         finish();
       }
     }, 3500);
@@ -204,8 +277,8 @@ export function speakWithSpeechSynthesis(
 }
 
 // Main word pronunciation function:
-// 1. Tries offline local MP3 file in public/audio/
-// 2. Automatically falls back to Web Speech API if file fails or is missing
+// 1. Tries offline verified studio MP3 file in public/audio/
+// 2. Automatically falls back to Web Speech API instantly if missing
 export function speakWord(text: string, rate = 0.85, onEnd?: () => void) {
   if (typeof window === 'undefined') {
     onEnd?.();
@@ -236,7 +309,13 @@ export function speakWord(text: string, rate = 0.85, onEnd?: () => void) {
 }
 
 // Sequential pronunciation (e.g. letter "A", then word "Apple")
-export function speakSequence(words: string[], rate = 0.85, onComplete?: () => void, gapMs = 120) {
+// Has clean 160ms spacing to prevent audio ducking or overlapping
+export function speakSequence(
+  words: string[],
+  rate = 0.85,
+  onComplete?: () => void,
+  gapMs = 160
+) {
   if (!words || words.length === 0) {
     onComplete?.();
     return;
@@ -256,6 +335,26 @@ export function speakSequence(words: string[], rate = 0.85, onComplete?: () => v
   }
 
   speakNext();
+}
+
+// Unified praise helper:
+// Plays the celebratory chime, waits 300ms for note decay, then speaks encouraging words!
+// Eliminates audio ducking and volume fluctuation in all games!
+export function playPraise(
+  chime: 'success' | 'wrong' | 'star' | 'pop' | 'balloon' | null,
+  words: string | string[],
+  rate = 0.85,
+  onComplete?: () => void
+) {
+  const wordList = Array.isArray(words) ? words : [words];
+  if (chime) {
+    playChime(chime);
+    setTimeout(() => {
+      speakSequence(wordList, rate, onComplete);
+    }, 300);
+  } else {
+    speakSequence(wordList, rate, onComplete);
+  }
 }
 
 export function stopSpeaking() {
@@ -292,13 +391,13 @@ export function playChime(
         const osc = ctx.createOscillator();
         const gain = ctx.createGain();
         osc.type = 'sine';
-        osc.frequency.setValueAtTime(freq, now + i * 0.1);
-        gain.gain.setValueAtTime(0.2, now + i * 0.1);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.1 + 0.35);
+        osc.frequency.setValueAtTime(freq, now + i * 0.08);
+        gain.gain.setValueAtTime(0.25, now + i * 0.08);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.08 + 0.28);
         osc.connect(gain);
         gain.connect(ctx.destination);
-        osc.start(now + i * 0.1);
-        osc.stop(now + i * 0.1 + 0.4);
+        osc.start(now + i * 0.08);
+        osc.stop(now + i * 0.08 + 0.3);
       });
     } else if (type === 'fanfare') {
       const chords = [
@@ -308,21 +407,21 @@ export function playChime(
         [783.99, 1046.5, 1318.5],
       ];
       chords.forEach((chord, step) => {
-        const time = now + step * 0.14;
+        const time = now + step * 0.12;
         chord.forEach((freq) => {
           const osc = ctx.createOscillator();
           const gain = ctx.createGain();
           osc.type = 'triangle';
           osc.frequency.setValueAtTime(freq, time);
-          gain.gain.setValueAtTime(0.18, time);
+          gain.gain.setValueAtTime(0.2, time);
           gain.gain.exponentialRampToValueAtTime(
             0.001,
-            time + (step === chords.length - 1 ? 0.6 : 0.2)
+            time + (step === chords.length - 1 ? 0.5 : 0.18)
           );
           osc.connect(gain);
           gain.connect(ctx.destination);
           osc.start(time);
-          osc.stop(time + (step === chords.length - 1 ? 0.65 : 0.22));
+          osc.stop(time + (step === chords.length - 1 ? 0.55 : 0.2));
         });
       });
     } else if (type === 'balloon') {
@@ -331,7 +430,7 @@ export function playChime(
       osc.type = 'sine';
       osc.frequency.setValueAtTime(250, now);
       osc.frequency.exponentialRampToValueAtTime(800, now + 0.05);
-      gain.gain.setValueAtTime(0.35, now);
+      gain.gain.setValueAtTime(0.3, now);
       gain.gain.exponentialRampToValueAtTime(0.01, now + 0.08);
       osc.connect(gain);
       gain.connect(ctx.destination);
@@ -343,24 +442,24 @@ export function playChime(
       osc.type = 'sawtooth';
       osc.frequency.setValueAtTime(220, now);
       osc.frequency.exponentialRampToValueAtTime(140, now + 0.15);
-      gain.gain.setValueAtTime(0.15, now);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
+      gain.gain.setValueAtTime(0.18, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
       osc.connect(gain);
       gain.connect(ctx.destination);
       osc.start(now);
-      osc.stop(now + 0.22);
+      osc.stop(now + 0.2);
     } else if (type === 'pop') {
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
       osc.type = 'triangle';
       osc.frequency.setValueAtTime(320, now);
-      osc.frequency.exponentialRampToValueAtTime(650, now + 0.08);
-      gain.gain.setValueAtTime(0.25, now);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
+      osc.frequency.exponentialRampToValueAtTime(650, now + 0.07);
+      gain.gain.setValueAtTime(0.2, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.09);
       osc.connect(gain);
       gain.connect(ctx.destination);
       osc.start(now);
-      osc.stop(now + 0.12);
+      osc.stop(now + 0.1);
     } else if (type === 'star') {
       const notes = [659.25, 783.99, 1046.5, 1318.5];
       notes.forEach((freq, idx) => {
@@ -368,12 +467,12 @@ export function playChime(
         const gain = ctx.createGain();
         osc.type = 'sine';
         osc.frequency.setValueAtTime(freq, now + idx * 0.06);
-        gain.gain.setValueAtTime(0.15, now + idx * 0.06);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.06 + 0.25);
+        gain.gain.setValueAtTime(0.18, now + idx * 0.06);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.06 + 0.22);
         osc.connect(gain);
         gain.connect(ctx.destination);
         osc.start(now + idx * 0.06);
-        osc.stop(now + idx * 0.06 + 0.3);
+        osc.stop(now + idx * 0.06 + 0.25);
       });
     } else {
       const osc = ctx.createOscillator();
@@ -400,7 +499,7 @@ export function playNote(freq: number, duration = 0.25) {
     const gain = ctx.createGain();
     osc.type = 'sine';
     osc.frequency.setValueAtTime(freq, now);
-    gain.gain.setValueAtTime(0.15, now);
+    gain.gain.setValueAtTime(0.08, now); // Soft pleasant tone so speech is loud and clear
     gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
     osc.connect(gain);
     gain.connect(ctx.destination);

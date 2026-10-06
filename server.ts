@@ -34,6 +34,13 @@ async function startServer() {
     res.download(apkFile, 'English_Kids.apk');
   });
 
+  // Dedicated Audio static handling - prevent SPA HTML fallback on missing audio
+  const audioDir = path.join(process.cwd(), 'public', 'audio');
+  app.use('/audio', express.static(audioDir));
+  app.get('/audio/*', (req, res) => {
+    res.status(404).end();
+  });
+
   // AI Friend Chat endpoint
   app.post('/api/chat', async (req, res) => {
     try {

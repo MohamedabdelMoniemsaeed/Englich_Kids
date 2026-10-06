@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { JOBS_DATA } from '../data/learningData';
 import { ThemeConfig, JobItem } from '../types';
 import { Volume2, ChevronLeft, ChevronRight, Grid, Layers, Sparkles, RotateCcw, Briefcase } from 'lucide-react';
-import { speakWord, speakSequence, playChime } from '../utils/sound';
+import { speakWord, speakSequence, playChime, playPraise } from '../utils/sound';
 import confetti from 'canvas-confetti';
 
 interface JobsScreenProps {
@@ -98,15 +98,17 @@ export const JobsScreen: React.FC<JobsScreenProps> = ({ speechRate, soundEnabled
     }));
 
     if (isCorrect) {
-      playChime('success');
       confetti({ particleCount: 50, spread: 60, origin: { y: 0.6 } });
       if (soundEnabled) {
-        speakSequence(['Excellent!', option.nameEnglish], speechRate);
+        playPraise('success', ['Excellent!', option.nameEnglish], speechRate);
+      } else {
+        playChime('success');
       }
     } else {
-      playChime('click');
       if (soundEnabled) {
-        speakSequence(['This is', option.nameEnglish, 'Find the', quizQuestion.correctItem.nameEnglish], speechRate);
+        playPraise('wrong', ['This is', option.nameEnglish, 'Find the', quizQuestion.correctItem.nameEnglish], speechRate);
+      } else {
+        playChime('wrong');
       }
     }
   };

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { VEGETABLES_DATA } from '../data/learningData';
 import { ThemeConfig, VegetableItem } from '../types';
 import { Volume2, ChevronLeft, ChevronRight, Search, Grid, Layers, Sparkles, RotateCcw, Carrot, CheckCircle2, HelpCircle } from 'lucide-react';
-import { speakWord, playChime } from '../utils/sound';
+import { speakWord, playChime, playPraise } from '../utils/sound';
 import confetti from 'canvas-confetti';
 
 interface VegetablesScreenProps {
@@ -98,16 +98,23 @@ export const VegetablesScreen: React.FC<VegetablesScreenProps> = ({ themeConfig,
     }));
 
     if (option.id === quizQuestion.correctItem.id) {
-      playChime('success');
       confetti({
         particleCount: 50,
         spread: 60,
         origin: { y: 0.7 },
       });
+      if (soundEnabled) {
+        playPraise('success', option.nameEnglish, speechRate);
+      } else {
+        playChime('success');
+      }
     } else {
-      playChime('pop');
+      if (soundEnabled) {
+        playPraise('wrong', option.nameEnglish, speechRate);
+      } else {
+        playChime('wrong');
+      }
     }
-    speakWord(option.nameEnglish, speechRate);
   };
 
   return (

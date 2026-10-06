@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Volume2, Sparkles, HelpCircle, Delete, Flame, ArrowRight } from 'lucide-react';
-import { playChime, speakWord, speakSequence } from '../../utils/sound';
+import { playChime, speakWord, speakSequence, playPraise } from '../../utils/sound';
 import confetti from 'canvas-confetti';
 
 interface SpellingGameProps {
@@ -86,8 +86,11 @@ export const SpellingGame: React.FC<SpellingGameProps> = ({ speechRate, soundEna
   const handleLetterTap = (letterItem: { id: number; char: string; used: boolean }) => {
     if (letterItem.used || isCorrect) return;
 
-    playChime('pop');
-    if (soundEnabled) speakWord(letterItem.char, speechRate);
+    if (soundEnabled) {
+      speakWord(letterItem.char, speechRate);
+    } else {
+      playChime('pop');
+    }
 
     const nextBuilt = [...built, { id: letterItem.id, char: letterItem.char }];
     setBuilt(nextBuilt);
@@ -101,7 +104,6 @@ export const SpellingGame: React.FC<SpellingGameProps> = ({ speechRate, soundEna
       const spelled = nextBuilt.map((b) => b.char).join('');
       if (spelled === currentItem.word) {
         setIsCorrect(true);
-        playChime('success');
         const nextStreak = streak + 1;
         setStreak(nextStreak);
         const nextWordsCount = wordsCompleted + 1;
@@ -110,16 +112,23 @@ export const SpellingGame: React.FC<SpellingGameProps> = ({ speechRate, soundEna
         const scoreEarned = 25 * (nextStreak >= 3 ? 2 : 1);
         onWin(scoreEarned, 5);
         confetti({ particleCount: 75, spread: 70 });
-        if (soundEnabled) speakSequence(['Super!', currentItem.word], speechRate);
+        if (soundEnabled) {
+          playPraise('success', ['Super!', currentItem.word], speechRate);
+        } else {
+          playChime('success');
+        }
       } else {
-        playChime('wrong');
         setStreak(0);
         setTimeout(() => {
           // Reset current attempt
           setBuilt([]);
           setScrambled((prev) => prev.map((l) => ({ ...l, used: false })));
-          if (soundEnabled) speakSequence(['Try again!'], speechRate);
-        }, 800);
+          if (soundEnabled) {
+            playPraise('wrong', ['Try again!'], speechRate);
+          } else {
+            playChime('wrong');
+          }
+        }, 600);
       }
     }
   };

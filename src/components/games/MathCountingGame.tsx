@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Volume2, Sparkles, CheckCircle2, ArrowRight, Flame } from 'lucide-react';
-import { playChime, speakWord, speakSequence } from '../../utils/sound';
+import { playChime, speakWord, speakSequence, playPraise } from '../../utils/sound';
 import confetti from 'canvas-confetti';
 
 interface MathCountingGameProps {
@@ -56,13 +56,14 @@ export const MathCountingGame: React.FC<MathCountingGameProps> = ({
   }, [roundIdx]);
 
   const handleTapObject = (idx: number) => {
-    playChime('pop');
     let nextTapped = [...tappedIndices];
     if (!nextTapped.includes(idx)) {
       nextTapped.push(idx);
       setTappedIndices(nextTapped);
       if (soundEnabled) {
         speakWord(nextTapped.length.toString(), speechRate);
+      } else {
+        playChime('pop');
       }
     }
   };
@@ -74,19 +75,21 @@ export const MathCountingGame: React.FC<MathCountingGameProps> = ({
     setAnswered(true);
 
     if (num === currentQ.count) {
-      playChime('success');
       const nextStreak = streak + 1;
       setStreak(nextStreak);
       onWin(20, 4);
       confetti({ particleCount: 50, spread: 60 });
       if (soundEnabled) {
-        speakSequence([`Correct! There are ${currentQ.count} ${currentQ.itemNameEn}!`], speechRate);
+        playPraise('success', [`Correct! There are ${currentQ.count} ${currentQ.itemNameEn}!`], speechRate);
+      } else {
+        playChime('success');
       }
     } else {
-      playChime('wrong');
       setStreak(0);
       if (soundEnabled) {
-        speakSequence([`Not quite! Count them one by one!`], speechRate);
+        playPraise('wrong', ['Not quite! Count them one by one!'], speechRate);
+      } else {
+        playChime('wrong');
       }
     }
   };

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { VEHICLES_DATA } from '../data/learningData';
 import { ThemeConfig, VehicleItem } from '../types';
 import { Volume2, ChevronLeft, ChevronRight, Grid, Layers, Sparkles, RotateCcw, Compass } from 'lucide-react';
-import { speakWord, speakSequence, playChime } from '../utils/sound';
+import { speakWord, speakSequence, playChime, playPraise } from '../utils/sound';
 import confetti from 'canvas-confetti';
 
 interface VehiclesScreenProps {
@@ -106,15 +106,17 @@ export const VehiclesScreen: React.FC<VehiclesScreenProps> = ({ speechRate, soun
     }));
 
     if (isCorrect) {
-      playChime('success');
       confetti({ particleCount: 50, spread: 60, origin: { y: 0.6 } });
       if (soundEnabled) {
-        speakSequence(['Awesome!', option.nameEnglish], speechRate);
+        playPraise('success', ['Awesome!', option.nameEnglish], speechRate);
+      } else {
+        playChime('success');
       }
     } else {
-      playChime('click');
       if (soundEnabled) {
-        speakSequence(['This is', option.nameEnglish, 'Find the', quizQuestion.correctItem.nameEnglish], speechRate);
+        playPraise('wrong', ['This is', option.nameEnglish, 'Find the', quizQuestion.correctItem.nameEnglish], speechRate);
+      } else {
+        playChime('wrong');
       }
     }
   };
