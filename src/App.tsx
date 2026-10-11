@@ -82,7 +82,10 @@ export const App: React.FC = () => {
   const themeConfig = THEMES[currentTheme] || THEMES.boy;
 
   return (
-    <div className={`min-h-screen flex flex-col relative overflow-x-hidden ${themeConfig.bgColor}`}>
+    <div
+      className={`min-h-screen flex flex-col relative overflow-x-hidden ${themeConfig.bgColor}`}
+      style={{ paddingBottom: 'max(env(safe-area-inset-bottom, 0px), 12px)' }}
+    >
       {/* Background Graphic Layer */}
       {themeConfig.bgImage ? (
         <div

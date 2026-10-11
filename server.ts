@@ -28,6 +28,12 @@ async function startServer() {
     res.json({ status: 'ok', app: 'English Kids' });
   });
 
+  // Privacy Policy endpoint (Google Play Console requirement)
+  app.get(['/privacy', '/privacy.html', '/privacy-policy'], (req, res) => {
+    const privacyFile = path.join(process.cwd(), 'public', 'privacy.html');
+    res.sendFile(privacyFile);
+  });
+
   // Direct APK download routes
   app.get(['/English_Kids.apk', '/app-release.apk', '/download-apk'], (req, res) => {
     const publicApk = path.join(process.cwd(), 'public', 'English_Kids.apk');
@@ -37,6 +43,17 @@ async function startServer() {
     res.setHeader('Content-Type', 'application/vnd.android.package-archive');
     res.setHeader('Content-Disposition', 'attachment; filename="English_Kids.apk"');
     res.download(targetFile, 'English_Kids.apk');
+  });
+
+  // Direct AAB download routes (Google Play Store Bundle)
+  app.get(['/English_Kids.aab', '/app-release.aab', '/download-aab'], (req, res) => {
+    const publicAab = path.join(process.cwd(), 'public', 'English_Kids.aab');
+    const distAab = path.join(process.cwd(), 'dist', 'English_Kids.aab');
+    const rootAab = path.join(process.cwd(), 'English_Kids.aab');
+    const targetFile = fs.existsSync(publicAab) ? publicAab : (fs.existsSync(distAab) ? distAab : rootAab);
+    res.setHeader('Content-Type', 'application/octet-stream');
+    res.setHeader('Content-Disposition', 'attachment; filename="English_Kids.aab"');
+    res.download(targetFile, 'English_Kids.aab');
   });
 
   // Dedicated Audio static handling - prevent SPA HTML fallback on missing audio

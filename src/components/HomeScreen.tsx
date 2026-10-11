@@ -239,23 +239,34 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ themeConfig, onNavigate 
                 <div>
                   <h3 className="font-fun font-black text-base sm:text-lg text-white flex items-center gap-2 justify-center sm:justify-start">
                     <span>تشغيل التطبيق على هاتف الأندرويد</span>
-                    <span className="bg-yellow-400 text-slate-900 text-[10px] font-black px-2 py-0.5 rounded-full">Android APK</span>
+                    <span className="bg-yellow-400 text-slate-900 text-[10px] font-black px-2 py-0.5 rounded-full">Google Play</span>
                   </h3>
                   <p className="text-emerald-100 text-xs sm:text-sm font-medium mt-0.5">
-                    ثبّت التطبيق ليعمل على الهاتف مباشرة وبدون إنترنت
+                    حمّل التطبيق الآن من متجر Google Play ليعمل على الهاتف وبدون إنترنت
                   </p>
                 </div>
               </div>
 
               <div className="flex flex-wrap items-center justify-center gap-2 w-full sm:w-auto">
                 <a
-                  href="/English_Kids.apk"
-                  download="English_Kids.apk"
+                  href="https://play.google.com/store/apps/details?id=com.englishkids.app"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   onClick={() => playChime('fanfare')}
                   className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 py-2.5 bg-yellow-400 hover:bg-yellow-300 text-slate-900 font-fun font-black text-xs sm:text-sm rounded-2xl shadow-md active:scale-95 transition-all"
                 >
                   <Download className="w-4 h-4 text-slate-900" />
-                  <span>تثبيت APK الآن</span>
+                  <span>تحميل الآن / تثبيت من Google Play</span>
+                </a>
+
+                <a
+                  href="/English_Kids.apk"
+                  download="English_Kids.apk"
+                  onClick={() => playChime('click')}
+                  className="flex items-center justify-center gap-1.5 px-3 py-2 bg-white/20 hover:bg-white/30 text-white font-fun font-bold text-xs rounded-2xl transition-all active:scale-95"
+                  title="تحميل ملف APK مباشر بدون متجر Play"
+                >
+                  <span>تحميل APK مباشر</span>
                 </a>
 
                 {deferredPrompt && (

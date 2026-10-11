@@ -193,15 +193,37 @@ export const SettingsDrawer: React.FC<SettingsDrawerProps> = ({
               <label className="text-sm font-bold text-slate-700">تطبيق الهاتف / Mobile App</label>
             </div>
             <a
-              href="./English_Kids.apk"
-              download="English_Kids.apk"
+              href="https://play.google.com/store/apps/details?id=com.englishkids.app"
+              target="_blank"
+              rel="noopener noreferrer"
               className="w-full flex items-center justify-center gap-2 py-3 px-4 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 active:scale-98 text-white rounded-2xl font-bold transition-all shadow-md text-sm"
             >
-              <span>📥 تحميل تطبيق الأندرويد الكامل APK (23MB)</span>
+              <span>▶️ تثبيت من متجر Google Play</span>
             </a>
+            <div className="flex justify-center">
+              <a
+                href="./English_Kids.apk"
+                download="English_Kids.apk"
+                className="text-xs text-slate-500 hover:text-slate-700 underline font-semibold flex items-center gap-1"
+              >
+                <span>📥 أو تحميل ملف APK المباشر (25MB)</span>
+              </a>
+            </div>
             <p className="text-[11px] text-slate-500 text-center leading-relaxed">
               تطبيق أندرويد مستقل بالكامل، يعمل بدون إنترنت (Offline) ولا يحتاج لفتح متصفح.
             </p>
+          </div>
+
+          {/* Privacy Policy link (Google Play requirement) */}
+          <div className="pt-2 border-t border-slate-100 text-center">
+            <a
+              href="/privacy.html"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 text-xs text-indigo-600 hover:text-indigo-800 font-bold underline"
+            >
+              <span>🔒 سياسة الخصوصية / Privacy Policy</span>
+            </a>
           </div>
 
           {/* Smart Update & Status */}
