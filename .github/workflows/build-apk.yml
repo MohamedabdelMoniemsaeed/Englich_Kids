@@ -5,7 +5,7 @@ on:
     branches: [ main, master ]
   pull_request:
     branches: [ main, master ]
-  workflow_dispatch: # Allows manual trigger from GitHub UI
+  workflow_dispatch:
 
 jobs:
   build:
@@ -31,7 +31,14 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
+      - name: Disable Gradle file watching
+        run: |
+          mkdir -p android
+          echo "org.gradle.vfs.watch=false" >> android/gradle.properties
+
       - name: Build APK (Release)
+        env:
+          GRADLE_OPTS: -Dorg.gradle.vfs.watch=false
         run: flutter build apk --release
 
       - name: Upload APK Artifact
